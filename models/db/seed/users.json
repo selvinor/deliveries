@@ -1,0 +1,101 @@
+ [{
+   "_id": "111111111111111111111100",
+   "username": "himking",
+   "firstName": "Him",
+   "lastName": "King",
+   "email": "himking@fakeemail.com",
+   "phone": "555-555-1111",
+   "orders": [
+    {"_id": "22222222222222222222001","userId": "himking","productCode": "3", "productName": "Designer's Lobby Arrangement",  "productSize": "", "status": "active", "startDate" : "20181105", "duration" : "3 months", "frequency": "monthly",   "recipientFirstName" :  "Foo",   "recipientLastName" :  "Bar", "recipientAddress" : "123 Maple St.",         "recipientAptSuite" : "",     "recipientCity" : "Portland", "recipientState" : "Oregon","recipientZipcode" : "97204"}
+  ],
+    "password": "$2a$10$DRmg9pBYGKY4GwVAwbV1KuygIepzrs/HUadFAejMlVjukPfBD9ZYu"
+ },
+ {
+   "_id": "111111111111111111111101",
+   "username": "bazz",
+   "lastName": "Zax",
+   "firstName": "Bazz",
+   "email": "bazz@fakeemail.com",
+   "phone": "555-555-1212",
+   "orders": [
+    {"_id": "22222222222222222222002", "userId": "bazz",  "productCode": "3", "productName": "Designer's Lobby Arrangement",  "productSize": "", "status": "active", "startDate" : "20181112", "duration" : "3 months", "frequency": "monthly",   "recipientFirstName" :  "Bix",   "recipientLastName" :  "Bat", "recipientAddress" : "745 Van Fir Ave.",      "recipientAptSuite" : "",     "recipientCity" : "Portland", "recipientState" : "Oregon","recipientZipcode" : "97204"},
+    {"_id": "22222222222222222222003", "userId": "bazz",  "productCode": "2", "productName": "Designer's Choice Arrangement", "productSize": "", "status": "active", "startDate" : "20181122", "duration" : "3 months", "frequency": "bi-weekly", "recipientFirstName" :  "Har",   "recipientLastName" :  "Nav", "recipientAddress" : "156 SW 7th Ave",        "recipientAptSuite" : "",     "recipientCity" : "Portland", "recipientState" : "Oregon","recipientZipcode" : "97204"},
+    {"_id": "22222222222222222222004", "userId": "bazz",  "productCode": "3", "productName": "Designer's Lobby Arrangement",  "productSize": "", "status": "active", "startDate" : "20181119", "duration" : "3 months", "frequency": "bi-weekly", "recipientFirstName" :  "Vim",   "recipientLastName" :  "Xan", "recipientAddress" : "77 H Ave.",             "recipientAptSuite" : "",     "recipientCity" : "Portland", "recipientState" : "Oregon","recipientZipcode" : "97204"},
+    {"_id": "22222222222222222222005", "userId": "bazz",  "productCode": "3", "productName": "Designer's Lobby Arrangement",  "productSize": "", "status": "active", "startDate" : "20181112", "duration" : "3 months", "frequency": "monthly",   "recipientFirstName" :  "Kho",   "recipientLastName" :  "Dim", "recipientAddress" : "6434 C St.",            "recipientAptSuite" : "",     "recipientCity" : "Portland", "recipientState" : "Oregon","recipientZipcode" : "97204"}
+    ],
+   "password": "$2a$10$DRmg9pBYGKY4GwVAwbV1KuygIepzrs/HUadFAejMlVjukPfBD9ZYu"
+ },
+ {
+   "_id": "111111111111111111111102",
+   "username": "bifoo",
+   "firstName": "Bifoo",
+   "lastName": "Baf",
+   "email": "bifoo@fakeemail.com",
+   "phone": "555-555-2222",
+   "orders": [
+    {"_id": "22222222222222222222006", "userId": "bifoo", "productCode": "3", "productName": "Designer's Lobby Arrangement",  "productSize": "", "status": "active", "startDate" : "20181126", "duration" : "3 months", "frequency": "monthly",   "recipientFirstName" :  "Bak",   "recipientLastName" :  "Ghi", "recipientAddress" : "359 1st Ave.",          "recipientAptSuite" : "344",  "recipientCity" : "Portland", "recipientState" : "Oregon","recipientZipcode" : "97204"},
+    {"_id": "22222222222222222222007", "userId": "bifoo", "productCode": "1", "productName": "Designer's Bouquet",            "productSize": "", "status": "active", "startDate" : "20181116", "duration" : "3 months", "frequency": "monthly",   "recipientFirstName" :  "Nol",   "recipientLastName" :  "Bij", "recipientAddress" : "736 SW Taylor St.",     "recipientAptSuite" : "887",  "recipientCity" : "Portland", "recipientState" : "Oregon","recipientZipcode" : "97204"},
+    {"_id": "22222222222222222222008", "userId": "bifoo", "productCode": "3", "productName": "Designer's Lobby Arrangement",  "productSize": "", "status": "active", "startDate" : "20181102", "duration" : "3 months", "frequency": "bi-weekly", "recipientFirstName" :  "Mok",   "recipientLastName" :  "Xif", "recipientAddress" : "679 SW Main St.",       "recipientAptSuite" : "356",  "recipientCity" : "Portland", "recipientState" : "Oregon","recipientZipcode" : "97204"}
+    ],
+   "password": "$2a$10$DRmg9pBYGKY4GwVAwbV1KuygIepzrs/HUadFAejMlVjukPfBD9ZYu"
+ },
+ {
+   "_id": "111111111111111111111103",
+   "username": "bax",
+   "firstName": "Bax",
+   "lastName": "Dafmoz",
+   "email": "bax@fakeemail.com",
+   "phone": "555-555-3333",
+   "orders": [
+    {"_id": "22222222222222222222009", "userId": "bax",   "productCode": "1", "productName": "Designer's Bouquet",            "productSize": "", "status": "active", "startDate" : "20181119", "duration" : "3 months", "frequency": "bi-weekly", "recipientFirstName" :  "Dib",   "recipientLastName" :  "Mod", "recipientAddress" : "875 NW Powell St.",     "recipientAptSuite" : "",     "recipientCity" : "Portland", "recipientState" : "Oregon","recipientZipcode" : "97204"},
+    {"_id": "22222222222222222222010", "userId": "bax",   "productCode": "2", "productName": "Designer's Choice Arrangement", "productSize": "", "status": "active", "startDate" : "20181123", "duration" : "3 months", "frequency": "weekly",    "recipientFirstName" :  "Sil",   "recipientLastName" :  "Soz", "recipientAddress" : "555 NW Harbor Dr.",     "recipientAptSuite" : "5767", "recipientCity" : "Portland", "recipientState" : "Oregon","recipientZipcode" : "97204"},
+    {"_id": "22222222222222222222011", "userId": "bax",   "productCode": "3", "productName": "Designer's Lobby Arrangement",  "productSize": "", "status": "active", "startDate" : "20181116", "duration" : "3 months", "frequency": "bi-weekly", "recipientFirstName" :  "Lid",   "recipientLastName" :  "Nib", "recipientAddress" : "746 NE Spring St.",     "recipientAptSuite" : "222",  "recipientCity" : "Portland", "recipientState" : "Oregon","recipientZipcode" : "97204"},
+    {"_id": "22222222222222222222012", "userId": "bax",   "productCode": "3", "productName": "Designer's Lobby Arrangement",  "productSize": "", "status": "active", "startDate" : "20181122", "duration" : "3 months", "frequency": "monthly",   "recipientFirstName" :  "Kep",   "recipientLastName" :  "Puc", "recipientAddress" : "111 E. Van Buren Ave.", "recipientAptSuite" : "4553", "recipientCity" : "Portland", "recipientState" : "Oregon","recipientZipcode" : "97204"}
+    ],
+   "password": "$2a$10$DRmg9pBYGKY4GwVAwbV1KuygIepzrs/HUadFAejMlVjukPfBD9ZYu"
+ },
+ {
+   "_id": "111111111111111111111104",
+   "username": "foo",
+   "firstName": "Foo",
+   "lastName": "Bat",
+   "email": "foo@fakeemail.com",
+   "phone": "555-555-4444",
+   "orders": [
+    {"_id": "22222222222222222222013", "userId": "foo",   "productCode": "1", "productName": "Designer's Bouquet",            "productSize": "", "status": "active", "startDate" : "20181105", "duration" : "3 months", "frequency": "monthly",   "recipientFirstName" :  "Duj",   "recipientLastName" :  "Ser", "recipientAddress" : "88  Gilbert St.",       "recipientAptSuite" : "",     "recipientCity" : "Portland", "recipientState" : "Oregon","recipientZipcode" : "97204"},
+    {"_id": "22222222222222222222014", "userId": "foo",   "productCode": "2", "productName": "Designer's Choice Arrangement", "productSize": "", "status": "active", "startDate" : "20181105", "duration" : "3 months", "frequency": "monthly",   "recipientFirstName" :  "Bol",   "recipientLastName" :  "Wen", "recipientAddress" : "736 SW Taylor St.",     "recipientAptSuite" : "561",  "recipientCity" : "Portland", "recipientState" : "Oregon","recipientZipcode" : "97204"},
+    {"_id": "22222222222222222222015", "userId": "foo",   "productCode": "3", "productName": "Designer's Lobby Arrangement",  "productSize": "", "status": "active", "startDate" : "20181105", "duration" : "3 months", "frequency": "weekly",    "recipientFirstName" :  "Sah",   "recipientLastName" :  "Mez", "recipientAddress" : "736 SW Taylor St.",     "recipientAptSuite" : "687",  "recipientCity" : "Portland", "recipientState" : "Oregon","recipientZipcode" : "97204"}
+    ],
+   "password": "$2a$10$DRmg9pBYGKY4GwVAwbV1KuygIepzrs/HUadFAejMlVjukPfBD9ZYu"
+ },
+ {
+   "_id": "111111111111111111111105",
+   "username": "bar",
+   "firstName": "Bar",
+   "lastName": "Bix",
+   "email": "bar@fakeemail.com",
+   "phone": "555-555-5555",
+   "orders": [
+    {"_id": "22222222222222222222016", "userId": "bar",   "productCode": "3", "productName": "Designer's Lobby Arrangement",  "productSize": "", "status": "active", "startDate" : "20181112", "duration" : "3 months", "frequency": "bi-weekly", "recipientFirstName" :  "Giw",   "recipientLastName" :  "Zem", "recipientAddress" : "679 SW Main St.",       "recipientAptSuite" : "334",  "recipientCity" : "Portland", "recipientState" : "Oregon","recipientZipcode" : "97204"},
+    {"_id": "22222222222222222222017", "userId": "bar",   "productCode": "3", "productName": "Designer's Lobby Arrangement",  "productSize": "", "status": "active", "startDate" : "20181120", "duration" : "3 months", "frequency": "weekly",    "recipientFirstName" :  "Ceh",   "recipientLastName" :  "Vic", "recipientAddress" : "679 SW Main St.",       "recipientAptSuite" : "964",  "recipientCity" : "Portland", "recipientState" : "Oregon","recipientZipcode" : "97204"},
+    {"_id": "22222222222222222222018", "userId": "bar",   "productCode": "3", "productName": "Designer's Lobby Arrangement",  "productSize": "", "status": "active", "startDate" : "20181119", "duration" : "3 months", "frequency": "monthly",   "recipientFirstName" :  "Sun",   "recipientLastName" :  "Lau", "recipientAddress" : "359 1st Ave.",          "recipientAptSuite" : "A",    "recipientCity" : "Portland", "recipientState" : "Oregon","recipientZipcode" : "97204"},
+    {"_id": "22222222222222222222019", "userId": "bar",   "productCode": "3", "productName": "Designer's Lobby Arrangement",  "productSize": "", "status": "active", "startDate" : "20181102", "duration" : "3 months", "frequency": "monthly",   "recipientFirstName" :  "Mit",   "recipientLastName" :  "Meg", "recipientAddress" : "359 1st Ave.",          "recipientAptSuite" : "B",    "recipientCity" : "Portland", "recipientState" : "Oregon","recipientZipcode" : "97204"}
+    ],
+   "password": "$2a$10$DRmg9pBYGKY4GwVAwbV1KuygIepzrs/HUadFAejMlVjukPfBD9ZYu"
+ },
+ {
+   "_id": "111111111111111111111106",
+   "username": "bix",
+   "firstName": "Bix",
+   "lastName": "Foo",
+   "email": "bix@fakeemail.com",
+   "phone": "555-555-6666",
+   "orders": [
+    {"_id": "22222222222222222222020", "userId": "bix",   "productCode": "1", "productName": "Designer's Bouquet",            "productSize": "", "status": "active", "startDate" : "20181115", "duration" : "3 months", "frequency": "monthly",   "recipientFirstName" :  "Kop",   "recipientLastName" :  "Dod", "recipientAddress" : "88  Gilbert St.",       "recipientAptSuite" : "",     "recipientCity" : "Portland", "recipientState" : "Oregon","recipientZipcode" : "97204"},
+    {"_id": "22222222222222222222021", "userId": "bix",   "productCode": "2", "productName": "Designer's Choice Arrangement", "productSize": "", "status": "active", "startDate" : "20181114", "duration" : "3 months", "frequency": "monthly",   "recipientFirstName" :  "Lix",   "recipientLastName" :  "Koi", "recipientAddress" : "555 NW Harbor Dr.",     "recipientAptSuite" : "4556", "recipientCity" : "Portland", "recipientState" : "Oregon","recipientZipcode" : "97204"},
+    {"_id": "22222222222222222222022", "userId": "bix",   "productCode": "3", "productName": "Designer's Lobby Arrangement",  "productSize": "", "status": "active", "startDate" : "20181107", "duration" : "3 months", "frequency": "monthly",   "recipientFirstName" :  "Xum",   "recipientLastName" :  "Kiu", "recipientAddress" : "555 NW Harbor Dr.",     "recipientAptSuite" : "1882", "recipientCity" : "Portland", "recipientState" : "Oregon","recipientZipcode" : "97204"},
+    {"_id": "22222222222222222222023", "userId": "bix",   "productCode": "1", "productName": "Designer's Bouquet",            "productSize": "", "status": "active", "startDate" : "20181109", "duration" : "3 months", "frequency": "bi-weekly", "recipientFirstName" :  "Fil",   "recipientLastName" :  "Aso", "recipientAddress" : "88  Gilbert St.",       "recipientAptSuite" : "D",    "recipientCity" : "Portland", "recipientState" : "Oregon","recipientZipcode" : "97204"}
+    ],
+   "password": "$2a$10$DRmg9pBYGKY4GwVAwbV1KuygIepzrs/HUadFAejMlVjukPfBD9ZYu"
+ }]
+ 
