@@ -4,11 +4,11 @@ const mongoose = require('mongoose');
 
 const { MONGODB_URI } = require('../config');
 
-const order = require('../models/users');
-const User = require('../models/users');
+const Delivery = require('../models/deliveries');
+const merchant = require('../models/merchants');
 
-const seedorders = require('../db/seed/orders');
-const seedUsers = require('../db/seed/users');
+const seedDeliverys = require('../db/seed/deliveries');
+const seedmerchants = require('../db/seed/merchants');
 
 console.log(`Connecting to mongodb at ${MONGODB_URI}`);
 mongoose.connect(MONGODB_URI)
@@ -20,11 +20,11 @@ mongoose.connect(MONGODB_URI)
     console.info('Seeding Database');
     return Promise.all([
 
-      order.insertMany(seedorders),
-      order.createIndexes(),
+      Delivery.insertMany(seedDeliverys),
+      Delivery.createIndexes(),
 
-      User.insertMany(seedUsers),
-      User.createIndexes()
+      merchant.insertMany(seedmerchants),
+      merchant.createIndexes()
 
     ]);
   })

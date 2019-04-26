@@ -1,0 +1,26 @@
+ [{
+   "_id": "111111111111111111111100",
+   "driverId": "driver1",
+   "driverPassword": "$2a$10$Mk7Z.7hiexMSLbN6unTgCOEzbCcg3TgEf7H81dPIE6219EP78UJWK",
+   "driverName": "Bob Driver",
+   "driverEmail": "driver1@fakeemail.com",
+   "driverPhone": "555-555-1111",
+   "driverVehicleType": "Subaru Outback",
+   "driverVehiclePlate": "deliver1",
+   "deliveries": 
+    [
+      { " _id": "22222222222222222222001",
+        "merchantId": "shop1",
+        "deliveryNumber": "3", 
+        "deliveryOrderRef": "#870",  
+        "deliveryAddress": "1100 SW 6th Ave Portland, OR 97204", 
+        "deliveryInstructions": "Deliver to front desk, have guard call recipient", 
+        "deliveryRecipient" : "Jane Doe", 
+        "deliveryPhone" : "555-555-1212", 
+        "deliveryStatus": "ready_for_pickup",   
+        "deliveryZone" :  "zone1"   
+      }
+    ] 
+  }
+ ]
+ 

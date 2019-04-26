@@ -5,32 +5,32 @@ const { Strategy: LocalStrategy } = require('passport-local');
 // https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#Assigning_to_new_variable_names
 const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt');
 
-const { User } = require('../models/users');
+const { merchant } = require('../models/merchants');
 const { JWT_SECRET } = require('../config');
 
-const localStrategy = new LocalStrategy((username, password, callback) => {
-  let user;
-  User.findOne({ username: username })
-    .then(_user => {
-      user = _user;
-      if (!user) {
+const localStrategy = new LocalStrategy((merchant, password, callback) => {
+  let merchant;
+  merchant.findOne({ merchant: merchant })
+    .then(_merchant => {
+      merchant = _merchant;
+      if (!merchant) {
         // Return a rejected promise so we break out of the chain of .thens.
         // Any errors like this will be handled in the catch block.
         return Promise.reject({
           reason: 'LoginError',
-          message: 'Incorrect username or password'
+          message: 'Incorrect merchant or password'
         });
       }
-      return user.validatePassword(password);
+      return merchant.validatePassword(password);
     })
     .then(isValid => {
       if (!isValid) {
         return Promise.reject({
           reason: 'LoginError',
-          message: 'Incorrect username or password'
+          message: 'Incorrect merchant or password'
         });
       }
-      return callback(null, user);
+      return callback(null, merchant);
     })
     .catch(err => {
       if (err.reason === 'LoginError') {
@@ -49,7 +49,7 @@ const jwtStrategy = new JwtStrategy(
     algorithms: ['HS256']
   },
   (payload, done) => {
-    done(null, payload.user);
+    done(null, payload.merchant);
   }
 );
 

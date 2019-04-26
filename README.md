@@ -12,7 +12,7 @@ A template for developing and deploying Node.js apps.
 * Install the dependencies: `npm install`
 * Create a new repo on GitHub: https://github.com/new
     * Make sure the "Initialize this repository with a README" option is left unchecked
-* Update the remote to point to your GitHub repository: `git remote set-url origin https://github.com/YOUR_GITHUB_USERNAME/YOUR_REPOSITORY_NAME`
+* Update the remote to point to your GitHub repository: `git remote set-url origin https://github.com/YOUR_GITHUB_merchant/YOUR_REPOSITORY_NAME`
 
 ### Working on the project
 
@@ -35,8 +35,8 @@ Requires the [Heroku CLI client](https://devcenter.heroku.com/articles/heroku-co
 * Create the Heroku app: `heroku create PROJECT_NAME`
 
 * If your backend connects to a database, you need to configure the database URL:
-    * For a MongoDB database: `heroku config:set DATABASE_URL=mongodb://USERNAME:PASSWORD@HOST:PORT/DATABASE_NAME`
-    * For a PostgreSQL database: `heroku config:set DATABASE_URL=postgresql://USERNAME:PASSWORD@HOST:PORT/DATABASE_NAME`
+    * For a MongoDB database: `heroku config:set DATABASE_URL=mongodb://merchant:PASSWORD@HOST:PORT/DATABASE_NAME`
+    * For a PostgreSQL database: `heroku config:set DATABASE_URL=postgresql://merchant:PASSWORD@HOST:PORT/DATABASE_NAME`
 
 * If you are creating a full-stack app, you need to configure the client origin: `heroku config:set CLIENT_ORIGIN=https://www.YOUR_DEPLOYED_CLIENT.com`
 
