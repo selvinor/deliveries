@@ -4,52 +4,64 @@ const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 
-const merchantSchema = new mongoose.Schema({
-  merchantId: { type: String, required: true, unique: true },
+const userSchema = new mongoose.Schema({
+  userId: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   streetAddress: {type: String, default: ''},
   businessName: {type: String, default: ''},
+  contactPerson: {type: String, default: ''},
   email: {type: String, default: ''},
   phone: {type: String, default: ''},
-  deliveries: [
+  orders: [
     {
-      delivery: { type: mongoose.Schema.Types.ObjectId, ref: 'delivery' }
+      order: { type: mongoose.Schema.Types.ObjectId, ref: 'order' }
     }
   ]
 });
 
-merchantSchema.methods.serialize = function() {
+userSchema.methods.serialize = function() { 
   return {
-    merchantId: this.merchant || '',
+    userId: this.user || '',
     streetAddress: this.streetAddress || '',
     businessName: this.businessName || '',
+    contactPerson: this.businessName || '',
     email: this.email|| '',
     phone: this.phone|| '',
-    deliveries: this.deliveries|| ''
+    orders: this.orders|| ''
   };
 };
 
-merchantSchema.methods.validatePassword = function(password) {
+userSchema.methods.validatePassword = function(password) {
   return bcrypt.compare(password, this.password);
 };
 
-merchantSchema.statics.hashPassword = function(password) {
+userSchema.statics.hashPassword = function(password) {
   return bcrypt.hash(password, 10);
 };
 
-const merchant = mongoose.model('merchant', merchantSchema);
+const User = mongoose.model('user', userSchema);
 // Add `createdAt` and `updatedAt` fields
-merchantSchema.set('timestamps', true);
+userSchema.set('timestamps', true);
 
 // Customize output for `res.json(data)`, `console.log(data)` etc.
-merchantSchema.set('toObject', {
+userSchema.set('toObject', {
   virtuals: true,     // include built-in virtual `id`
   versionKey: false,  // remove `__v` version key
   transform: (doc, ret) => {
     delete ret._id; // delete `_id`
     delete ret.password; // delete `_id`
+    delete ret.__v;
   }
 });
 
+userSchema.set('toJSON', {
+  virtuals: true,
+  versionKey: false, 
+  transform: (doc, ret) => {
+    delete ret._id;
+    delete ret.password;
+    delete ret.__v;
+  }
+});
 
-module.exports = {merchant};
+module.exports = { User };
