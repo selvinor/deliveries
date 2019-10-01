@@ -7,7 +7,7 @@ const { JWT_SECRET, JWT_EXPIRY } = require('../config');
 
 const options = { session: false, failWithError: true };
 const localAuth = passport.authenticate('local', options);
-// const jwtAuth = passport.authenticate('jwt', { session: false, failWithError: true });
+const jwtAuth = passport.authenticate('jwt', { session: false, failWithError: true });
 
 
 const router = express.Router();

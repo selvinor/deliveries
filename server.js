@@ -35,7 +35,7 @@ app.use(
 
 app.use(express.json());
 
-app.use('/api/auth', authRouter);
+app.use('/api/login', authRouter);
 app.use('/api/users', userRouter);
 app.use('/api/drivers', driverRouter);
 app.use('/api/orders', orderRouter);

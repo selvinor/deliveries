@@ -6,6 +6,37 @@ const mongoose = require('mongoose');
 const User = require('../models/users');
 
 const router = express.Router();
+router.get('/', (req, res, next) => {
+  return User.find()
+    .then(result => {
+      return res
+      .status(200)
+      .json(result);
+    })
+    .catch(err => {
+      next(err);
+    });
+});
+router.get('/:id', (req, res, next) => {
+
+  const userId = req.params.id;
+
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    const err = new Error('The `id` is not valid');
+    err.status = 400;
+    return next(err);
+  }
+
+  return User.findById(userId)
+    .then(result => {
+      return res
+      .status(200)
+      .json(result);
+    })
+    .catch(err => {
+      next(err);
+    });
+});
 
 router.post('/', (req, res, next) => {
   const requiredFields = ['username', 'email', 'password'];
