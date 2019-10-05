@@ -15,10 +15,9 @@ const userRouter = require('./routes/users');
 const driverRouter = require('./routes/drivers');
 const orderRouter = require('./routes/orders');
 const authRouter = require('./routes/auth');
+const merchantRouter = require('./routes/merchants');
 
-passport.use(localStrategy);
-passport.use(jwtStrategy);
-
+// Create an Express application
 const app = express();
 
 app.use(
@@ -33,12 +32,21 @@ app.use(
   })
 );
 
+// Create a static webserver
+app.use(express.static('public'));
+
+// Parse request body
 app.use(express.json());
+
+
+passport.use(localStrategy);
+passport.use(jwtStrategy);
 
 app.use('/api/login', authRouter);
 app.use('/api/users', userRouter);
 app.use('/api/drivers', driverRouter);
 app.use('/api/orders', orderRouter);
+app.use('/api/merchants', merchantRouter);
 
 
 app.use((req, res, next) => {
@@ -47,6 +55,7 @@ app.use((req, res, next) => {
   next(err);
 });
 
+// Custom Error Handler
 app.use((err, req, res, next) => {
   if (err.status) {
     const errBody = Object.assign({}, err, { message: err.message });
@@ -59,7 +68,7 @@ app.use((err, req, res, next) => {
 function runServer(port = PORT) {
   const server = app
     .listen(port, () => {
-      console.info(`App listening on port ${server.address().port}`);
+      console.info(`Server listening on port ${server.address().port}`);
     })
     .on('error', err => {
       console.error('Express failed to start');

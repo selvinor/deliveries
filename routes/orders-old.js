@@ -4,9 +4,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const passport = require('passport');
 
-const Driver = require('../models/drivers');
-const User = require('../models/user');
 const Order = require('../models/orders');
+const User = require('../models/users');
+const Place = require('../models/drivers');
 
 const router = express.Router();
 
@@ -18,28 +18,28 @@ router.use(
 
 /* ========== GET/READ ALL ITEMS ========== */
 router.get('/', (req, res, next) => {
-  const { searchTerm, orderId } = req.query;
+  const { searchTerm, driverId } = req.query;
   const userId = req.user.id;
 
   let filter = {};
 
   if (searchTerm) {
-    filter.driver = { $regex: searchTerm, $options: 'i' };
+    filter.order = { $regex: searchTerm, $options: 'i' };
   }
 
-  if (orderId) {
-    if (!mongoose.Types.ObjectId.isValid(orderId)) {
+  if (driverId) {
+    if (!mongoose.Types.ObjectId.isValid(driverId)) {
       const err = new Error('The `order id` is not valid');
       err.status = 400;
       return next(err);
     }
-    filter.orderId = orderId;
+    filter.driverId = driverId;
   }
 
   if (userId) {
     filter.userId = userId;
   }
-  Driver.find(filter)
+  Order.find(filter)
     .sort({ updatedAt: 'desc' })
     .then(results => {
       res.json(results); 
@@ -50,8 +50,8 @@ router.get('/', (req, res, next) => {
 });
 
 /* ========== GET/READ A SINGLE ITEM by order Id and user Id in combo========== */
-router.get('/:orderId', (req, res, next) => {
-  const orderId = req.params.orderId;
+router.get('/:driverId', (req, res, next) => {
+  const driverId = req.params.driverId;
   const userId = req.user.id;
 
   if (!mongoose.Types.ObjectId.isValid(userId)) {
@@ -60,13 +60,13 @@ router.get('/:orderId', (req, res, next) => {
     return next(err);
   }
 
-  if (!mongoose.Types.ObjectId.isValid(orderId)) {
+  if (!mongoose.Types.ObjectId.isValid(driverId)) {
     const err = new Error('The `order id` is not valid');
     err.status = 400;
     return next(err);
   }
 
-  Driver.findOne({ orderId: orderId, userId: userId })
+  Order.findOne({ driverId: driverId, userId: userId })
     .then(result => {
       if (result) {
         res.json(result);
@@ -81,16 +81,16 @@ router.get('/:orderId', (req, res, next) => {
 
 /* ========== POST/CREATE AN ITEM ========== */
 router.post('/', (req, res, next) => {
-  const { driver, orderId } = req.body;
+  const { order, driverId } = req.body;
   const userId = req.user.id;
 
-  if (!driver) {
-    const err = new Error('Missing `driver` in request body');
+  if (!order) {
+    const err = new Error('Missing `order` in request body');
     err.status = 400;
     return next(err);
   }
 
-  if (orderId && !mongoose.Types.ObjectId.isValid(orderId)) {
+  if (driverId && !mongoose.Types.ObjectId.isValid(driverId)) {
     const err = new Error('The `order id` is not valid');
     err.status = 400;
     return next(err);
@@ -102,23 +102,23 @@ router.post('/', (req, res, next) => {
     return next(err);
   }
 
-  const newDriver = { driver, orderId, userId };
+  const newOrder = { order, driverId, userId };
 
-  Driver.findOne({ orderId: orderId, userId: userId })  
+  Order.findOne({ driverId: driverId, userId: userId })  
     .then(result => {
       if (result) {
-        const err = new Error('You have already posted a driver');
+        const err = new Error('You have already posted a order');
         err.status = 400;
         err.reason = 'ValidationError';
         return next(err);
       } else {
-        Driver.create(newDriver)    
+        Order.create(newOrder)    
           .then(result => {
-            Order.findOne({ _id: orderId })
+            Place.findOne({ _id: driverId })
               .then(order => {
-                order.drivers.push(result.id);
+                order.orders.push(result.id);
                 order.save((err,doc,numdocs)=>{
-                  updateAvgDrivers(orderId, function() {
+                  updateAvgOrders(driverId, function() {
                     res
                       .location(`${req.originalUrl}/${result.id}`)
                       .status(201)
@@ -128,7 +128,7 @@ router.post('/', (req, res, next) => {
               });              
             User.findOne({ _id: userId })
               .then(user => {
-                user.drivers.push(result.id);
+                user.orders.push(result.id);
                 user.save(); 
               });
           });
@@ -140,43 +140,43 @@ router.post('/', (req, res, next) => {
 });
 
 /* ========== PUT/UPDATE A SINGLE ITEM ========== */
-router.put('/:driverId', (req, res, next) => {
-  const { driverId } = req.params;
-  const { driver, orderId } = req.body;
+router.put('/:orderId', (req, res, next) => {
+  const { orderId } = req.params;
+  const { order, driverId } = req.body;
 
-  const updateDriver = {};
-  const updateFields = ['driver', 'userId', 'orderId'];
+  const updateOrder = {};
+  const updateFields = ['order', 'userId', 'driverId'];
 
   updateFields.forEach(field => {
     if (field in req.body) {
-      updateDriver[field] = req.body[field];
+      updateOrder[field] = req.body[field];
     }
   });
 
   /***** Never trust users - validate input *****/
-  if (!mongoose.Types.ObjectId.isValid(driverId)) {
-    const err = new Error('The `driver id` is not valid');
+  if (!mongoose.Types.ObjectId.isValid(orderId)) {
+    const err = new Error('The `order id` is not valid');
     err.status = 400;
     return next(err);
   }
-  if (orderId && !mongoose.Types.ObjectId.isValid(orderId)) {
-    const err = new Error('The `orderId` is not valid');
+  if (driverId && !mongoose.Types.ObjectId.isValid(driverId)) {
+    const err = new Error('The `driverId` is not valid');
     err.status = 400;
     return next(err);
   }
-  if (!driver) {
-    const err = new Error('Missing `driver` in request body');
+  if (!order) {
+    const err = new Error('Missing `order` in request body');
     err.status = 400;
     return next(err);
   }
-  Driver.findOne({ _id: driverId })
-    .then(driver => {
-      if (driver) {
-        driver.driver = updateDriver.driver;
-        driver.save((err,doc,numrows) => {
+  Order.findOne({ _id: orderId })
+    .then(order => {
+      if (order) {
+        order.order = updateOrder.order;
+        order.save((err,doc,numrows) => {
           if(!err){
-            updateAvgDrivers(orderId, function() {
-              res.json(driver);
+            updateAvgOrders(driverId, function() {
+              res.json(order);
             }); 
           }
         });
@@ -191,27 +191,27 @@ router.put('/:driverId', (req, res, next) => {
 
 });
 /* ========== DELETE/REMOVE A SINGLE ITEM ========== */
-router.delete('/:orderId', (req, res, next) => {
-  const { orderId } = req.params;
+router.delete('/:driverId', (req, res, next) => {
+  const { driverId } = req.params;
   const userId = req.user.id;
 
   /***** Never trust users - validate input *****/
-  if (!mongoose.Types.ObjectId.isValid(orderId)) {
+  if (!mongoose.Types.ObjectId.isValid(driverId)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
 
-  Driver.findOneAndDelete({ orderId, userId })
+  Order.findOneAndDelete({ driverId, userId })
     .then(result => {
       if (result) {
-        Order.update({_id: orderId }, { $pull: { drivers: result.id }} )
+        Place.update({_id: driverId }, { $pull: { orders: result.id }} )
           .then(() => {
-            updateAvgDrivers(orderId, function() {
+            updateAvgOrders(driverId, function() {
               res.sendStatus(204);
             }); 
           });
-        User.update({userId: userId }, { $pull: { drivers: { _id: result.id } }} );
+        User.update({userId: userId }, { $pull: { orders: { _id: result.id } }} );
       } else {
         res.sendStatus(404);
       }
@@ -221,7 +221,7 @@ router.delete('/:orderId', (req, res, next) => {
     });
 });
 
-function updateAvgDrivers(orderId, callback) {
+function updateAvgOrders(driverId, callback) {
   let warmLightingTotal,
     relaxedMusicTotal,
     calmEnvironmentTotal,
@@ -241,29 +241,29 @@ function updateAvgDrivers(orderId, callback) {
   warmLightingAverage = relaxedMusicAverage = calmEnvironmentAverage = softFabricsAverage = comfySeatingAverage = hotFoodDrinkAverage = 0;
 
 
-  Driver.find({ orderId: orderId })
-    .then((drivers) => {
+  Order.find({ driverId: driverId })
+    .then((orders) => {
 
-      let numberOfDrivers = drivers.length; 
-      if (numberOfDrivers !== 0) {
-        drivers.forEach((driver) => {
-          warmLightingTotal += driver.driver.warmLighting;
-          relaxedMusicTotal += driver.driver.relaxedMusic;
-          calmEnvironmentTotal += driver.driver.calmEnvironment;
-          softFabricsTotal += driver.driver.softFabrics;
-          comfySeatingTotal += driver.driver.comfySeating;
-          hotFoodDrinkTotal += driver.driver.hotFoodDrink;
+      let numberOfOrders = orders.length; 
+      if (numberOfOrders !== 0) {
+        orders.forEach((order) => {
+          warmLightingTotal += order.order.warmLighting;
+          relaxedMusicTotal += order.order.relaxedMusic;
+          calmEnvironmentTotal += order.order.calmEnvironment;
+          softFabricsTotal += order.order.softFabrics;
+          comfySeatingTotal += order.order.comfySeating;
+          hotFoodDrinkTotal += order.order.hotFoodDrink;
         });
 
-        warmLightingAverage = (warmLightingTotal / numberOfDrivers) ;
-        relaxedMusicAverage = (relaxedMusicTotal / numberOfDrivers);
-        calmEnvironmentAverage = (calmEnvironmentTotal / numberOfDrivers);
-        softFabricsAverage = (softFabricsTotal / numberOfDrivers);
-        comfySeatingAverage = (comfySeatingTotal / numberOfDrivers);
-        hotFoodDrinkAverage = (hotFoodDrinkTotal / numberOfDrivers);
+        warmLightingAverage = (warmLightingTotal / numberOfOrders) ;
+        relaxedMusicAverage = (relaxedMusicTotal / numberOfOrders);
+        calmEnvironmentAverage = (calmEnvironmentTotal / numberOfOrders);
+        softFabricsAverage = (softFabricsTotal / numberOfOrders);
+        comfySeatingAverage = (comfySeatingTotal / numberOfOrders);
+        hotFoodDrinkAverage = (hotFoodDrinkTotal / numberOfOrders);
       }
 
-      return Order.findOne({ _id: orderId });
+      return Place.findOne({ _id: driverId });
     })
     .then((order) => {
       order.averageWarmLighting = +warmLightingAverage.toFixed(2);

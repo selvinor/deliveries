@@ -3,7 +3,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 
-const User = require('../models/users');
+const User = require('../models/user');
 
 const router = express.Router();
 router.get('/', (req, res, next) => {
@@ -39,6 +39,7 @@ router.get('/:id', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
+  const { username, email, password  } = req.body;
   const requiredFields = ['username', 'email', 'password'];
   const missingField = requiredFields.find(field => !(field in req.body));
 
@@ -106,8 +107,6 @@ router.post('/', (req, res, next) => {
     err.status = 422;
     return next(err);
   }
-
-  let { username, email, password } = req.body;
 
   return User.hashPassword(password)
     .then(digest => {

@@ -4,7 +4,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const passport = require('passport');
 
-const Order = require('../models/orders');
+const Merchant = require('../models/merchants');
 const User = require('../models/user');
 
 const router = express.Router();
@@ -14,7 +14,7 @@ router.use('/', passport.authenticate('jwt', { session: false, failWithError: tr
 
 /* ========== GET/READ ALL ITEMS ========== */
 router.get('/', (req, res, next) => {
-  return Order.find()
+  return Merchant.find()
     .then(result => {
       return res
       .status(200)
@@ -47,7 +47,7 @@ router.get('/', (req, res, next) => {
 //     filter.userId = userId;
 //   }
 
-//   Order.find(filter) //
+//   Merchant.find(filter) //
 //     .sort({ updatedAt: 'desc' })
 //     .then(results => {
 //       console.log('RESULTS: ', res.json(results));
@@ -69,7 +69,7 @@ router.get('/:id', (req, res, next) => {
     return next(err);
   }
 
-  Order.findOne({ _id: id, userId })
+  Merchant.findOne({ _id: id, userId })
     .then(result => {
       if (result) {
         res.json(result);
@@ -105,9 +105,9 @@ router.post('/', (req, res, next) => {
     return next(err);
   }
 
-  const newOrder = { title, content, driverId, userId };
+  const newMerchant = { title, content, driverId, userId };
 
-  Order.create(newOrder) //
+  Merchant.create(newMerchant) //
     .then(result => {
       res
         .location(`${req.originalUrl}/${result.id}`)
@@ -123,12 +123,12 @@ router.post('/', (req, res, next) => {
 router.put('/:id', (req, res, next) => {
   const { id } = req.params;
   const { title, content, driverId } = req.body;
-  const updateOrder = {};
+  const updateMerchant = {};
   const updateFields = ['title', 'content', 'driverId']
 
   updateFields.forEach(field => {
     if (field in req.body) {
-      updateOrder[field] = req.body[field];
+      updateMerchant[field] = req.body[field];
     }
   });
 
@@ -149,7 +149,7 @@ router.put('/:id', (req, res, next) => {
     return next(err);
   }
 
-  Order.findByIdAndUpdate(id, updateOrder, { new: true })
+  Merchant.findByIdAndUpdate(id, updateMerchant, { new: true })
     .then(result => {
       if (result) {
         res.json(result);
@@ -174,7 +174,7 @@ router.delete('/:id', (req, res, next) => {
     return next(err);
   }
 
-  Order.deleteOne({ _id: id, userId })
+  Merchant.deleteOne({ _id: id, userId })
     .then(result => {
       if (result.n) {
         res.sendStatus(204);
