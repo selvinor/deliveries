@@ -3,22 +3,25 @@
 const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true },
-  orderNumber: {type: String, unique: true, required:true },
+  merchant: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true },
+  depot: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true },
+  driver: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true },
+  orderId: {type: String, unique: true, required:true },
   orderAddress :  {type: String, default: ''},
   orderBusinessName :  {type: String, default: ''},
   orderInstructions:{type: String, default: ''},
   orderRecipient : {type: String, default: ''},
   orderRecipientPhone :  {type: String, default: ''},
   orderStatus: {type: String, default: 'pending'},
-  orderOrderRef: {type: String, default: ''},
   orderZone: { type: mongoose.Schema.Types.ObjectId, ref: 'orderZone' }
 });
 
 orderSchema.methods.serialize = function() {
   return {
-    user: this.user || '',
-    orderNumber: this.orderNumber || '',
+    merchant: this.user || '',
+    depot: this.user || '',
+    driver: this.user || '',
+    orderId: this.orderId || '',
     orderAddress :  this.orderAddress || '',
     orderBusinessName :  this.orderBusinessName || '',    
     orderInstructions: this.orderInstructions || '',

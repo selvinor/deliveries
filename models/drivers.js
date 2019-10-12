@@ -5,12 +5,11 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 const driverSchema = new mongoose.Schema({
-  driverId: { type: String, required: true, unique: true },
-  driverPassword: { type: String, required: true },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true },
   driverName: {type: String, default: ''},
-  driverEmail: {type: String, default: ''},
   driverPhone: {type: String, default: ''},
-  driverVehicleType: {type: String, default: ''},
+  driverVehicleMake: {type: String, default: ''},
+  driverVehicleModel: {type: String, default: ''},
   driverVehiclePlate: {type: String, default: ''},
   driverDeliveries: [
     {
@@ -21,8 +20,7 @@ const driverSchema = new mongoose.Schema({
 
 driverSchema.methods.serialize = function() {
   return {
-    driverId: this.driverId || '',
-    driverPassword: { type: String, required: true },
+    userId: this.user || '',
     driverName: this.driverName || '',
     driverEmail: this.driverEmail|| '',
     driverPhone: this.driverPhone|| '',
