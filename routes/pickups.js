@@ -4,7 +4,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const passport = require('passport');
 
-const Merchant = require('../models/merchants');
+const Merchant = require('../models/pickups');
 const User = require('../models/user');
 
 const router = express.Router();

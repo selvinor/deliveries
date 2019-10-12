@@ -15,7 +15,7 @@ const userRouter = require('./routes/users');
 const driverRouter = require('./routes/drivers');
 const orderRouter = require('./routes/orders');
 const authRouter = require('./routes/auth');
-const merchantRouter = require('./routes/merchants');
+const pickupRouter = require('./routes/pickups');
 
 // Create an Express application
 const app = express();
@@ -46,7 +46,7 @@ app.use('/api/login', authRouter);
 app.use('/api/users', userRouter);
 app.use('/api/drivers', driverRouter);
 app.use('/api/orders', orderRouter);
-app.use('/api/merchants', merchantRouter);
+app.use('/api/pickups', pickupRouter);
 
 
 app.use((req, res, next) => {

@@ -1,26 +1,105 @@
- [{
-   "_id": "111111111111111111111100",
-   "driverId": "driver1",
-   "driverPassword": "$2a$10$Mk7Z.7hiexMSLbN6unTgCOEzbCcg3TgEf7H81dPIE6219EP78UJWK",
+ [
+  {
+   "_id": "DRI000000000000000000101",
    "driverName": "Bob Driver",
    "driverEmail": "driver1@fakeemail.com",
    "driverPhone": "555-555-1111",
    "driverVehicleType": "Subaru Outback",
    "driverVehiclePlate": "deliver1",
-   "orders": 
+   "pickups": 
     [
-      { " _id": "22222222222222222222001",
-        "userId": "shop1",
-        "orderId": "3", 
-        "orderOrderRef": "#870",  
-        "orderAddress": "1100 SW 6th Ave Portland, OR 97204", 
-        "orderInstructions": "Deliver to front desk, have guard call recipient", 
-        "orderRecipient" : "Jane Doe", 
-        "orderPhone" : "555-555-1212", 
-        "orderStatus": "ready_for_pickup",   
-        "orderZone" :  "zone1"   
-      }
-    ] 
+      "PKP00000000000000000001", 
+      "PKP00000000000000000002"
+    ],
+    "deliveries" : 
+    []
+  },
+  {
+    "_id": "DRI000000000000000000102",
+    "driverName": "Jill Driver",
+    "driverEmail": "driver2@fakeemail.com",
+    "driverPhone": "555-555-1111",
+    "driverVehicleType": "Subaru Outback",
+    "driverVehiclePlate": "deliver2",
+    "pickups": 
+     [
+       "PKP00000000000000000003" 
+     ],
+     "deliveries" : 
+     [] 
+   },
+   {
+    "_id": "DRI000000000000000000103",
+    "driverName": "Debra Driver",
+    "driverEmail": "driver3@fakeemail.com",
+    "driverPhone": "555-555-1111",
+    "driverVehicleType": "Subaru Outback",
+    "driverVehiclePlate": "deliver3",
+    "pickups": 
+     [],
+     "deliveries" : 
+     [
+      "DEL000000000000000000001"
+     ] 
+   },
+   {
+    "_id": "DRI000000000000000000104",
+    "driverName": "Zoe Driver",
+    "driverEmail": "driver4@fakeemail.com",
+    "driverPhone": "555-555-1111",
+    "driverVehicleType": "Subaru Outback",
+    "driverVehiclePlate": "deliver4",
+    "pickups": 
+     [
+     ],
+     "deliveries" : 
+     [
+      "DEL00000000000000000002", 
+      "DEL00000000000000000003", 
+      "DEL00000000000000000004", 
+      "DEL00000000000000000005" 
+     ] 
+   },
+   {
+    "_id": "DRI000000000000000000105",
+    "driverName": "Fred Driver",
+    "driverEmail": "driver5@fakeemail.com",
+    "driverPhone": "555-555-1111",
+    "driverVehicleType": "Subaru Outback",
+    "driverVehiclePlate": "deliver5",
+    "pickups": 
+     [
+      ],
+     "deliveries" : 
+     [
+      "DEL00000000000000000006"
+     ] 
+   },
+   {
+    "_id": "DRI000000000000000000106",
+    "driverName": "Fiona Driver",
+    "driverEmail": "driver6@fakeemail.com",
+    "driverPhone": "555-555-1111",
+    "driverVehicleType": "Subaru Outback",
+    "driverVehiclePlate": "deliver6",
+    "pickups": 
+     [],
+     "deliveries" : 
+     [
+      "DEL00000000000000000007"
+     ] 
+   },
+  {
+   "_id": "DRI000000000000000000107",
+   "driverName": "Larry Driver",
+   "driverEmail": "driver17@fakeemail.com",
+   "driverPhone": "555-555-1111",
+   "driverVehicleType": "Subaru Outback",
+   "driverVehiclePlate": "deliver1",
+   "pickups": 
+    [],
+   "deliveries" : 
+    [] 
   }
- ]
+      ]
  

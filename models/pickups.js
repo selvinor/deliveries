@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 
 
-const merchantSchema = new mongoose.Schema({
+const pickupSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true },
   streetAddress: {type: String, default: ''},
   businessName: {type: String, default: ''},
@@ -16,7 +16,7 @@ const merchantSchema = new mongoose.Schema({
   ]
 });
 
-merchantSchema.methods.serialize = function() { 
+pickupSchema.methods.serialize = function() { 
   return {
     user: this.user || '',
     streetAddress: this.streetAddress || '',
@@ -29,10 +29,10 @@ merchantSchema.methods.serialize = function() {
 
 
 // Add `createdAt` and `updatedAt` fields
-merchantSchema.set('timestamps', true);
+pickupSchema.set('timestamps', true);
 
 // Customize output for `res.json(data)`, `console.log(data)` etc.
-merchantSchema.set('toObject', {
+pickupSchema.set('toObject', {
   virtuals: true,     // include built-in virtual `id`
   versionKey: false,  // remove `__v` version key
   transform: (doc, ret) => {
@@ -40,4 +40,4 @@ merchantSchema.set('toObject', {
   }
 });
 
-module.exports = mongoose.model('Merchant', merchantSchema);
+module.exports = mongoose.model('Merchant', pickupSchema);

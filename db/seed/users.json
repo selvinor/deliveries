@@ -1,59 +1,79 @@
 [
   {
-    "_id":      "000000000000000000000001",
-    "username": "merchant1",
-    "email":    "merchant1@fakeemail.com",
-    "password": "$2a$10$7QGPMellj8necAZTRbjY5eu3wBpy1Z20U7gwYYfksKVCr1kHBrCvG",   
-    "merchants": [
-      "111111111111111111111012"
-   ] 
+    "_id"       : "USR000000000000000000001",
+    "username"  : "pickup1",
+    "email"     : "pickup1@fakeemail.com",
+    "password"  : "$2a$10$7QGPMellj8necAZTRbjY5eu3wBpy1Z20U7gwYYfksKVCr1kHBrCvG",
+    "pickup"    : "PKP00000000000000000001" 
+
 },
   {
-    "_id":      "000000000000000000000002",
-    "username": "merchant2",
-    "email":    "merchant2@fakeemail.com",
-    "password": "$2a$10$7QGPMellj8necAZTRbjY5eu3wBpy1Z20U7gwYYfksKVCr1kHBrCvG",
-    "merchants": [
-      "111111111111111111111012"
-   ]       "111111111111111111111022",
-      "111111111111111111111023",
-      "111111111111111111111028"
-   ]
-},
-  {
-    "_id":      "000000000000000000000003",
-    "username": "merchant3",
-    "email":    "merchant3@fakeemail.com",
-    "password": "$2a$10$7QGPMellj8necAZTRbjY5eu3wBpy1Z20U7gwYYfksKVCr1kHBrCvG",
-    "merchants": [
-      "111111111111111111111012"
-   ] 
+    "_id"       : "USR000000000000000000002",
+    "username"  : "pickup2",
+    "email"     : "pickup2@fakeemail.com",
+    "password"  : "$2a$10$7QGPMellj8necAZTRbjY5eu3wBpy1Z20U7gwYYfksKVCr1kHBrCvG",
+    "pickup"    : "PKP00000000000000000002" 
   },
   {
-    "_id":      "000000000000000000000004",
-    "username": "driver1",
-    "email":    "driver1@fakeemail.com",
-    "password": "$2a$10$7QGPMellj8necAZTRbjY5eu3wBpy1Z20U7gwYYfksKVCr1kHBrCvG",
-    "drivers": [
-      "111111111111111111111012"
-   ] 
+    "_id"       : "USR000000000000000000003",
+    "username"  : "pickup3",
+    "email"     : "pickup3@fakeemail.com",
+    "password"  : "$2a$10$7QGPMellj8necAZTRbjY5eu3wBpy1Z20U7gwYYfksKVCr1kHBrCvG",
+    "pickup"    : "PKP00000000000000000003" 
   },
   {
-    "_id":      "000000000000000000000005",
-    "username": "driver2",
-    "email":    "driver2@fakeemail.com",
-    "password": "$2a$10$7QGPMellj8necAZTRbjY5eu3wBpy1Z20U7gwYYfksKVCr1kHBrCvG",
-    "drivers": [
-      "111111111111111111111012"
-   ] 
+    "_id"       : "USR000000000000000000004",
+    "username"  : "driver1",
+    "email"     : "driver1@fakeemail.com",
+    "password"  : "$2a$10$7QGPMellj8necAZTRbjY5eu3wBpy1Z20U7gwYYfksKVCr1kHBrCvG",
+    "driver"    : "DRI00000000000000000001" 
   },
   {
-    "_id":      "000000000000000000000005",
-    "username": "depot1",
-    "email":    "depot1@fakeemail.com",
-    "password": "$2a$10$7QGPMellj8necAZTRbjY5eu3wBpy1Z20U7gwYYfksKVCr1kHBrCvG",
-    "drivers": [
-      "111111111111111111111012"
-   ] 
+    "_id"       : "USR000000000000000000005",
+    "username"  : "driver2",
+    "email"     : "driver2@fakeemail.com",
+    "password"  : "$2a$10$7QGPMellj8necAZTRbjY5eu3wBpy1Z20U7gwYYfksKVCr1kHBrCvG",
+    "driver"    : "DRI00000000000000000002" 
+  },
+  {
+    "_id"       : "USR000000000000000000006",
+    "username"  : "driver3",
+    "email"     : "driver3@fakeemail.com",
+    "password"  : "$2a$10$7QGPMellj8necAZTRbjY5eu3wBpy1Z20U7gwYYfksKVCr1kHBrCvG",
+    "driver"    : "DRI00000000000000000003" 
+  },
+  {
+    "_id"       : "USR000000000000000000007",
+    "username"  : "driver4",
+    "email"     : "driver2@fakeemail.com",
+    "password"  : "$2a$10$7QGPMellj8necAZTRbjY5eu3wBpy1Z20U7gwYYfksKVCr1kHBrCvG",
+    "driver"    : "DRI00000000000000000004" 
+  },
+  {
+    "_id"       : "USR000000000000000000008",
+    "username"  : "driver5",
+    "email"     : "driver2@fakeemail.com",
+    "password"  : "$2a$10$7QGPMellj8necAZTRbjY5eu3wBpy1Z20U7gwYYfksKVCr1kHBrCvG",
+    "driver"    : "DRI00000000000000000005" 
+  },
+  {
+    "_id"       : "USR000000000000000000010",
+    "username"  : "depot1",
+    "email"     : "depot1@fakeemail.com",
+    "password"  : "$2a$10$7QGPMellj8necAZTRbjY5eu3wBpy1Z20U7gwYYfksKVCr1kHBrCvG",
+    "drivers"   : ["DRI00000000000000000001","DRI00000000000000000002","DRI00000000000000000003","DRI00000000000000000004","DRI00000000000000000005"],
+    "pickups"   : ["PKP00000000000000000001","PKP00000000000000000002","PKP00000000000000000003"],
+    "deliveries": [
+      "DEL00000000000000000001", 
+      "DEL00000000000000000002",
+      "DEL00000000000000000003",
+      "DEL00000000000000000004",
+      "DEL00000000000000000005",
+      "DEL00000000000000000006",
+      "DEL00000000000000000007",
+      "DEL00000000000000000008",
+      "DEL00000000000000000009",
+      "DEL00000000000000000010"
+    ]
   }
 ]

@@ -1,0 +1,48 @@
+ [{
+   "_id": "PKP00000000000000000001",
+   "userId": "USR000000000000000000001",
+   "streetAddress": "900 SW 5th Ave. Portland Oregon 97204",
+   "businessName": "Blooms",
+   "email": "blooms@fakeemail.com",
+   "phone": "555-555-1111",
+   "orders": 
+    [
+      { 
+        "orderId" : "ORD000000000000000000001",
+        "orderId" : "ORD000000000000000000002",
+        "orderId" : "ORD000000000000000000003",
+        "orderId" : "ORD000000000000000000004"
+      }
+    ] 
+  },
+  {
+    "_id": "PKP00000000000000000002",
+    "userId": "USR000000000000000000002",
+    "streetAddress": "1100 SW 6th Ave. Portland Oregon 97204",
+    "businessName": "Acme Flowers",
+    "email": "acme@fakeemail.com",
+    "phone": "555-555-1111",
+    "orders": 
+    [
+      { 
+        "orderId" : "ORD000000000000000000005",
+        "orderId" : "ORD000000000000000000006"
+      }
+    ] 
+  },
+  {
+    "_id": "PKP00000000000000000003",
+    "userId": "USR000000000000000000003",
+    "streetAddress": "1900 SW 7th Ave. Portland Oregon 97204",
+    "businessName": "Fake Flowers Co",
+    "email": "fakeflowers@fakeemail.com",
+    "phone": "555-555-1111",
+    "orders": 
+      [
+        { 
+          "orderId" : "ORD000000000000000000007"
+        }
+      ] 
+  }
+]
+ 

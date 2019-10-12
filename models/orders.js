@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
-  merchant: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true },
+  pickup: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true },
   depot: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true },
   driver: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true },
   orderId: {type: String, unique: true, required:true },
@@ -18,7 +18,7 @@ const orderSchema = new mongoose.Schema({
 
 orderSchema.methods.serialize = function() {
   return {
-    merchant: this.user || '',
+    pickup: this.user || '',
     depot: this.user || '',
     driver: this.user || '',
     orderId: this.orderId || '',
