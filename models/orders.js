@@ -3,9 +3,10 @@
 const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
-  pickup: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true },
-  depot: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true },
-  driver: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true },
+  pickup: { type: mongoose.Schema.Types.ObjectId, ref: 'pickup', required: true },
+  delivery: { type: mongoose.Schema.Types.ObjectId, ref: 'delivery', required: true },
+  depot: { type: mongoose.Schema.Types.ObjectId, ref: 'depot', required: true },
+  driver: { type: mongoose.Schema.Types.ObjectId, ref: 'driver', required: true },
   orderId: {type: String, unique: true, required:true },
   orderAddress :  {type: String, default: ''},
   orderBusinessName :  {type: String, default: ''},
@@ -18,9 +19,10 @@ const orderSchema = new mongoose.Schema({
 
 orderSchema.methods.serialize = function() {
   return {
-    pickup: this.user || '',
-    depot: this.user || '',
-    driver: this.user || '',
+    pickup: this.pickup || '',
+    delivery: this.delivery || '',
+    depot: this.depot || '',
+    driver: this.driver || '',
     orderId: this.orderId || '',
     orderAddress :  this.orderAddress || '',
     orderBusinessName :  this.orderBusinessName || '',    

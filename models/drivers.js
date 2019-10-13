@@ -1,5 +1,4 @@
-'use strict';
-const bcrypt = require('bcryptjs');
+'use strict';');
 const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
@@ -22,21 +21,12 @@ driverSchema.methods.serialize = function() {
   return {
     userId: this.user || '',
     driverName: this.driverName || '',
-    driverEmail: this.driverEmail|| '',
     driverPhone: this.driverPhone|| '',
     driverVehicleType: this.driverVehicleType|| '',
     driverPhone: this.driverPhone|| '',
     driverVehiclePlate: this.driverVehiclePlate|| '',
     driverDeliveries: this.driverDeliveries|| ''
   };
-};
-
-driverSchema.methods.validatePassword = function(password) {
-  return bcrypt.compare(password, this.password);
-};
-
-driverSchema.statics.hashPassword = function(password) {
-  return bcrypt.hash(password, 10);
 };
 
 const Driver = mongoose.model('driver', driverSchema);
@@ -49,9 +39,7 @@ driverSchema.set('toObject', {
   versionKey: false,  // remove `__v` version key
   transform: (doc, ret) => {
     delete ret._id; // delete `_id`
-    delete ret.password; // delete `_id`
   }
 });
-
 
 module.exports = {Driver};

@@ -1,12 +1,10 @@
 'use strict';
-const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
-
 
 const pickupSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true },
-  streetAddress: {type: String, default: ''},
   businessName: {type: String, default: ''},
+  streetAddress: {type: String, default: ''},
   contactEmail: {type: String, default: ''},
   phone: {type: String, default: ''},
   orders: [
@@ -19,8 +17,8 @@ const pickupSchema = new mongoose.Schema({
 pickupSchema.methods.serialize = function() { 
   return {
     user: this.user || '',
-    streetAddress: this.streetAddress || '',
     businessName: this.businessName || '',
+    streetAddress: this.streetAddress || '',
     contactEmail: this.businessName || '',
     phone: this.phone|| '',
     orders: this.orders|| ''

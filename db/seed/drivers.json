@@ -1,8 +1,8 @@
  [
   {
    "_id": "DRI000000000000000000101",
+   "userId":   "USR000000000000000000004",
    "driverName": "Bob Driver",
-   "driverEmail": "driver1@fakeemail.com",
    "driverPhone": "555-555-1111",
    "driverVehicleType": "Subaru Outback",
    "driverVehiclePlate": "deliver1",
@@ -16,8 +16,8 @@
   },
   {
     "_id": "DRI000000000000000000102",
+    "userId":   "000000000000000000000001",
     "driverName": "Jill Driver",
-    "driverEmail": "driver2@fakeemail.com",
     "driverPhone": "555-555-1111",
     "driverVehicleType": "Subaru Outback",
     "driverVehiclePlate": "deliver2",
@@ -30,8 +30,8 @@
    },
    {
     "_id": "DRI000000000000000000103",
+    "userId":   "000000000000000000000001",
     "driverName": "Debra Driver",
-    "driverEmail": "driver3@fakeemail.com",
     "driverPhone": "555-555-1111",
     "driverVehicleType": "Subaru Outback",
     "driverVehiclePlate": "deliver3",
@@ -44,8 +44,8 @@
    },
    {
     "_id": "DRI000000000000000000104",
+    "userId":   "000000000000000000000001",
     "driverName": "Zoe Driver",
-    "driverEmail": "driver4@fakeemail.com",
     "driverPhone": "555-555-1111",
     "driverVehicleType": "Subaru Outback",
     "driverVehiclePlate": "deliver4",
@@ -62,8 +62,8 @@
    },
    {
     "_id": "DRI000000000000000000105",
+    "userId":   "000000000000000000000001",
     "driverName": "Fred Driver",
-    "driverEmail": "driver5@fakeemail.com",
     "driverPhone": "555-555-1111",
     "driverVehicleType": "Subaru Outback",
     "driverVehiclePlate": "deliver5",
@@ -77,8 +77,8 @@
    },
    {
     "_id": "DRI000000000000000000106",
+    "userId":   "000000000000000000000001",
     "driverName": "Fiona Driver",
-    "driverEmail": "driver6@fakeemail.com",
     "driverPhone": "555-555-1111",
     "driverVehicleType": "Subaru Outback",
     "driverVehiclePlate": "deliver6",
@@ -91,8 +91,8 @@
    },
   {
    "_id": "DRI000000000000000000107",
+   "userId":   "000000000000000000000001",
    "driverName": "Larry Driver",
-   "driverEmail": "driver17@fakeemail.com",
    "driverPhone": "555-555-1111",
    "driverVehicleType": "Subaru Outback",
    "driverVehiclePlate": "deliver1",
