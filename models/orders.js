@@ -3,33 +3,33 @@
 const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
-  pickup: { type: mongoose.Schema.Types.ObjectId, ref: 'Pickup', required: true },
-  delivery: { type: mongoose.Schema.Types.ObjectId, ref: 'Delivery', required: true },
-  depot: { type: mongoose.Schema.Types.ObjectId, ref: 'Depot', required: true },
-  driver: { type: mongoose.Schema.Types.ObjectId, ref: 'Driver', required: true },
-  orderId: {type: String, unique: true, required:true },
-  orderAddress :  {type: String, default: ''},
-  orderBusinessName :  {type: String, default: ''},
-  orderInstructions:{type: String, default: ''},
-  orderRecipient : {type: String, default: ''},
-  orderContactPhone :  {type: String, default: ''},
-  orderStatus: {type: String, default: 'pending'},
+  vendor: { type: mongoose.Schema.Types.ObjectId, ref: 'Vendor', required: true },
+  pickupId: { type: mongoose.Schema.Types.ObjectId, ref: 'Pickup', required: true },
+  deliveryId: { type: mongoose.Schema.Types.ObjectId, ref: 'Delivery', required: true },
+  orderId: {type: String, unique: false, required:true },
+  destination : {
+    businessName :  {type: String, default: ''},
+    streetAddress :  {type: String, default: ''},
+    city: {type: String, default: ''},
+    state: {type: String, default: ''},
+    zipcode: {type: String, default: ''},
+    geocode: {
+      type: { type: String },
+      coordinates: []
+    },
+    instructions:{type: String, default: ''},
+    recipient : {type: String, default: ''},
+    contactPhone :  {type: String, default: ''}  
+  }
 });
 
 orderSchema.methods.serialize = function() {
   return {
+    vendor: this.vendor || '',
     pickup: this.pickup || '',
     delivery: this.delivery || '',
-    depot: this.depot || '',
-    driver: this.driver || '',
     orderId: this.orderId || '',
-    orderAddress :  this.orderAddress || '',
-    orderBusinessName :  this.orderBusinessName || '',    
-    orderInstructions: this.orderInstructions || '',
-    orderRecipient: this.orderRecipient || '',
-    orderContactPhone :  this.orderContactPhone || '',
-    orderStatus: this.orderStatus || '',
-    orderOrderRef :  this.orderOrderRef || ''
+    destination: this.destination|| ''
   };
 };
 // const Order = mongoose.model('Order', OrderSchema);

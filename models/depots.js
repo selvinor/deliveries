@@ -3,23 +3,22 @@ const mongoose = require('mongoose');
 
 
 const depotSchema = new mongoose.Schema({ 
+  zones : [{ type: mongoose.Schema.Types.ObjectId, ref: 'Zone' }],
   drivers : { type: mongoose.Schema.Types.ObjectId, ref: 'Driver' },  
   pickups : { type: mongoose.Schema.Types.ObjectId, ref: 'Pickup' },  
   deliveries : { type: mongoose.Schema.Types.ObjectId, ref: 'Delivery' },  
-  zones : [{ type: mongoose.Schema.Types.ObjectId, ref: 'Zone' }],
   orders: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Order' }]  
 });
 
 depotSchema.methods.serialize = function() { 
   return {
+    zones: this.zones || '',
     drivers: this.drivers || '',
     pickups: this.pickups|| '',
     deliveries: this.deliveries || '',
-    zones: this.zones|| '',
     orders: this.orders || ''
   };
 };
-
 
 // Add `createdAt` and `updatedAt` fields
 depotSchema.set('timestamps', true);

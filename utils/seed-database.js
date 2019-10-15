@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const { MONGODB_URI } = require('../config');
 
 // const Order = require('../models/orders');
-const User = require('../models/user');
+const User = require('../models/users');
 
 // const seedOrders = require('../db/seed/orders');
 const seedUsers = require('../db/seed/users');

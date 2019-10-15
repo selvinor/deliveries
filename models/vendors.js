@@ -21,6 +21,11 @@ const vendorSchema = new mongoose.Schema({
     {
       pickup: { type: mongoose.Schema.Types.ObjectId, ref: 'Pickup' }
     }
+  ],
+  deliveries: [
+    {
+      delivery: { type: mongoose.Schema.Types.ObjectId, ref: 'Delivery' }
+    }
   ]
 });
 
@@ -28,11 +33,14 @@ vendorSchema.methods.serialize = function() {
   return {
     userId: this.user || '',
     vendorName: this.vendorName || '',
-    vendorPhone: this.vendorPhone|| '',
-    vendorVehicleType: this.vendorVehicleType|| '',
-    vendorPhone: this.vendorPhone|| '',
-    vendorVehiclePlate: this.vendorVehiclePlate|| '',
-    vendorDeliveries: this.vendorDeliveries|| ''
+    streetAddress: this.vendorAddress|| '',
+    city: this.vendorCity|| '',
+    state: this.vendorState|| '',
+    zipcode: this.vendorZipcode|| '',
+    phone: this.vendorPhone|| '',
+    orders: this.orders|| '',
+    pickups: this.pickups|| '',
+    deliveries: this.deliveries|| '',
   };
 };
 

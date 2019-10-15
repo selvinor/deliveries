@@ -4,8 +4,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const passport = require('passport');
 
-const Merchant = require('../models/pickups');
-const User = require('../models/user');
+const Pickup = require('../models/pickups');
 
 const router = express.Router();
 
@@ -14,7 +13,7 @@ router.use('/', passport.authenticate('jwt', { session: false, failWithError: tr
 
 /* ========== GET/READ ALL ITEMS ========== */
 router.get('/', (req, res, next) => {
-  return Merchant.find()
+  return Pickup.find()
     .then(result => {
       return res
       .status(200)
@@ -47,7 +46,7 @@ router.get('/', (req, res, next) => {
 //     filter.userId = userId;
 //   }
 
-//   Merchant.find(filter) //
+//   Pickup.find(filter) //
 //     .sort({ updatedAt: 'desc' })
 //     .then(results => {
 //       console.log('RESULTS: ', res.json(results));
@@ -69,7 +68,7 @@ router.get('/:id', (req, res, next) => {
     return next(err);
   }
 
-  Merchant.findOne({ _id: id, userId })
+  Pickup.findOne({ _id: id, userId })
     .then(result => {
       if (result) {
         res.json(result);
@@ -105,9 +104,9 @@ router.post('/', (req, res, next) => {
     return next(err);
   }
 
-  const newMerchant = { title, content, driverId, userId };
+  const newPickup = { title, content, driverId, userId };
 
-  Merchant.create(newMerchant) //
+  Pickup.create(newPickup) //
     .then(result => {
       res
         .location(`${req.originalUrl}/${result.id}`)
@@ -123,12 +122,12 @@ router.post('/', (req, res, next) => {
 router.put('/:id', (req, res, next) => {
   const { id } = req.params;
   const { title, content, driverId } = req.body;
-  const updateMerchant = {};
+  const updatePickup = {};
   const updateFields = ['title', 'content', 'driverId']
 
   updateFields.forEach(field => {
     if (field in req.body) {
-      updateMerchant[field] = req.body[field];
+      updatePickup[field] = req.body[field];
     }
   });
 
@@ -149,7 +148,7 @@ router.put('/:id', (req, res, next) => {
     return next(err);
   }
 
-  Merchant.findByIdAndUpdate(id, updateMerchant, { new: true })
+  Pickup.findByIdAndUpdate(id, updatePickup, { new: true })
     .then(result => {
       if (result) {
         res.json(result);
@@ -174,7 +173,7 @@ router.delete('/:id', (req, res, next) => {
     return next(err);
   }
 
-  Merchant.deleteOne({ _id: id, userId })
+  Pickup.deleteOne({ _id: id, userId })
     .then(result => {
       if (result.n) {
         res.sendStatus(204);

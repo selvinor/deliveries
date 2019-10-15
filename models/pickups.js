@@ -34,4 +34,4 @@ pickupSchema.set('toObject', {
   }
 });
 
-module.exports = mongoose.model('Merchant', pickupSchema);
+module.exports = mongoose.model('Pickup', pickupSchema);
