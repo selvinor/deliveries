@@ -3,18 +3,17 @@
 const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
-  pickup: { type: mongoose.Schema.Types.ObjectId, ref: 'pickup', required: true },
-  delivery: { type: mongoose.Schema.Types.ObjectId, ref: 'delivery', required: true },
-  depot: { type: mongoose.Schema.Types.ObjectId, ref: 'depot', required: true },
-  driver: { type: mongoose.Schema.Types.ObjectId, ref: 'driver', required: true },
+  pickup: { type: mongoose.Schema.Types.ObjectId, ref: 'Pickup', required: true },
+  delivery: { type: mongoose.Schema.Types.ObjectId, ref: 'Delivery', required: true },
+  depot: { type: mongoose.Schema.Types.ObjectId, ref: 'Depot', required: true },
+  driver: { type: mongoose.Schema.Types.ObjectId, ref: 'Driver', required: true },
   orderId: {type: String, unique: true, required:true },
   orderAddress :  {type: String, default: ''},
   orderBusinessName :  {type: String, default: ''},
   orderInstructions:{type: String, default: ''},
   orderRecipient : {type: String, default: ''},
-  orderRecipientPhone :  {type: String, default: ''},
+  orderContactPhone :  {type: String, default: ''},
   orderStatus: {type: String, default: 'pending'},
-  orderZone: { type: mongoose.Schema.Types.ObjectId, ref: 'orderZone' }
 });
 
 orderSchema.methods.serialize = function() {
@@ -28,10 +27,9 @@ orderSchema.methods.serialize = function() {
     orderBusinessName :  this.orderBusinessName || '',    
     orderInstructions: this.orderInstructions || '',
     orderRecipient: this.orderRecipient || '',
-    orderRecipientPhone :  this.orderRecipientPhone || '',
+    orderContactPhone :  this.orderContactPhone || '',
     orderStatus: this.orderStatus || '',
-    orderOrderRef :  this.orderOrderRef || '',
-    orderZone: this.orderZone || ''
+    orderOrderRef :  this.orderOrderRef || ''
   };
 };
 // const Order = mongoose.model('Order', OrderSchema);

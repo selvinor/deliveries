@@ -4,7 +4,7 @@
     "deliveryId" : "DEL000000000000000000001",
     "pickupId" :   "PKP00000000000000000001",
     "destination" : {
-      "businessName" :  "Insomnia Coffee Co",
+      "vendorName" :  "Insomnia Coffee Co",
       "address": "2388 NW Amberbrook Dr",
       "city": "Beaverton",
       "state": "OR",
@@ -23,7 +23,7 @@
     "deliveryId" : "DEL000000000000000000001",
     "pickupId" :   "PKP00000000000000000001",
     "destination" : {
-      "businessName" :  "AVA Roasteria",
+      "vendorName" :  "AVA Roasteria",
       "address": "2936 NE Orenco Station Loop",
       "city": "Beaverton",
       "state": "OR",
@@ -42,7 +42,7 @@
     "deliveryId" : "DEL000000000000000000002",
     "pickupId" :   "PKP00000000000000000001",
     "destination" : {
-      "businessName" :  "The Dragonfly Coffee House",
+      "vendorName" :  "The Dragonfly Coffee House",
       "address": "2387 NW Thurman St",
       "city": "Portland",
       "state": "OR",
@@ -61,7 +61,7 @@
     "deliveryId" : "DEL000000000000000000003",
     "pickupId" :   "PKP00000000000000000001",
     "destination" : {
-      "businessName" :  "Nia Technique",
+      "vendorName" :  "Nia Technique",
       "address": "918 SW Yamhill St",
       "city": "Portland",
       "state": "OR",
@@ -80,7 +80,7 @@
     "deliveryId" : "DEL000000000000000000004",
     "pickupId" :   "PKP00000000000000000001",
     "destination" : {
-      "businessName" :  "",
+      "vendorName" :  "",
       "address": "1221 S W 10th Ave #1306",
       "city": "Portland",
       "state": "OR",
@@ -100,7 +100,7 @@
     "deliveryId" : "DEL000000000000000000005",
     "pickupId" :   "PKP00000000000000000001",
     "destination" : {
-      "businessName" :  "Linfield College",
+      "vendorName" :  "Linfield College",
       "address": "2215 NW Northrup St.",
       "city": "Portland",
       "state": "OR",
@@ -120,7 +120,7 @@
     "deliveryId" : "DEL000000000000000000006",
     "pickupId" :   "PKP00000000000000000001",
     "destination" : {
-      "businessName" :  "Knight Diagnostic Labs",
+      "vendorName" :  "Knight Diagnostic Labs",
       "address": "2525 SW 3rd Ave, Suite 350",
       "city": "Portland",
       "state": "OR",

@@ -2,14 +2,10 @@
 const mongoose = require('mongoose');
 
 const pickupSchema = new mongoose.Schema({
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true },
-  businessName: {type: String, default: ''},
-  streetAddress: {type: String, default: ''},
-  contactEmail: {type: String, default: ''},
-  phone: {type: String, default: ''},
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   orders: [
     {
-      order: { type: mongoose.Schema.Types.ObjectId, ref: 'order' }
+      order: { type: mongoose.Schema.Types.ObjectId, ref: 'Order' }
     }
   ]
 });
@@ -17,9 +13,9 @@ const pickupSchema = new mongoose.Schema({
 pickupSchema.methods.serialize = function() { 
   return {
     user: this.user || '',
-    businessName: this.businessName || '',
+    vendorName: this.vendorName || '',
     streetAddress: this.streetAddress || '',
-    contactEmail: this.businessName || '',
+    vendorEmail: this.vendorName || '',
     phone: this.phone|| '',
     orders: this.orders|| ''
   };

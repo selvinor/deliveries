@@ -1,10 +1,11 @@
-'use strict';');
+'use strict';
+
 const mongoose = require('mongoose');
 
-mongoose.Promise = global.Promise;
+// mongoose.Promise = global.Promise;
 
 const driverSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   driverName: {type: String, default: ''},
   driverPhone: {type: String, default: ''},
   driverVehicleMake: {type: String, default: ''},
@@ -12,7 +13,7 @@ const driverSchema = new mongoose.Schema({
   driverVehiclePlate: {type: String, default: ''},
   driverDeliveries: [
     {
-      order: { type: mongoose.Schema.Types.ObjectId, ref: 'order' }
+      order: { type: mongoose.Schema.Types.ObjectId, ref: 'Order' }
     }
   ]
 });

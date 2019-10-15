@@ -7,7 +7,7 @@ const deliverySchema = new mongoose.Schema({
     "depotId" :  { type: mongoose.Schema.Types.ObjectId, ref: 'Depot' },   
     "driverId" : { type: mongoose.Schema.Types.ObjectId, ref: 'Driver' },  
     "status" : {type: String, default: ''},
-    "deliveryZone" : { type: mongoose.Schema.Types.ObjectId, ref: 'Zone' }
+    "zone" : { type: mongoose.Schema.Types.ObjectId, ref: 'Zone' }
   },
   orders: [
     {order: { type: mongoose.Schema.Types.ObjectId, ref: 'Order' }}

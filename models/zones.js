@@ -3,12 +3,20 @@ const mongoose = require('mongoose');
 
 
 const zoneSchema = new mongoose.Schema({ 
-  zones : [{type: String, default: ''}]
+  zone : [
+    {type: String, default: ''}
+  ],
+  pickups : [
+    {type: mongoose.Schema.Types.ObjectId, ref: 'Pickup'}
+  ],
+  deliveries : [
+    {type: mongoose.Schema.Types.ObjectId, ref: 'Delivery'}
+  ]
 });
 
 zoneSchema.methods.serialize = function() { 
   return {
-    zones: this.zones|| ''
+    zone: this.zone|| ''
   };
 };
 

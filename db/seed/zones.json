@@ -1,18 +1,37 @@
 [
   {
     "_id": "ZON000000000000000000001",
-    "deliveryZone" : "1"
+    "zone" : "1",
+    "deliveries" : 
+      [
+        {"deliveryId" : "DEL000000000000000000001"}
+      ]
   },
   {
     "_id": "ZON000000000000000000002",
-    "deliveryZone" : "2"
+    "zone" : "2",
+    "deliveries" : 
+      [
+        {"deliveryId" : "DEL000000000000000000002"},
+        {"deliveryId" : "DEL000000000000000000003"},
+        {"deliveryId" : "DEL000000000000000000004"}
+
+      ]
   },
   {
     "_id": "ZON000000000000000000003",
-    "deliveryZone" : "3"
+    "zone" : "3",
+    "deliveries" : 
+      [
+        {"deliveryId" : "DEL000000000000000000005"}
+      ]
   },
   {
     "_id": "ZON000000000000000000004",
-    "deliveryZone" : "4"
+    "zone" : "4",
+    "deliveries" : 
+      [
+        {"deliveryId" : "DEL000000000000000000006"}
+      ]
   }
 ]
