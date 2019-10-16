@@ -16,7 +16,9 @@ const zoneSchema = new mongoose.Schema({
 
 zoneSchema.methods.serialize = function() { 
   return {
-    zone: this.zone|| ''
+    zone: this.zone|| '',
+    pickups: this.pickups|| '',
+    deliveries: this.deliveries|| ''
   };
 };
 

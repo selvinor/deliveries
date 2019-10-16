@@ -11,11 +11,15 @@ const jwtStrategy = require('./passport/jwt');
 const { PORT, CLIENT_ORIGIN } = require('./config');
 const { dbConnect } = require('./db-mongoose');
 
-const userRouter = require('./routes/users');
+const authRouter = require('./routes/auth');
+const deliveryRouter = require('./routes/deliveries');
+const depotRouter = require('./routes/depots');
 const driverRouter = require('./routes/drivers');
 const orderRouter = require('./routes/orders');
-const authRouter = require('./routes/auth');
 const pickupRouter = require('./routes/pickups');
+const userRouter = require('./routes/users');
+const vendorRouter = require('./routes/vendors');
+const zoneRouter = require('./routes/zones');
 
 // Create an Express application
 const app = express();
@@ -43,10 +47,14 @@ passport.use(localStrategy);
 passport.use(jwtStrategy);
 
 app.use('/api/login', authRouter);
-app.use('/api/users', userRouter);
+app.use('/api/deliveries', deliveryRouter);
+app.use('/api/depots', depotRouter);
 app.use('/api/drivers', driverRouter);
 app.use('/api/orders', orderRouter);
 app.use('/api/pickups', pickupRouter);
+app.use('/api/users', userRouter);
+app.use('/api/vendors', vendorRouter);
+app.use('/api/zones', zoneRouter);
 
 
 app.use((req, res, next) => {

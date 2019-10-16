@@ -13,10 +13,6 @@ const pickupSchema = new mongoose.Schema({
 pickupSchema.methods.serialize = function() { 
   return {
     user: this.user || '',
-    vendorName: this.vendorName || '',
-    streetAddress: this.streetAddress || '',
-    vendorEmail: this.vendorName || '',
-    phone: this.phone|| '',
     orders: this.orders|| ''
   };
 };

@@ -2,8 +2,6 @@
 
 const mongoose = require('mongoose');
 
-// mongoose.Promise = global.Promise;
-
 const driverSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   driverName: {type: String, default: ''},
@@ -11,22 +9,28 @@ const driverSchema = new mongoose.Schema({
   driverVehicleMake: {type: String, default: ''},
   driverVehicleModel: {type: String, default: ''},
   driverVehiclePlate: {type: String, default: ''},
-  driverDeliveries: [
+  pickups: [
     {
-      order: { type: mongoose.Schema.Types.ObjectId, ref: 'Order' }
+      pickup: { type: mongoose.Schema.Types.ObjectId, ref: 'Pickup' }
+    }
+  ],
+  deliveries: [
+    {
+      delivery: { type: mongoose.Schema.Types.ObjectId, ref: 'Delivery' }
     }
   ]
 });
 
 driverSchema.methods.serialize = function() {
   return {
-    userId: this.user || '',
+    userId: this.userId || '',
     driverName: this.driverName || '',
     driverPhone: this.driverPhone|| '',
-    driverVehicleType: this.driverVehicleType|| '',
-    driverPhone: this.driverPhone|| '',
+    driverVehicleMake: this.driverVehicleMake|| '',
+    driverVehicleModel: this.driverVehicleModel|| '',
     driverVehiclePlate: this.driverVehiclePlate|| '',
-    driverDeliveries: this.driverDeliveries|| ''
+    pickups: this.pickups|| '',
+    deliveries: this.deliveries|| ''
   };
 };
 

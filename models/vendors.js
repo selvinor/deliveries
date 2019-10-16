@@ -2,16 +2,18 @@
 
 const mongoose = require('mongoose');
 
-// mongoose.Promise = global.Promise;
-
 const vendorSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   vendorName: {type: String, default: ''},
-  vendorAddress: {type: String, default: ''},
-  vendorCity: {type: String, default: ''},
-  vendorState: {type: String, default: ''},
-  vendorZipcode: {type: String, default: ''},
-  vendorPhone: {type: String, default: ''},
+  streetAddress: {type: String, default: ''},
+  city: {type: String, default: ''},
+  state: {type: String, default: ''},
+  zipcode: {type: String, default: ''},
+  geocode: {
+    type: { type: String },
+    coordinates: []
+  },
+  phone: {type: String, default: ''},
   orders: [
     {
       order: { type: mongoose.Schema.Types.ObjectId, ref: 'Order' }
@@ -31,16 +33,17 @@ const vendorSchema = new mongoose.Schema({
 
 vendorSchema.methods.serialize = function() {
   return {
-    userId: this.user || '',
+    userId: this.userId || '',
     vendorName: this.vendorName || '',
-    streetAddress: this.vendorAddress|| '',
-    city: this.vendorCity|| '',
-    state: this.vendorState|| '',
-    zipcode: this.vendorZipcode|| '',
-    phone: this.vendorPhone|| '',
+    streetAddress: this.streetAddress|| '',
+    city: this.city|| '',
+    state: this.state|| '',
+    zipcode: this.zipcode|| '',
+    geocode: this.geocode|| '',
+    phone: this.phone|| '',
     orders: this.orders|| '',
     pickups: this.pickups|| '',
-    deliveries: this.deliveries|| '',
+    deliveries: this.deliveries|| ''
   };
 };
 

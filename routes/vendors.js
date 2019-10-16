@@ -4,7 +4,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const passport = require('passport');
 
-const Driver = require('../models/drivers');
+const Vendor = require('../models/vendors');
 
 const router = express.Router();
 
@@ -13,7 +13,7 @@ router.use('/', passport.authenticate('jwt', { session: false, failWithError: tr
 
 /* ========== GET/READ ALL ITEMS ========== */
 router.get('/', (req, res, next) => {
-  return Driver.find()
+  return Vendor.find()
     .then(result => {
       return res
       .status(200)
@@ -46,7 +46,7 @@ router.get('/', (req, res, next) => {
 //     filter.userId = userId;
 //   }
 
-//   Driver.find(filter) //
+//   Vendor.find(filter) //
 //     .sort({ updatedAt: 'desc' })
 //     .then(results => {
 //       console.log('RESULTS: ', res.json(results));
@@ -68,7 +68,7 @@ router.get('/:id', (req, res, next) => {
     return next(err);
   }
 
-  Driver.findOne({ _id: id, userId })
+  Vendor.findOne({ _id: id, userId })
     .then(result => {
       if (result) {
         res.json(result);
@@ -98,10 +98,15 @@ router.post('/', (req, res, next) => {
     err.status = 400;
     return next(err);
   }
+  if (driverId && !mongoose.Types.ObjectId.isValid(userId)) {
+    const err = new Error('The `userId` is not valid');
+    err.status = 400;
+    return next(err);
+  }
 
-  const newDriver = { driver };
+  const newVendor = { title, content, driverId, userId };
 
-  Driver.create(newDriver) //
+  Vendor.create(newVendor) //
     .then(result => {
       res
         .location(`${req.originalUrl}/${result.id}`)
@@ -116,13 +121,13 @@ router.post('/', (req, res, next) => {
 /* ========== PUT/UPDATE A SINGLE ITEM ========== */
 router.put('/:id', (req, res, next) => {
   const { id } = req.params;
-  const { driverId } = req.body;
-  const updateDriver = {};
-  const updateFields = ['driverId']
+  const { title, content, driverId } = req.body;
+  const updateVendor = {};
+  const updateFields = ['title', 'content', 'driverId']
 
   updateFields.forEach(field => {
     if (field in req.body) {
-      updateDriver[field] = req.body[field];
+      updateVendor[field] = req.body[field];
     }
   });
 
@@ -137,13 +142,13 @@ router.put('/:id', (req, res, next) => {
     err.status = 400;
     return next(err);
   }
-  if (driverId === '') {
-    const err = new Error('Missing `driverId` in request body');
+  if (title === '') {
+    const err = new Error('Missing `title` in request body');
     err.status = 400;
     return next(err);
   }
 
-  Driver.findByIdAndUpdate(id, updateDriver, { new: true })
+  Vendor.findByIdAndUpdate(id, updateVendor, { new: true })
     .then(result => {
       if (result) {
         res.json(result);
@@ -168,7 +173,7 @@ router.delete('/:id', (req, res, next) => {
     return next(err);
   }
 
-  Driver.deleteOne({ _id: id, userId })
+  Vendor.deleteOne({ _id: id, userId })
     .then(result => {
       if (result.n) {
         res.sendStatus(204);

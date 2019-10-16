@@ -4,7 +4,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const passport = require('passport');
 
-const Driver = require('../models/drivers');
+const Zone = require('../models/zones');
 
 const router = express.Router();
 
@@ -13,7 +13,7 @@ router.use('/', passport.authenticate('jwt', { session: false, failWithError: tr
 
 /* ========== GET/READ ALL ITEMS ========== */
 router.get('/', (req, res, next) => {
-  return Driver.find()
+  return Zone.find()
     .then(result => {
       return res
       .status(200)
@@ -25,7 +25,7 @@ router.get('/', (req, res, next) => {
 });
 
 // router.get('/', (req, res, next) => {
-//   const { searchTerm, driverId } = req.query;
+//   const { searchTerm, zoneId } = req.query;
 //   const userId = req.user.id;
 
 //   let filter = {};
@@ -38,15 +38,15 @@ router.get('/', (req, res, next) => {
 //     // filter.$or = [{ 'title': re }, { 'content': re }];
 //   }
 
-//   if (driverId) {
-//     filter.driverId = driverId;
+//   if (zoneId) {
+//     filter.zoneId = zoneId;
 //   }
 
 //   if (userId) {
 //     filter.userId = userId;
 //   }
 
-//   Driver.find(filter) //
+//   Zone.find(filter) //
 //     .sort({ updatedAt: 'desc' })
 //     .then(results => {
 //       console.log('RESULTS: ', res.json(results));
@@ -68,7 +68,7 @@ router.get('/:id', (req, res, next) => {
     return next(err);
   }
 
-  Driver.findOne({ _id: id, userId })
+  Zone.findOne({ _id: id, userId })
     .then(result => {
       if (result) {
         res.json(result);
@@ -83,7 +83,7 @@ router.get('/:id', (req, res, next) => {
 
 /* ========== POST/CREATE AN ITEM ========== */
 router.post('/', (req, res, next) => {
-  const { title, content, driverId } = req.body;
+  const { title, content, zoneId } = req.body;
   const userId = req.user.id;
   //console.log('req.user', req.user);
   /***** Never trust users - validate input *****/
@@ -93,15 +93,15 @@ router.post('/', (req, res, next) => {
     return next(err);
   }
 
-  if (driverId && !mongoose.Types.ObjectId.isValid(driverId)) {
-    const err = new Error('The `driverId` is not valid');
+  if (zoneId && !mongoose.Types.ObjectId.isValid(zoneId)) {
+    const err = new Error('The `zoneId` is not valid');
     err.status = 400;
     return next(err);
   }
 
-  const newDriver = { driver };
+  const newZone = { zone };
 
-  Driver.create(newDriver) //
+  Zone.create(newZone) //
     .then(result => {
       res
         .location(`${req.originalUrl}/${result.id}`)
@@ -116,13 +116,13 @@ router.post('/', (req, res, next) => {
 /* ========== PUT/UPDATE A SINGLE ITEM ========== */
 router.put('/:id', (req, res, next) => {
   const { id } = req.params;
-  const { driverId } = req.body;
-  const updateDriver = {};
-  const updateFields = ['driverId']
+  const { zoneId } = req.body;
+  const updateZone = {};
+  const updateFields = ['zoneId']
 
   updateFields.forEach(field => {
     if (field in req.body) {
-      updateDriver[field] = req.body[field];
+      updateZone[field] = req.body[field];
     }
   });
 
@@ -132,18 +132,18 @@ router.put('/:id', (req, res, next) => {
     err.status = 400;
     return next(err);
   }
-  if (driverId && !mongoose.Types.ObjectId.isValid(driverId)) {
-    const err = new Error('The `driverId` is not valid');
+  if (zoneId && !mongoose.Types.ObjectId.isValid(zoneId)) {
+    const err = new Error('The `zoneId` is not valid');
     err.status = 400;
     return next(err);
   }
-  if (driverId === '') {
-    const err = new Error('Missing `driverId` in request body');
+  if (zoneId === '') {
+    const err = new Error('Missing `zoneId` in request body');
     err.status = 400;
     return next(err);
   }
 
-  Driver.findByIdAndUpdate(id, updateDriver, { new: true })
+  Zone.findByIdAndUpdate(id, updateZone, { new: true })
     .then(result => {
       if (result) {
         res.json(result);
@@ -168,7 +168,7 @@ router.delete('/:id', (req, res, next) => {
     return next(err);
   }
 
-  Driver.deleteOne({ _id: id, userId })
+  Zone.deleteOne({ _id: id, userId })
     .then(result => {
       if (result.n) {
         res.sendStatus(204);

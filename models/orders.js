@@ -6,7 +6,7 @@ const orderSchema = new mongoose.Schema({
   vendor: { type: mongoose.Schema.Types.ObjectId, ref: 'Vendor', required: true },
   pickupId: { type: mongoose.Schema.Types.ObjectId, ref: 'Pickup', required: true },
   deliveryId: { type: mongoose.Schema.Types.ObjectId, ref: 'Delivery', required: true },
-  orderId: {type: String, unique: false, required:true },
+  orderNum: {type: String, unique: false, required:true },
   destination : {
     businessName :  {type: String, default: ''},
     streetAddress :  {type: String, default: ''},
@@ -26,9 +26,9 @@ const orderSchema = new mongoose.Schema({
 orderSchema.methods.serialize = function() {
   return {
     vendor: this.vendor || '',
-    pickup: this.pickup || '',
-    delivery: this.delivery || '',
-    orderId: this.orderId || '',
+    pickupId: this.pickupId || '',
+    deliveryId: this.deliveryId || '',
+    orderNum: this.orderNum || '',
     destination: this.destination|| ''
   };
 };
