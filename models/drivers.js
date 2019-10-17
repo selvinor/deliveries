@@ -34,7 +34,7 @@ driverSchema.methods.serialize = function() {
   };
 };
 
-const Driver = mongoose.model('driver', driverSchema);
+
 // Add `createdAt` and `updatedAt` fields
 driverSchema.set('timestamps', true);
 
@@ -47,4 +47,4 @@ driverSchema.set('toObject', {
   }
 });
 
-module.exports = {Driver};
+module.exports = mongoose.model('Driver', driverSchema);

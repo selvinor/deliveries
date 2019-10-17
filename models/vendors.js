@@ -14,21 +14,9 @@ const vendorSchema = new mongoose.Schema({
     coordinates: []
   },
   phone: {type: String, default: ''},
-  orders: [
-    {
-      order: { type: mongoose.Schema.Types.ObjectId, ref: 'Order' }
-    }
-  ],
-  pickups: [
-    {
-      pickup: { type: mongoose.Schema.Types.ObjectId, ref: 'Pickup' }
-    }
-  ],
-  deliveries: [
-    {
-      delivery: { type: mongoose.Schema.Types.ObjectId, ref: 'Delivery' }
-    }
-  ]
+  pickups : [{ type: mongoose.Schema.Types.ObjectId, ref: 'Pickup' }],  
+  deliveries :[{ type: mongoose.Schema.Types.ObjectId, ref: 'Delivery' }],  
+  orders: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Order' }]  
 });
 
 vendorSchema.methods.serialize = function() {
@@ -41,14 +29,12 @@ vendorSchema.methods.serialize = function() {
     zipcode: this.zipcode|| '',
     geocode: this.geocode|| '',
     phone: this.phone|| '',
-    orders: this.orders|| '',
     pickups: this.pickups|| '',
-    deliveries: this.deliveries|| ''
+    deliveries: this.deliveries || '',
+    orders: this.orders || ''
   };
 };
 
-const Vendor = mongoose.model('vendor', vendorSchema);
-// Add `createdAt` and `updatedAt` fields
 vendorSchema.set('timestamps', true);
 
 // Customize output for `res.json(data)`, `console.log(data)` etc.
@@ -60,4 +46,5 @@ vendorSchema.set('toObject', {
   }
 });
 
-module.exports = {Vendor};
+module.exports = mongoose.model('Vendor', vendorSchema);
+

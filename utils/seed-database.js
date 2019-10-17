@@ -33,11 +33,21 @@ mongoose.connect(DATABASE_URL)
     console.info('Seeding Database');
     return Promise.all([
       Depots.insertMany(seedDepots),
-      Depots.createIndexes(),
-      Orders.insertMany(seedOrders),
-      Orders.createIndexes(),
-      Users.insertMany(seedUsers),
-      Users.createIndexes()
+      Depots.createIndexes()
+      // Vendors.insertMany(seedVendors),
+      // Vendors.createIndexes(),
+      // Zones.insertMany(seedZones),
+      // Zones.createIndexes(),
+      // Drivers.insertMany(seedDrivers),
+      // Drivers.createIndexes(),
+      // Pickups.insertMany(seedPickups),
+      // Pickups.createIndexes(),
+      // Deliveries.insertMany(seedDeliveries),
+      // Deliveries.createIndexes(),      
+      // Orders.insertMany(seedOrders),
+      // Orders.createIndexes(),
+      // Users.insertMany(seedUsers),
+      // Users.createIndexes()
     ]);
   })
   .then(() => {
@@ -48,32 +58,3 @@ mongoose.connect(DATABASE_URL)
     console.error(err);
     return mongoose.disconnect();
   });
-
-  // .then(() => {
-  //   console.info('Seeding Database');
-  //   return Promise.all([
-
-  //     Users.insertMany(seedUsers),
-  //     Users.createIndexes(),
-
-  //     Vendors.insertMany(seedVendors),
-  //     Vendors.createIndexes()
-
-      // Orders.insertMany(seedOrders),
-      // Orders.createIndexes()
-
-      // Zones.insertMany(seedZones),
-      // Zones.createIndexes()
-
-      // Depots.insertMany(seedDepots),
-      // Depots.createIndexes()
-
-      // Drivers.insertMany(seedDrivers),
-      // Drivers.createIndexes(),
-
-
-      // Pickups.insertMany(seedPickups),
-      // Pickups.createIndexes(),
-
-      // Deliveries.insertMany(seedDeliveries),
-      // Deliveries.createIndexes()

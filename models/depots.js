@@ -3,15 +3,31 @@ const mongoose = require('mongoose');
 
 
 const depotSchema = new mongoose.Schema({ 
+  depotName:  { type: String, required: true },
+  streetAddress:  {type: String, required: true },
+  city:  {type: String,  required: true },
+  state:  {type: String,  required: true },
+  zipcode:  { type: String, required: true, default: '' },
+  geocode: {
+    type:  {type: String, default: 'Point'},
+    coordinates: []
+  },
+  phone: {type: String,  required: true },
   zones : [{ type: mongoose.Schema.Types.ObjectId, ref: 'Zone' }],
-  drivers : { type: mongoose.Schema.Types.ObjectId, ref: 'Driver' },  
-  pickups : { type: mongoose.Schema.Types.ObjectId, ref: 'Pickup' },  
-  deliveries : { type: mongoose.Schema.Types.ObjectId, ref: 'Delivery' },  
+  drivers : [{ type: mongoose.Schema.Types.ObjectId, ref: 'Driver' }],  
+  pickups : [{ type: mongoose.Schema.Types.ObjectId, ref: 'Pickup' }],  
+  deliveries :[{ type: mongoose.Schema.Types.ObjectId, ref: 'Delivery' }],  
   orders: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Order' }]  
 });
 
 depotSchema.methods.serialize = function() { 
   return {
+    depotName: this.depotName,
+    streetAddress: this.streetAddress,
+    city: this.city,
+    state: this.state,
+    zipcode: this.zipcode,
+    geocode: this.geocode,
     zones: this.zones || '',
     drivers: this.drivers || '',
     pickups: this.pickups|| '',
