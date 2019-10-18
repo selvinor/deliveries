@@ -70,17 +70,13 @@ router.post('/', (req, res, next) => {
 /* ========== GET/READ A SINGLE ITEM ========== */
 router.put('/:id', (req, res, next) => {
   const { id } = req.params;
-  const userId = req.user.id;
 
   const updateDepot = {};
   const updateFields = ['depotName', 'streetAddress', 'city', 'state', 'zipcode', 'geocode', 'phone']
-  console.log('req.body: ', req.body);
   updateFields.forEach(field => {
     if (field in req.body) {
-      console.log('field: ', field);
       updateDepot[field] = req.body[field];
       updateDepot[field] = req.body[field];
-      console.log('updateDepot[field]:', updateDepot[field]);
     }
   });
 
@@ -90,7 +86,6 @@ router.put('/:id', (req, res, next) => {
     return next(err);
   }
   Depot.findByIdAndUpdate(id, updateDepot, { new: true })
-  // Depot.findOne({ _id: id, userId })
     .then(result => {
       if (result) {
         res.json(result);
@@ -103,79 +98,6 @@ router.put('/:id', (req, res, next) => {
     });
 });
 
-
-
-/* ========== PUT/UPDATE A SINGLE ITEM ========== */
-// router.put('/:id', (req, res, next) => {
-//   const { id } = req.params;
-//   const userId = req.user.id;
-
-//   const { depotName, streetAddress, city, state, zipcode, geocode, phone, zones, drivers, pickups, deliveries, orders} = req.body;
-//   const updateDepot = {};
-//   const updateFields = ['depotName', 'streetAddress', 'city', 'state', 'zipcode', 'geocode', 'phone']
-//   console.log('req.body: ', req.body);
-//   updateFields.forEach(field => {
-//     if (field in req.body) {
-//       console.log('field: ', field);
-//       updateDepot[field] = req.body[field];
-//       updateDepot[field] = req.body[field];
-//       console.log('updateDepot[field]:', updateDepot[field]);
-//     }
-//   });
-
-//   /***** Never trust users - validate input *****/
-//   if (!mongoose.Types.ObjectId.isValid(id)) {
-//     const err = new Error('The `id` is not valid');
-//     err.status = 400;
-//     return next(err);
-//   }
-//   if (depotId && !mongoose.Types.ObjectId.isValid(depotId)) {
-//     const err = new Error('The `depotId` is not valid');
-//     err.status = 400;
-//     return next(err);
-//   }
-//   if (depotId === '') {
-//     const err = new Error('Missing `id` in request body');
-//     err.status = 400;
-//     return next(err);
-//   }
-
-//   Depot.findOne({ _id: id, userId })
-//     .then(result => {
-//       if (result) {
-//         res.json(result);
-//       } else {
-//         next();
-//       }
-//     })
-//     .catch(err => {
-//       next(err);
-//     });
-//   // Depot.findOne({ _id: id, userId })
-//   //   .then(result => {
-//   //     if (result) {
-//   //       res.json(result);
-//   //     } else {
-//   //       next();
-//   //     }
-//   //   })
-//   //   .catch(err => {
-//   //     next(err);
-//   //   });
-
-
-//   // Depot.findByIdAndUpdate(id, updateDepot, { new: true })
-//   //   .then(result => {
-//   //     if (result) {
-//   //       res.json(result);
-//   //     } else {
-//   //       next();
-//   //     }
-//   //   })
-//   //   .catch(err => {
-//   //     next(err);
-//   //   });
-// });
 
 /* ========== DELETE/REMOVE A SINGLE ITEM ========== */
 router.delete('/:id', (req, res, next) => {
