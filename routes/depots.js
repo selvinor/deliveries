@@ -24,38 +24,6 @@ router.get('/', (req, res, next) => {
     });
 });
 
-// router.get('/', (req, res, next) => {
-//   const { searchTerm, driverId } = req.query;
-//   const userId = req.user.id;
-
-//   let filter = {};
-
-//   if (searchTerm) {
-//     filter.title = { $regex: searchTerm, $options: 'i' };
-
-//     // Mini-Challenge: Search both `title` and `content`
-//     // const re = new RegExp(searchTerm, 'i');
-//     // filter.$or = [{ 'title': re }, { 'content': re }];
-//   }
-
-//   if (driverId) {
-//     filter.driverId = driverId;
-//   }
-
-//   if (userId) {
-//     filter.userId = userId;
-//   }
-
-//   Depot.find(filter) //
-//     .sort({ updatedAt: 'desc' })
-//     .then(results => {
-//       console.log('RESULTS: ', res.json(results));
-//       res.json(results);  //
-//     })
-//     .catch(err => {
-//       next(err);
-//     });
-// });
 
 /* ========== GET/READ A SINGLE ITEM ========== */
 router.get('/:id', (req, res, next) => {
@@ -83,72 +51,46 @@ router.get('/:id', (req, res, next) => {
 
 /* ========== POST/CREATE AN ITEM ========== */
 router.post('/', (req, res, next) => {
-  const { title, content, driverId } = req.body;
-  const userId = req.user.id;
-  //console.log('req.user', req.user);
-  /***** Never trust users - validate input *****/
-  if (!title) {
-    const err = new Error('Missing `title` in request body');
+  if (!req.body) {
+    const err = new Error('Missing `depot` in request body');
     err.status = 400;
     return next(err);
   }
 
-  if (driverId && !mongoose.Types.ObjectId.isValid(driverId)) {
-    const err = new Error('The `driverId` is not valid');
-    err.status = 400;
-    return next(err);
-  }
-  if (driverId && !mongoose.Types.ObjectId.isValid(userId)) {
-    const err = new Error('The `userId` is not valid');
-    err.status = 400;
-    return next(err);
-  }
-
-  const newDepot = { title, content, driverId, userId };
-
-  Depot.create(newDepot) //
-    .then(result => {
-      res
-        .location(`${req.originalUrl}/${result.id}`)
-        .status(201)
-        .json(result); //
-    })
+  Depot.create(req.body).then(result => {
+    res
+      .location(`${req.originalUrl}/${result.id}`)
+      .status(201)
+      .json(result);
+  })
     .catch(err => {
       next(err);
     });
-});
-
-/* ========== PUT/UPDATE A SINGLE ITEM ========== */
+}); 
+/* ========== GET/READ A SINGLE ITEM ========== */
 router.put('/:id', (req, res, next) => {
   const { id } = req.params;
-  const { title, content, driverId } = req.body;
-  const updateDepot = {};
-  const updateFields = ['title', 'content', 'driverId']
+  const userId = req.user.id;
 
+  const updateDepot = {};
+  const updateFields = ['depotName', 'streetAddress', 'city', 'state', 'zipcode', 'geocode', 'phone']
+  console.log('req.body: ', req.body);
   updateFields.forEach(field => {
     if (field in req.body) {
+      console.log('field: ', field);
       updateDepot[field] = req.body[field];
+      updateDepot[field] = req.body[field];
+      console.log('updateDepot[field]:', updateDepot[field]);
     }
   });
 
-  /***** Never trust users - validate input *****/
   if (!mongoose.Types.ObjectId.isValid(id)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
-  if (driverId && !mongoose.Types.ObjectId.isValid(driverId)) {
-    const err = new Error('The `driverId` is not valid');
-    err.status = 400;
-    return next(err);
-  }
-  if (title === '') {
-    const err = new Error('Missing `title` in request body');
-    err.status = 400;
-    return next(err);
-  }
-
   Depot.findByIdAndUpdate(id, updateDepot, { new: true })
+  // Depot.findOne({ _id: id, userId })
     .then(result => {
       if (result) {
         res.json(result);
@@ -160,6 +102,80 @@ router.put('/:id', (req, res, next) => {
       next(err);
     });
 });
+
+
+
+/* ========== PUT/UPDATE A SINGLE ITEM ========== */
+// router.put('/:id', (req, res, next) => {
+//   const { id } = req.params;
+//   const userId = req.user.id;
+
+//   const { depotName, streetAddress, city, state, zipcode, geocode, phone, zones, drivers, pickups, deliveries, orders} = req.body;
+//   const updateDepot = {};
+//   const updateFields = ['depotName', 'streetAddress', 'city', 'state', 'zipcode', 'geocode', 'phone']
+//   console.log('req.body: ', req.body);
+//   updateFields.forEach(field => {
+//     if (field in req.body) {
+//       console.log('field: ', field);
+//       updateDepot[field] = req.body[field];
+//       updateDepot[field] = req.body[field];
+//       console.log('updateDepot[field]:', updateDepot[field]);
+//     }
+//   });
+
+//   /***** Never trust users - validate input *****/
+//   if (!mongoose.Types.ObjectId.isValid(id)) {
+//     const err = new Error('The `id` is not valid');
+//     err.status = 400;
+//     return next(err);
+//   }
+//   if (depotId && !mongoose.Types.ObjectId.isValid(depotId)) {
+//     const err = new Error('The `depotId` is not valid');
+//     err.status = 400;
+//     return next(err);
+//   }
+//   if (depotId === '') {
+//     const err = new Error('Missing `id` in request body');
+//     err.status = 400;
+//     return next(err);
+//   }
+
+//   Depot.findOne({ _id: id, userId })
+//     .then(result => {
+//       if (result) {
+//         res.json(result);
+//       } else {
+//         next();
+//       }
+//     })
+//     .catch(err => {
+//       next(err);
+//     });
+//   // Depot.findOne({ _id: id, userId })
+//   //   .then(result => {
+//   //     if (result) {
+//   //       res.json(result);
+//   //     } else {
+//   //       next();
+//   //     }
+//   //   })
+//   //   .catch(err => {
+//   //     next(err);
+//   //   });
+
+
+//   // Depot.findByIdAndUpdate(id, updateDepot, { new: true })
+//   //   .then(result => {
+//   //     if (result) {
+//   //       res.json(result);
+//   //     } else {
+//   //       next();
+//   //     }
+//   //   })
+//   //   .catch(err => {
+//   //     next(err);
+//   //   });
+// });
 
 /* ========== DELETE/REMOVE A SINGLE ITEM ========== */
 router.delete('/:id', (req, res, next) => {
