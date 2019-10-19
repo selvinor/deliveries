@@ -3,22 +3,23 @@ const mongoose = require('mongoose');
 
 
 const deliverySchema = new mongoose.Schema({
-  routing: {
-    "depotId" :  { type: mongoose.Schema.Types.ObjectId, ref: 'Depot' },   
-    "driverId" : { type: mongoose.Schema.Types.ObjectId, ref: 'Driver' },  
-    "status" : {type: String, default: ''},
-    "zone" : { type: mongoose.Schema.Types.ObjectId, ref: 'Zone' }
-  },
-  orders: [
-    {order: { type: mongoose.Schema.Types.ObjectId, ref: 'Order' }}
+  depotId   : { type: mongoose.Schema.Types.ObjectId, ref: 'Depot' },   
+  driverId  : { type: mongoose.Schema.Types.ObjectId, ref: 'Driver' },  
+  status    : {type: String, default: ''},
+  zone      : { type: mongoose.Schema.Types.ObjectId, ref: 'Zone' },
+  orders    : [
+    { order: { type: mongoose.Schema.Types.ObjectId, ref: 'Order' }}
   ]
-});
+ });
 
 deliverySchema.methods.serialize = function() { 
   return {
-    routing: this.routing || '',
-    orders: this.orders|| ''
-  };
+    depotId   :  this.depotId || '', 
+    driverId  :  this.driverId || '',
+    status    :  this.status || '',
+    zone      : this.zone|| '',
+    orders    : this.orders|| ''
+   };
 };
 
 

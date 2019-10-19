@@ -14,9 +14,9 @@ const vendorSchema = new mongoose.Schema({
     coordinates: []
   },
   phone: {type: String, default: ''},
-  pickups : [{ type: mongoose.Schema.Types.ObjectId, ref: 'Pickup' }],  
-  deliveries :[{ type: mongoose.Schema.Types.ObjectId, ref: 'Delivery' }],  
-  orders: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Order' }]  
+  pickups : [{pickup:{ type: mongoose.Schema.Types.ObjectId, ref: 'Pickup'} }],  
+  deliveries :[{delivery:{ type: mongoose.Schema.Types.ObjectId, ref: 'Delivery'} }],  
+  orders: [{order:{ type: mongoose.Schema.Types.ObjectId, ref: 'Order'} }]  
 });
 
 vendorSchema.methods.serialize = function() {

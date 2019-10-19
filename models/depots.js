@@ -12,22 +12,21 @@ const depotSchema = new mongoose.Schema({
     type:  {type: String, default: 'Point'},
     coordinates: []
   },
-  phone: {type: String,  required: true },
-  zones : [{ type: mongoose.Schema.Types.ObjectId, ref: 'Zone' }],
-  drivers : [{ type: mongoose.Schema.Types.ObjectId, ref: 'Driver' }],  
-  pickups : [{ type: mongoose.Schema.Types.ObjectId, ref: 'Pickup' }],  
-  deliveries :[{ type: mongoose.Schema.Types.ObjectId, ref: 'Delivery' }],  
-  orders: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Order' }]  
+  zones : [{zone:{ type: mongoose.Schema.Types.ObjectId, ref: 'Zone' }}],
+  drivers : [{driver:{ type: mongoose.Schema.Types.ObjectId, ref: 'Driver' }}],  
+  pickups : [{pickup:{ type: mongoose.Schema.Types.ObjectId, ref: 'Pickup' }}],  
+  deliveries :[{delivery:{ type: mongoose.Schema.Types.ObjectId, ref: 'Delivery' }}],  
+  orders: [{order:{ type: mongoose.Schema.Types.ObjectId, ref: 'Order'} }]  
 });
 
 depotSchema.methods.serialize = function() { 
   return {
-    depotName: this.depotName,
-    streetAddress: this.streetAddress,
-    city: this.city,
-    state: this.state,
-    zipcode: this.zipcode,
-    geocode: this.geocode,
+    depotName: this.depotName || '',
+    streetAddress: this.streetAddress || '',
+    city: this.city || '',
+    state: this.state || '',
+    zipcode: this.zipcode || '',
+    geocode: this.geocode || '',
     zones: this.zones || '',
     drivers: this.drivers || '',
     pickups: this.pickups|| '',

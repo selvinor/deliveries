@@ -76,7 +76,6 @@ router.put('/:id', (req, res, next) => {
   updateFields.forEach(field => {
     if (field in req.body) {
       updateDepot[field] = req.body[field];
-      updateDepot[field] = req.body[field];
     }
   });
 

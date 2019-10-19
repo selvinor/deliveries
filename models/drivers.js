@@ -9,16 +9,9 @@ const driverSchema = new mongoose.Schema({
   driverVehicleMake: {type: String, default: ''},
   driverVehicleModel: {type: String, default: ''},
   driverVehiclePlate: {type: String, default: ''},
-  pickups: [
-    {
-      pickup: { type: mongoose.Schema.Types.ObjectId, ref: 'Pickup' }
-    }
-  ],
-  deliveries: [
-    {
-      delivery: { type: mongoose.Schema.Types.ObjectId, ref: 'Delivery' }
-    }
-  ]
+  zones : [{zone:{ type: mongoose.Schema.Types.ObjectId, ref: 'Zone' }}],
+  pickups : [{pickup:{ type: mongoose.Schema.Types.ObjectId, ref: 'Pickup' }}],  
+  deliveries :[{delivery:{ type: mongoose.Schema.Types.ObjectId, ref: 'Delivery' }}],  
 });
 
 driverSchema.methods.serialize = function() {
@@ -29,6 +22,7 @@ driverSchema.methods.serialize = function() {
     driverVehicleMake: this.driverVehicleMake|| '',
     driverVehicleModel: this.driverVehicleModel|| '',
     driverVehiclePlate: this.driverVehiclePlate|| '',
+    zones: this.zones || '',
     pickups: this.pickups|| '',
     deliveries: this.deliveries|| ''
   };

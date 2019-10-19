@@ -2,18 +2,16 @@
 const mongoose = require('mongoose');
 
 const pickupSchema = new mongoose.Schema({
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  orders: [
+  vendors: [
     {
-      order: { type: mongoose.Schema.Types.ObjectId, ref: 'Order' }
+      vendor: { type: mongoose.Schema.Types.ObjectId, ref: 'Vendor', required: true }
     }
   ]
 });
 
 pickupSchema.methods.serialize = function() { 
   return {
-    user: this.user || '',
-    orders: this.orders|| ''
+    vendors: this.vendors || ''
   };
 };
 
