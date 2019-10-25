@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 
 const vendorSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  user: { type: mongoose.Schema.Types.Object, ref: 'User', required: true },
   vendorName: {type: String, default: ''},
   streetAddress: {type: String, default: ''},
   city: {type: String, default: ''},
@@ -15,19 +15,19 @@ const vendorSchema = new mongoose.Schema({
   },
   phone: {type: String, default: ''},
   pickups : [{
-    type: mongoose.Schema.Types.ObjectId, ref: 'Pickup'
+    type: mongoose.Schema.Types.Object, ref: 'Pickup'
   }],  
   deliveries :[{
-    type: mongoose.Schema.Types.ObjectId, ref: 'Delivery'
+    type: mongoose.Schema.Types.Object, ref: 'Delivery'
   }],  
   orders: [{
-    type: mongoose.Schema.Types.ObjectId, ref: 'Order'
+    type: mongoose.Schema.Types.Object, ref: 'Order'
   }]  
 });
 
 vendorSchema.methods.serialize = function() {
   return {
-    userId: this.userId || '',
+    user: this.user || '',
     vendorName: this.vendorName || '',
     streetAddress: this.streetAddress|| '',
     city: this.city|| '',

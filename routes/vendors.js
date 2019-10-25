@@ -5,17 +5,18 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 
 const Vendor = require('../models/vendors');
-const Order = require('../models/orders');
-//const Photo = require('../models/photos');
 
 const router = express.Router();
+
+router.use('/', passport.authenticate('jwt', { session: false, failWithError: true }));
 
 /* ========== GET/READ ALL ITEMS ========== */
 router.get('/', (req, res, next) => {
   return Vendor.find()
-  .populate('pickups') 
-  .populate('deliveries') 
-  .populate('orders') 
+  .populate('pickup', 'pickupDate status updatedAt')
+  .populate('delivery', 'deliveryDate status updatedAt')
+
+  .populate('orders', 'vendorOrderRef orderDate deliveryDate') 
     .then(result => {
       return res
       .status(200)
@@ -29,8 +30,8 @@ router.get('/', (req, res, next) => {
 /* ========== GET/READ A SINGLE ITEM ========== */
 router.get('/:id', (req, res, next) => {
   const { id } = req.params;
-//   const userId = req.user.id;
-  if (!mongoose.Types.ObjectId.isValid(id)) {
+//   const user = req.user.id;
+  if (!mongoose.Types.Object.isValid(id)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
@@ -82,13 +83,13 @@ router.put('/:id', (req, res, next) => {
     }
   });
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
+  if (!mongoose.Types.Object.isValid(id)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
   
-  Vendor.findByIdAndUpdate(id, updateVendor,   { $push: { orders: updateVendor } })
+  Vendor.findByAndUpdate(id, updateVendor,   { $push: { orders: updateVendor } })
     .then(result => {
       if (result) {
         res.json(result);
@@ -105,16 +106,16 @@ router.put('/:id', (req, res, next) => {
 /* ========== DELETE/REMOVE A SINGLE ITEM ========== */
 router.delete('/:id', (req, res, next) => {
   const { id } = req.params;
-  const userId = req.user.id;
+  const user = req.user.id;
 
   /***** Never trust users - validate input *****/
-  if (!mongoose.Types.ObjectId.isValid(id)) {
+  if (!mongoose.Types.Object.isValid(id)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
 
-  Vendor.deleteOne({ _id: id, userId })
+  Vendor.deleteOne({ _id: id, user })
     .then(result => {
       if (result.n) {
         res.sendStatus(204);

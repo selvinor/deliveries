@@ -32,22 +32,22 @@ mongoose.connect(DATABASE_URL)
     delete mongoose.connection.models['Depot'];
     console.info('Seeding Database');
     return Promise.all([
+      Users.insertMany(seedUsers),
+      Users.createIndexes(),
       Depots.insertMany(seedDepots),
-      Depots.createIndexes()
-      // Vendors.insertMany(seedVendors),
-      // Vendors.createIndexes(),
-      // Zones.insertMany(seedZones),
-      // Zones.createIndexes(),
-      // Drivers.insertMany(seedDrivers),
-      // Drivers.createIndexes(),
-      // Pickups.insertMany(seedPickups),
-      // Pickups.createIndexes(),
-      // Deliveries.insertMany(seedDeliveries),
-      // Deliveries.createIndexes(),      
-      // Orders.insertMany(seedOrders),
-      // Orders.createIndexes(),
-      // Users.insertMany(seedUsers),
-      // Users.createIndexes()
+      Depots.createIndexes(),
+      Vendors.insertMany(seedVendors),
+      Vendors.createIndexes(),
+      Zones.insertMany(seedZones),
+      Zones.createIndexes(),
+      Orders.insertMany(seedOrders),
+      Orders.createIndexes(),
+      Drivers.insertMany(seedDrivers),
+      Drivers.createIndexes(),
+      Pickups.insertMany(seedPickups),
+      Pickups.createIndexes(),
+      Deliveries.insertMany(seedDeliveries),
+      Deliveries.createIndexes()      
     ]);
   })
   .then(() => {

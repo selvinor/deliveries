@@ -28,10 +28,10 @@ router.get('/', (req, res, next) => {
 /* ========== GET/READ A SINGLE ITEM ========== */
 router.get('/:id', (req, res, next) => {
   const { id } = req.params;
-  // const userId = req.user.id;
-  // console.log('userId: ', userId);
+  // const user = req.user.id;
+  // console.log('user: ', user);
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
+  if (!mongoose.Types.Object.isValid(id)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
@@ -74,19 +74,19 @@ router.put('/:id', (req, res, next) => {
   const { id } = req.params;
 
   const updateDelivery = {};
-  const updateFields = ['routing', 'driverId', 'status', 'zoneId', 'orders', 'orders']
+  const updateFields = ['routing', 'driver', 'status', 'zone', 'orders', 'orders']
   updateFields.forEach(field => {
     if (field in req.body) {
       updateDelivery[field] = req.body[field];
     }
   });
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
+  if (!mongoose.Types.Object.isValid(id)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
-  Delivery.findByIdAndUpdate(id, updateDelivery, { new: true })
+  Delivery.findByAndUpdate(id, updateDelivery, { new: true })
     .then(result => {
       if (result) {
         res.json(result);
@@ -103,16 +103,16 @@ router.put('/:id', (req, res, next) => {
 /* ========== DELETE/REMOVE A SINGLE ITEM ========== */
 router.delete('/:id', (req, res, next) => {
   const { id } = req.params;
-  const userId = req.user.id;
+  const user = req.user.id;
 
   /***** Never trust users - validate input *****/
-  if (!mongoose.Types.ObjectId.isValid(id)) {
+  if (!mongoose.Types.Object.isValid(id)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
 
-  Delivery.deleteOne({ _id: id, userId })
+  Delivery.deleteOne({ _id: id, user })
     .then(result => {
       if (result.n) {
         res.sendStatus(204);

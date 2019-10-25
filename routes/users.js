@@ -19,15 +19,15 @@ router.get('/', (req, res, next) => {
 });
 router.get('/:id', (req, res, next) => {
 
-  const userId = req.params.id;
+  const user = req.params.id;
 
-  if (!mongoose.Types.ObjectId.isValid(userId)) {
+  if (!mongoose.Types.Object.isValid(user)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
 
-  return User.findById(userId)
+  return User.findBy(user)
     .then(result => {
       return res
       .status(200)
@@ -134,15 +134,15 @@ router.post('/', (req, res, next) => {
 });
 
 router.delete('/:id', (req, res, next) => {
-  const userId = req.params.id;
+  const user = req.params.id;
 
-  if (!mongoose.Types.ObjectId.isValid(userId)) {
+  if (!mongoose.Types.Object.isValid(user)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
 
-  User.findByIdAndDelete(userId)
+  User.findByAndDelete(user)
     .then(() => {
 
       res.sendStatus(204);

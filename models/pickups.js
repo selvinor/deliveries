@@ -2,13 +2,13 @@
 const mongoose = require('mongoose');
 
 const pickupSchema = new mongoose.Schema({
-  pickupDate: Date,
-  depotId   : { type: mongoose.Schema.Types.ObjectId, ref: 'Depot' },   
-  driverId  : { type: mongoose.Schema.Types.ObjectId, ref: 'Driver' },  
-  status    : {type: String, default: ''},
-  zone      : { type: mongoose.Schema.Types.ObjectId, ref: 'Zone' },
+  pickupDate: { type: Date},
+  depot   : { type: mongoose.Schema.Types.Object, ref: 'Depot' },   
+  driver  : { type: mongoose.Schema.Types.Object, ref: 'Driver' },  
+  status  : {type: String, default: ''},
+  zone    : { type: mongoose.Schema.Types.Object, ref: 'Zone' },
   vendors: [{
-    type: mongoose.Schema.Types.ObjectId, ref: 'Vendor'
+    type: mongoose.Schema.Types.Object, ref: 'Vendor'
   }]  
 });
 
@@ -16,8 +16,8 @@ const pickupSchema = new mongoose.Schema({
 pickupSchema.methods.serialize = function() { 
   return {
     pickupDate:  this.pickupDate || '',
-    depotId   :  this.depotId || '', 
-    driverId  :  this.driverId || '',
+    depot   :  this.depot || '', 
+    driver  :  this.driver || '',
     status    :  this.status || '',
     zone      : this.zone|| '',
     vendors    : this.orders|| ''

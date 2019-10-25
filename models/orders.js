@@ -3,10 +3,10 @@
 const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
-  vendor: { type: mongoose.Schema.Types.ObjectId, ref: 'Vendor', required: true },
-  pickupId: { type: mongoose.Schema.Types.ObjectId, ref: 'Pickup', required: true },
-  deliveryId: { type: mongoose.Schema.Types.ObjectId, ref: 'Delivery', required: true },
-  vendorOrderNum: {type: String, unique: false, required:true },
+  orderDate: { type: Date},
+  deliveryDate: { type: Date},
+  vendor: { type: mongoose.Schema.Types.Object, ref: 'Vendor', required: true },
+  vendorOrderRef: {type: String, unique: false, required:true },
   destination : {
     businessName :  {type: String, default: ''},
     streetAddress :  {type: String, default: ''},
@@ -20,16 +20,21 @@ const orderSchema = new mongoose.Schema({
     instructions:{type: String, default: ''},
     recipient : {type: String, default: ''},
     contactPhone :  {type: String, default: ''}  
-  }
+  },
+  pickup: { type: mongoose.Schema.Types.Object, ref: 'Pickup', required: true },
+  delivery: { type: mongoose.Schema.Types.Object, ref: 'Delivery', required: true }
+
 });
 
 orderSchema.methods.serialize = function() {
   return {
+    orderDate: this.orderDate || '',
+    deliveryDate: this.deliveryDate || '',                    
     vendor: this.vendor || '',
-    pickupId: this.pickupId || '',
-    deliveryId: this.deliveryId || '',
-    vendorOrderNum: this.vendorOrderNum || '',
-    destination: this.destination|| ''
+    vendorOrderRef: this.vendorOrderRef || '',
+    destination: this.destination|| '',
+    pickup: this.pickup|| '',
+    delivery: this.delivery|| ''
   };
 };
 // const Order = mongoose.model('Order', OrderSchema);

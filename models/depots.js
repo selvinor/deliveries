@@ -13,19 +13,19 @@ const depotSchema = new mongoose.Schema({
     coordinates: []
   },
   zones : [{
-   type: mongoose.Schema.Types.ObjectId, ref: 'Zone' 
+   type: mongoose.Schema.Types.Object, ref: 'Zone' 
   }],
   drivers : [{
-    type: mongoose.Schema.Types.ObjectId, ref: 'Driver' 
+    type: mongoose.Schema.Types.Object, ref: 'Driver' 
   }],  
   pickups : [{
-    type: mongoose.Schema.Types.ObjectId, ref: 'Pickup' 
+    type: mongoose.Schema.Types.Object, ref: 'Pickup' 
   }],  
   deliveries :[{
-    type: mongoose.Schema.Types.ObjectId, ref: 'Delivery' 
+    type: mongoose.Schema.Types.Object, ref: 'Delivery' 
   }],  
   orders: [{
-    type: mongoose.Schema.Types.ObjectId, ref: 'Order'
+    type: mongoose.Schema.Types.Object, ref: 'Order'
   }]  
 });
 

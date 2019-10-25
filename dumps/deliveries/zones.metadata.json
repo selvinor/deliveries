@@ -1,1 +1,1 @@
-{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"deliveries.zones"}],"uuid":"78d43887b8b94b3ea708f181df411dd1"}
+{"options":{,"indexes":[{"v":2,"key":{"_id":1,"name":"_id_","ns":"deliveries.zones"}],"uuid":"78d43887b8b94b3ea708f181df411dd1"}

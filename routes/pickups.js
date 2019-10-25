@@ -28,8 +28,8 @@ router.get('/', (req, res, next) => {
 /* ========== GET/READ A SINGLE ITEM ========== */
 router.get('/:id', (req, res, next) => {
   const { id } = req.params;
-//   const userId = req.user.id;
-  if (!mongoose.Types.ObjectId.isValid(id)) {
+//   const user = req.user.id;
+  if (!mongoose.Types.Object.isValid(id)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
@@ -79,13 +79,13 @@ router.put('/:id', (req, res, next) => {
     }
   });
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
+  if (!mongoose.Types.Object.isValid(id)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
   
-  Pickup.findByIdAndUpdate(id, updatePickup,   { $push: { orders: updatePickup } })
+  Pickup.findByAndUpdate(id, updatePickup,   { $push: { orders: updatePickup } })
     .then(result => {
       if (result) {
         res.json(result);
@@ -102,16 +102,16 @@ router.put('/:id', (req, res, next) => {
 /* ========== DELETE/REMOVE A SINGLE ITEM ========== */
 router.delete('/:id', (req, res, next) => {
   const { id } = req.params;
-  const userId = req.user.id;
+  const user = req.user.id;
 
   /***** Never trust users - validate input *****/
-  if (!mongoose.Types.ObjectId.isValid(id)) {
+  if (!mongoose.Types.Object.isValid(id)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
 
-  Pickup.deleteOne({ _id: id, userId })
+  Pickup.deleteOne({ _id: id, user })
     .then(result => {
       if (result.n) {
         res.sendStatus(204);

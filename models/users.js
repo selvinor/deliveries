@@ -9,9 +9,9 @@ const userSchema = new mongoose.Schema({
 	username: { type: String, unique: true, required: true },
 	email:  { type: String, unique: true, required: true },
 	password: { type: String, required: true },
-	vendorId: { type: String, required: false },
-	driverID: { type: String, required: false },
-	depotId: { type: String, required: false }
+	vendor: { type: String, required: false },
+	driver: { type: String, required: false },
+	depot: { type: String, required: false }
 })
 
 userSchema.set('toObject', {

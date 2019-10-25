@@ -5,7 +5,6 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 
 const Order = require('../models/orders');
-const User = require('../models/users');
 
 const router = express.Router();
 
@@ -15,6 +14,10 @@ router.use('/', passport.authenticate('jwt', { session: false, failWithError: tr
 /* ========== GET/READ ALL ITEMS ========== */
 router.get('/', (req, res, next) => {
   return Order.find()
+    .populate('vendor', 'vendorName phone')
+    .populate('pickup', 'status updatedAt')
+    .populate('delivery', 'status updatedAt')
+    .populate('driver', 'driverName')
     .then(result => {
       return res
       .status(200)
@@ -26,8 +29,8 @@ router.get('/', (req, res, next) => {
 });
 
 // router.get('/', (req, res, next) => {
-//   const { searchTerm, driverId } = req.query;
-//   const userId = req.user.id;
+//   const { searchTerm, driver } = req.query;
+//   const user = req.user.id;
 
 //   let filter = {};
 
@@ -39,12 +42,12 @@ router.get('/', (req, res, next) => {
 //     // filter.$or = [{ 'title': re }, { 'content': re }];
 //   }
 
-//   if (driverId) {
-//     filter.driverId = driverId;
+//   if (driver) {
+//     filter.driver = driver;
 //   }
 
-//   if (userId) {
-//     filter.userId = userId;
+//   if (user) {
+//     filter.user = user;
 //   }
 
 //   Order.find(filter) //
@@ -61,15 +64,15 @@ router.get('/', (req, res, next) => {
 /* ========== GET/READ A SINGLE ITEM ========== */
 router.get('/:id', (req, res, next) => {
   const { id } = req.params;
-  const userId = req.user.id;
+  const user = req.user.id;
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
+  if (!mongoose.Types.Object.isValid(id)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
 
-  Order.findOne({ _id: id, userId })
+  Order.findOne({ _id: id, user })
     .then(result => {
       if (result) {
         res.json(result);
@@ -84,8 +87,8 @@ router.get('/:id', (req, res, next) => {
 
 /* ========== POST/CREATE AN ITEM ========== */
 router.post('/', (req, res, next) => {
-  const { title, content, driverId } = req.body;
-  const userId = req.user.id;
+  const { title, content, driver } = req.body;
+  const user = req.user.id;
   //console.log('req.user', req.user);
   /***** Never trust users - validate input *****/
   if (!title) {
@@ -94,18 +97,18 @@ router.post('/', (req, res, next) => {
     return next(err);
   }
 
-  if (driverId && !mongoose.Types.ObjectId.isValid(driverId)) {
-    const err = new Error('The `driverId` is not valid');
+  if (driver && !mongoose.Types.Object.isValid(driver)) {
+    const err = new Error('The `driver` is not valid');
     err.status = 400;
     return next(err);
   }
-  if (driverId && !mongoose.Types.ObjectId.isValid(userId)) {
-    const err = new Error('The `userId` is not valid');
+  if (driver && !mongoose.Types.Object.isValid(user)) {
+    const err = new Error('The `user` is not valid');
     err.status = 400;
     return next(err);
   }
 
-  const newOrder = { title, content, driverId, userId };
+  const newOrder = { title, content, driver, user };
 
   Order.create(newOrder) //
     .then(result => {
@@ -122,9 +125,9 @@ router.post('/', (req, res, next) => {
 /* ========== PUT/UPDATE A SINGLE ITEM ========== */
 router.put('/:id', (req, res, next) => {
   const { id } = req.params;
-  const { title, content, driverId } = req.body;
+  const { title, content, driver } = req.body;
   const updateOrder = {};
-  const updateFields = ['title', 'content', 'driverId']
+  const updateFields = ['title', 'content', 'driver']
 
   updateFields.forEach(field => {
     if (field in req.body) {
@@ -133,13 +136,13 @@ router.put('/:id', (req, res, next) => {
   });
 
   /***** Never trust users - validate input *****/
-  if (!mongoose.Types.ObjectId.isValid(id)) {
+  if (!mongoose.Types.Object.isValid(id)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
-  if (driverId && !mongoose.Types.ObjectId.isValid(driverId)) {
-    const err = new Error('The `driverId` is not valid');
+  if (driver && !mongoose.Types.Object.isValid(driver)) {
+    const err = new Error('The `driver` is not valid');
     err.status = 400;
     return next(err);
   }
@@ -149,7 +152,7 @@ router.put('/:id', (req, res, next) => {
     return next(err);
   }
 
-  Order.findByIdAndUpdate(id, updateOrder, { new: true })
+  Order.findByAndUpdate(id, updateOrder, { new: true })
     .then(result => {
       if (result) {
         res.json(result);
@@ -165,16 +168,16 @@ router.put('/:id', (req, res, next) => {
 /* ========== DELETE/REMOVE A SINGLE ITEM ========== */
 router.delete('/:id', (req, res, next) => {
   const { id } = req.params;
-  const userId = req.user.id;
+  const user = req.user.id;
 
   /***** Never trust users - validate input *****/
-  if (!mongoose.Types.ObjectId.isValid(id)) {
+  if (!mongoose.Types.Object.isValid(id)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
 
-  Order.deleteOne({ _id: id, userId })
+  Order.deleteOne({ _id: id, user })
     .then(result => {
       if (result.n) {
         res.sendStatus(204);

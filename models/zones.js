@@ -5,13 +5,13 @@ const mongoose = require('mongoose');
 const zoneSchema = new mongoose.Schema({ 
   zone :   {type: String, default: ''},
    drivers : [{
-     type: mongoose.Schema.Types.ObjectId, ref: 'Driver' 
+     type: mongoose.Schema.Types.Object, ref: 'Driver' 
    }],  
    pickups : [{
-     type: mongoose.Schema.Types.ObjectId, ref: 'Pickup' 
+     type: mongoose.Schema.Types.Object, ref: 'Pickup' 
    }],  
    deliveries :[{
-     type: mongoose.Schema.Types.ObjectId, ref: 'Delivery' 
+     type: mongoose.Schema.Types.Object, ref: 'Delivery' 
    }]  
  });
 

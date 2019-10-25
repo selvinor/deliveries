@@ -1,6 +1,6 @@
  [
   {
-    "$oid": "888888888888888888888001",
+    "_id": "888888888888888888888001",
     "depotName": "Central Depot",
     "streetAddress": "837 SW 1st Ave.",
     "city": "Portland",

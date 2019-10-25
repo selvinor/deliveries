@@ -3,32 +3,28 @@
 const mongoose = require('mongoose');
 
 const driverSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  user: { type: mongoose.Schema.Types.Object, ref: 'User', required: true },
   driverName: {type: String, default: ''},
   driverPhone: {type: String, default: ''},
   driverVehicleMake: {type: String, default: ''},
   driverVehicleModel: {type: String, default: ''},
   driverVehiclePlate: {type: String, default: ''},
-  zones : [{
-    type: mongoose.Schema.Types.ObjectId, ref: 'Zone' 
-   }],
    pickups : [{
-     type: mongoose.Schema.Types.ObjectId, ref: 'Pickup' 
+     type: mongoose.Schema.Types.Object, ref: 'Pickup' 
    }],  
    deliveries :[{
-     type: mongoose.Schema.Types.ObjectId, ref: 'Delivery' 
+     type: mongoose.Schema.Types.Object, ref: 'Delivery' 
    }]
   });
 
 driverSchema.methods.serialize = function() {
   return {
-    userId: this.userId || '',
+    user: this.user || '',
     driverName: this.driverName || '',
     driverPhone: this.driverPhone|| '',
     driverVehicleMake: this.driverVehicleMake|| '',
     driverVehicleModel: this.driverVehicleModel|| '',
     driverVehiclePlate: this.driverVehiclePlate|| '',
-    zones: this.zones || '',
     pickups: this.pickups|| '',
     deliveries: this.deliveries|| ''
   };
