@@ -4,10 +4,16 @@ const mongoose = require('mongoose');
 
 const zoneSchema = new mongoose.Schema({ 
   zone :   {type: String, default: ''},
-  drivers : [{driver:{ type: mongoose.Schema.Types.ObjectId, ref: 'Driver' }}],  
-  pickups : [{pickup:{ type: mongoose.Schema.Types.ObjectId, ref: 'Pickup' }}],  
-  deliveries :[{delivery:{ type: mongoose.Schema.Types.ObjectId, ref: 'Delivery'} }]  
-});
+   drivers : [{
+     type: mongoose.Schema.Types.ObjectId, ref: 'Driver' 
+   }],  
+   pickups : [{
+     type: mongoose.Schema.Types.ObjectId, ref: 'Pickup' 
+   }],  
+   deliveries :[{
+     type: mongoose.Schema.Types.ObjectId, ref: 'Delivery' 
+   }]  
+ });
 
 zoneSchema.methods.serialize = function() { 
   return {

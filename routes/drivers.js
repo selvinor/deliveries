@@ -14,6 +14,8 @@ router.use('/', passport.authenticate('jwt', { session: false, failWithError: tr
 /* ========== GET/READ ALL ITEMS ========== */
 router.get('/', (req, res, next) => {
   return Driver.find()
+    .populate('pickups') 
+    .populate('deliveries') 
     .then(result => {
       return res
       .status(200)
@@ -35,6 +37,8 @@ router.get('/:id', (req, res, next) => {
   }
 
   Driver.findOne({ _id: id })
+    .populate('pickups') 
+    .populate('deliveries') 
     .then(result => {
       if (result) {
         res.json(result);

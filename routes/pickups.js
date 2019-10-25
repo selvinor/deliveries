@@ -14,7 +14,8 @@ router.use('/', passport.authenticate('jwt', { session: false, failWithError: tr
 /* ========== GET/READ ALL ITEMS ========== */
 router.get('/', (req, res, next) => {
   return Pickup.find()
-    .then(result => {
+  .populate('orders') 
+  .then(result => {
       return res
       .status(200)
       .json(result);
@@ -35,6 +36,7 @@ router.get('/:id', (req, res, next) => {
   }
 
   Pickup.findOne({ _id: id })
+    .populate('orders') 
     .then(result => {
       if (result) {
         res.json(result);
@@ -82,7 +84,8 @@ router.put('/:id', (req, res, next) => {
     err.status = 400;
     return next(err);
   }
-  Pickup.findByIdAndUpdate(id, updatePickup, { new: true })
+  
+  Pickup.findByIdAndUpdate(id, updatePickup,   { $push: { orders: updatePickup } })
     .then(result => {
       if (result) {
         res.json(result);

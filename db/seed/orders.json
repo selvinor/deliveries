@@ -6,7 +6,7 @@
     "vendorId" :    "222222222222222222222001",
     "pickupId" :    "888888888888888888888050",
     "deliveryId" :  "777777777777777777777500",
-    "orderNum" : "ABC100",
+    "vendorOrderNum" : "ABC100",
     "destination" : {
       "businessName" :  "Insomnia Coffee Co",
       "streetAddress": "2388 NW Amberbrook Dr",
@@ -29,7 +29,7 @@
     "vendorId" :    "222222222222222222222001",
     "pickupId" :    "888888888888888888888050",
     "deliveryId" :  "777777777777777777777501",
-    "orderNum" :     "ABC123",
+    "vendorOrderNum" :     "ABC123",
     "destination" : {
       "businessName" :  "AVA Roasteria",
       "streetAddress": "2936 NE Orenco Station Loop",
@@ -52,7 +52,7 @@
     "vendorId" :    "222222222222222222222001",
     "pickupId" :    "888888888888888888888050",
     "deliveryId" :  "777777777777777777777502",
-    "orderNum" :     "ABC135",
+    "vendorOrderNum" :     "ABC135",
     "destination" : {
       "businessName" :  "The Dragonfly Coffee House",
       "streetAddress": "2387 NW Thurman St",
@@ -75,7 +75,7 @@
     "vendorId" :    "222222222222222222222001",
     "pickupId" :    "888888888888888888888050",
     "deliveryId" :  "777777777777777777777503",
-    "orderNum" :     "H45",
+    "vendorOrderNum" :     "H45",
     "destination" : {
       "businessName" :  "Nia Technique",
       "streetAddress": "918 SW Yamhill St",
@@ -98,7 +98,7 @@
     "vendorId" :    "222222222222222222222002",
     "pickupId" :    "888888888888888888888051",
     "deliveryId" :  "777777777777777777777504",
-    "orderNum" :     "ABC140",
+    "vendorOrderNum" :     "ABC140",
     "destination" : {
       "businessName" :  "",
       "streetAddress": "1221 S W 10th Ave #1306",
@@ -122,7 +122,7 @@
     "vendorId" :    "222222222222222222222002",
     "pickupId" :    "888888888888888888888051",
     "deliveryId" :  "777777777777777777777505",
-    "orderNum" :     "a1234658",
+    "vendorOrderNum" :     "a1234658",
     "destination" : {
       "businessName" :  "Linfield College",
       "streetAddress": "2215 NW Northrup St.",
@@ -145,7 +145,7 @@
     "vendorId" :    "222222222222222222222003",
     "pickupId" :    "888888888888888888888052",
     "deliveryId" :  "777777777777777777777506",
-    "orderNum" :     "Z1000",
+    "vendorOrderNum" :     "Z1000",
     "destination" : {
       "businessName" :  "Knight Diagnostic Labs",
       "streetAddress": "2525 SW 3rd Ave, Suite 350",

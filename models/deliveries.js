@@ -3,17 +3,19 @@ const mongoose = require('mongoose');
 
 
 const deliverySchema = new mongoose.Schema({
+  deliveryDate: Date,
   depotId   : { type: mongoose.Schema.Types.ObjectId, ref: 'Depot' },   
   driverId  : { type: mongoose.Schema.Types.ObjectId, ref: 'Driver' },  
   status    : {type: String, default: ''},
   zone      : { type: mongoose.Schema.Types.ObjectId, ref: 'Zone' },
-  orders    : [
-    { order: { type: mongoose.Schema.Types.ObjectId, ref: 'Order' }}
-  ]
+  orders    : [{ 
+    type: mongoose.Schema.Types.ObjectId, ref: 'Order' 
+  }]
  });
 
 deliverySchema.methods.serialize = function() { 
   return {
+    deliveryDate: this.deliveryDate || '',
     depotId   :  this.depotId || '', 
     driverId  :  this.driverId || '',
     status    :  this.status || '',

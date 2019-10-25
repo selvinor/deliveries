@@ -12,11 +12,21 @@ const depotSchema = new mongoose.Schema({
     type:  {type: String, default: 'Point'},
     coordinates: []
   },
-  zones : [{zone:{ type: mongoose.Schema.Types.ObjectId, ref: 'Zone' }}],
-  drivers : [{driver:{ type: mongoose.Schema.Types.ObjectId, ref: 'Driver' }}],  
-  pickups : [{pickup:{ type: mongoose.Schema.Types.ObjectId, ref: 'Pickup' }}],  
-  deliveries :[{delivery:{ type: mongoose.Schema.Types.ObjectId, ref: 'Delivery' }}],  
-  orders: [{order:{ type: mongoose.Schema.Types.ObjectId, ref: 'Order'} }]  
+  zones : [{
+   type: mongoose.Schema.Types.ObjectId, ref: 'Zone' 
+  }],
+  drivers : [{
+    type: mongoose.Schema.Types.ObjectId, ref: 'Driver' 
+  }],  
+  pickups : [{
+    type: mongoose.Schema.Types.ObjectId, ref: 'Pickup' 
+  }],  
+  deliveries :[{
+    type: mongoose.Schema.Types.ObjectId, ref: 'Delivery' 
+  }],  
+  orders: [{
+    type: mongoose.Schema.Types.ObjectId, ref: 'Order'
+  }]  
 });
 
 depotSchema.methods.serialize = function() { 

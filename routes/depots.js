@@ -14,6 +14,10 @@ router.use('/', passport.authenticate('jwt', { session: false, failWithError: tr
 /* ========== GET/READ ALL ITEMS ========== */
 router.get('/', (req, res, next) => {
   return Depot.find()
+    .populate('pickups') 
+    .populate('deliveries') 
+    .populate('orders') 
+    .populate('drivers') 
     .then(result => {
       return res
       .status(200)
@@ -37,6 +41,10 @@ router.get('/:id', (req, res, next) => {
   }
 
   Depot.findOne({ _id: id, userId })
+    .populate('pickups') 
+    .populate('deliveries') 
+    .populate('orders') 
+    .populate('drivers') 
     .then(result => {
       if (result) {
         res.json(result);
