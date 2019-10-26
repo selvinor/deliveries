@@ -13,8 +13,8 @@ router.use('/', passport.authenticate('jwt', { session: false, failWithError: tr
 /* ========== GET/READ ALL ITEMS ========== */
 router.get('/', (req, res, next) => {
   return Vendor.find()
-  .populate('pickup', 'pickupDate status updatedAt')
-  .populate('delivery', 'deliveryDate status updatedAt')
+  .populate('pickups', 'pickupDate status updatedAt')
+  .populate('deliveries', 'deliveryDate status updatedAt')
 
   .populate('orders', 'vendorOrderRef orderDate deliveryDate') 
     .then(result => {

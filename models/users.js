@@ -9,35 +9,38 @@ const userSchema = new mongoose.Schema({
 	username: { type: String, unique: true, required: true },
 	email:  { type: String, unique: true, required: true },
 	password: { type: String, required: true },
-	vendor: { type: String, required: false },
-	driver: { type: String, required: false },
-	depot: { type: String, required: false }
+	vendor: {type: mongoose.Schema.Types.ObjectId, ref: 'Vendor'},
+	driver: {type: mongoose.Schema.Types.ObjectId, ref: 'Driver'},
+	depot: {type: mongoose.Schema.Types.ObjectId, ref: 'Depot'}
 })
 
 userSchema.set('toObject', {
 	virtuals: true,
 	versionKey: false,
 	transform: (doc, ret) => {
-		delete ret._id;
-		delete ret.password;
+    delete ret._id;
+    delete ret.password;
+    delete ret.__v;
 	}
 });
 
-userSchema.methods.validatePassword = function (password) {
-	return password === this.password;
+userSchema.set('toJSON', {
+  virtuals: true,
+  versionKey: false, 
+  transform: (doc, ret) => {
+    delete ret._id;
+    delete ret.password;
+    delete ret.__v;
+  }
+});
+
+userSchema.methods.validatePassword = function(password) {
+  return bcrypt.compare(password, this.password);
 };
 
-userSchema.statics.hashPassword = function (password) {
-	return bcrypt.hash(password, 10);
+userSchema.statics.hashPassword = function(password) {
+  return bcrypt.hash(password, 10);
 };
-
-userSchema.methods.validatePassword = function (password) {
-	return bcrypt.compare(password, this.password);
-};
-
-userSchema.statics.hashPassword = function (password) {
-	return bcrypt.hash(password, 10);
-}
 
 
 module.exports = mongoose.model('User', userSchema);

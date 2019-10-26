@@ -29,21 +29,17 @@ router.get('/', (req, res, next) => {
 });
 
 // router.get('/', (req, res, next) => {
-//   const { searchTerm, driver } = req.query;
+//   const { searchTerm, vendor } = req.query;
 //   const user = req.user.id;
 
 //   let filter = {};
 
 //   if (searchTerm) {
-//     filter.title = { $regex: searchTerm, $options: 'i' };
-
-//     // Mini-Challenge: Search both `title` and `content`
-//     // const re = new RegExp(searchTerm, 'i');
-//     // filter.$or = [{ 'title': re }, { 'content': re }];
+//     filter.vendor = { $regex: searchTerm, $options: 'i' };
 //   }
 
-//   if (driver) {
-//     filter.driver = driver;
+//   if (vendor) {
+//     filter.vendor = vendor;
 //   }
 
 //   if (user) {
@@ -51,10 +47,16 @@ router.get('/', (req, res, next) => {
 //   }
 
 //   Order.find(filter) //
+//     .populate('vendor', 'vendorName phone')
+//     .populate('pickup', 'status updatedAt')
+//     .populate('delivery', 'status updatedAt')
+//     .populate('driver', 'driverName')
 //     .sort({ updatedAt: 'desc' })
 //     .then(results => {
-//       console.log('RESULTS: ', res.json(results));
-//       res.json(results);  //
+//       // console.log('RESULTS: ', res.json(results));
+//       return res
+//       .status(200)
+//       .json(results);
 //     })
 //     .catch(err => {
 //       next(err);
@@ -64,15 +66,15 @@ router.get('/', (req, res, next) => {
 /* ========== GET/READ A SINGLE ITEM ========== */
 router.get('/:id', (req, res, next) => {
   const { id } = req.params;
-  const user = req.user.id;
-
+  // const user = req.user.id;
+console.log('req: ', req);
   if (!mongoose.Types.Object.isValid(id)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
 
-  Order.findOne({ _id: id, user })
+  Order.findOne({ _id: id })
     .then(result => {
       if (result) {
         res.json(result);
