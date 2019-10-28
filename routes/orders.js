@@ -12,8 +12,35 @@ const router = express.Router();
 router.use('/', passport.authenticate('jwt', { session: false, failWithError: true }));
 
 /* ========== GET/READ ALL ITEMS ========== */
+
 router.get('/', (req, res, next) => {
-  return Order.find()
+  const { searchTerm, vendorId } = req.query;
+  const userId = req.user.id;
+  let filter = {};
+
+  // userId
+  // orderDate
+  // deliveryDate
+  // vendor
+  // vendorOrderRef
+  // destination.businessName
+
+
+  if (searchTerm) {
+    filter = { $regex: searchTerm, $options: 'i' };
+  }
+  if (vendorId) {
+    if (!mongoose.Types.ObjectId.isValid(vendorId)) {
+      const err = new Error('The `vendor id` is not valid');
+      err.status = 400;
+      return next(err);
+    }
+    filter.vendorId = vendorId;
+  }
+  if (userId) {
+    filter.userId = userId;
+  }
+  return Order.find(filter)
     .populate('vendor', 'vendorName phone')
     .populate('pickup', 'status updatedAt')
     .populate('delivery', 'status updatedAt')
@@ -28,60 +55,25 @@ router.get('/', (req, res, next) => {
     });
 });
 
-// router.get('/', (req, res, next) => {
-//   const { searchTerm, vendor } = req.query;
-//   const user = req.user.id;
-
-//   let filter = {};
-
-//   if (searchTerm) {
-//     filter.vendor = { $regex: searchTerm, $options: 'i' };
-//   }
-
-//   if (vendor) {
-//     filter.vendor = vendor;
-//   }
-
-//   if (user) {
-//     filter.user = user;
-//   }
-
-//   Order.find(filter) //
-//     .populate('vendor', 'vendorName phone')
-//     .populate('pickup', 'status updatedAt')
-//     .populate('delivery', 'status updatedAt')
-//     .populate('driver', 'driverName')
-//     .sort({ updatedAt: 'desc' })
-//     .then(results => {
-//       // console.log('RESULTS: ', res.json(results));
-//       return res
-//       .status(200)
-//       .json(results);
-//     })
-//     .catch(err => {
-//       next(err);
-//     });
-// });
-
 /* ========== GET/READ A SINGLE ITEM ========== */
 router.get('/:id', (req, res, next) => {
-  const { id } = req.params;
-  // const user = req.user.id;
-console.log('req: ', req);
-  if (!mongoose.Types.Object.isValid(id)) {
+  // const { id } = req.params;
+  const id = req.params.id;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
 
   Order.findOne({ _id: id })
-    .then(result => {
-      if (result) {
-        res.json(result);
-      } else {
-        next();
-      }
-    })
+  .populate('vendor', 'vendorName phone')
+  .populate('pickup', 'status updatedAt')
+  .populate('delivery', 'status updatedAt')
+  .populate('driver', 'driverName')
+  .then(result => {
+    res.json(result);
+  })
     .catch(err => {
       next(err);
     });
