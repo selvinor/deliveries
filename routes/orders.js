@@ -18,17 +18,11 @@ router.get('/', (req, res, next) => {
   const userId = req.user.id;
   let filter = {};
 
-  // userId
-  // orderDate
-  // deliveryDate
-  // vendor
-  // vendorOrderRef
-  // destination.businessName
-
-
   if (searchTerm) {
-    filter = { $regex: searchTerm, $options: 'i' };
+    // filter.vendorOrderRef = { $regex: searchTerm, $options: 'i' };
+    filter.vendorOrderRef = searchTerm;
   }
+
   if (vendorId) {
     if (!mongoose.Types.ObjectId.isValid(vendorId)) {
       const err = new Error('The `vendor id` is not valid');
@@ -40,6 +34,8 @@ router.get('/', (req, res, next) => {
   if (userId) {
     filter.userId = userId;
   }
+  console.log('filter: ',filter);
+
   return Order.find(filter)
     .populate('vendor', 'vendorName phone')
     .populate('pickup', 'status updatedAt')
