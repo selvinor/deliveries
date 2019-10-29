@@ -34,7 +34,6 @@ router.get('/', (req, res, next) => {
   if (userId) {
     filter.userId = userId;
   }
-  console.log('filter: ',filter);
 
   return Order.find(filter)
     .populate('vendor', 'vendorName phone')
