@@ -46,24 +46,26 @@ describe('Auth API resource', function() {
     return mongoose.disconnect();
   });
 
-  describe('POST api/login', function() {
+  describe('POST api/auth/login', function() {
 
     it('should return a 401 if you attempt to login with a username not in the database ', function() {
       const userNotInDatabase = 'fiasnfsnafiasofnisn';
-      const inValidUser = {username: userNotInDatabase, password: 'password'};
+      const inValidUser = {username: userNotInDatabase, password: 'thinkful123'};
       return chai.request(app)
-        .post('/api/login/')
+        .post('/api/auth/login/')
         .send(inValidUser)
         .then(res => {
+          // return (console.log('res.status: ', res.status, 'res.body.message: ', res.body.message));
           expect(res).to.have.status(401);
           expect(res.body.message).to.equal('Unauthorized');
+          // return res;
         });
     });
     it('should return a 401 if you attempt to login with a password that is not correct', function() {
       const incorrectPassword = 'fiasnfsnafiasofnisn';
-      const inValidUser = {username: 'bobuser', password: incorrectPassword};
+      const inValidUser = {username: 'vendor1', password: incorrectPassword};
       return chai.request(app)
-        .post('/api/login/')
+        .post('/api/auth/login/')
         .send(inValidUser)
         .then(res => {
           expect(res).to.have.status(401);
@@ -71,9 +73,9 @@ describe('Auth API resource', function() {
         });
     });
     it('should return a valid jwt if your username is in the database and the password is correct', function() {
-      const validUser = {username: 'foobar', password: 'thinkful123'};
+      const validUser = {username: 'vendor1', password: 'thinkful123'};
       return chai.request(app)
-        .post('/api/login/')
+        .post('/api/auth/login/')
         .send(validUser)
         .then(res => {
           expect(res).to.have.status(200);
@@ -83,12 +85,13 @@ describe('Auth API resource', function() {
     });
   });
 
-  describe('POST api/refresh', function() {
+  describe('POST api/auth/refresh', function() {
     it('should return a valid jwt if you have a valid jwt', function() {
       return chai.request(app)
         .post('/api/auth/refresh/')
         .set('Authorization', `Bearer ${token}`)
         .then(res => {
+          // return (console.log('res.status: ', res.status, 'res.body.message: ', res.body.message, 'res.body: ', res.body));
           expect(res).to.have.status(200);
           expect(res).to.be.json;
           expect(res.body).to.include.keys('authToken');

@@ -15,7 +15,7 @@ router.use('/', passport.authenticate('jwt', { session: false, failWithError: tr
 
 router.get('/', (req, res, next) => {
   const { searchTerm, vendorId } = req.query;
-  const userId = req.user.id;
+  // const userId = req.user.id;
   let filter = {};
 
   if (searchTerm) {
@@ -31,9 +31,9 @@ router.get('/', (req, res, next) => {
     }
     filter.vendorId = vendorId;
   }
-  if (userId) {
-    filter.userId = userId;
-  }
+  // if (userId) {
+  //   filter.userId = userId;
+  // }
 
   return Order.find(filter)
     .populate('vendor', 'vendorName phone')
@@ -65,7 +65,6 @@ router.get('/:id', (req, res, next) => {
   .populate('vendor', 'vendorName phone')
   .populate('pickup', 'status updatedAt')
   .populate('delivery', 'status updatedAt')
-  .populate('driver', 'driverName')
   .then(result => {
     res.json(result);
   })

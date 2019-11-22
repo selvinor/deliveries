@@ -8,7 +8,7 @@ module.exports = {
   DATABASE_URL: process.env.DATABASE_URL,
   MONGODB_URI: process.env.DATABASE_URL,
   TEST_DATABASE_URL:    
-  'mongodb://localhost/thinkful-backend-test',
+  'mongodb://localhost/deliveryDb',
   JWT_SECRET: process.env.JWT_SECRET,
   JWT_EXPIRY: process.env.JWT_EXPIRY || '1d'
 };

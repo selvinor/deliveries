@@ -46,7 +46,7 @@ app.use(express.json());
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
-app.use('/api/login', authRouter);
+app.use('/api/auth', authRouter);
 app.use('/api/deliveries', deliveryRouter);
 app.use('/api/depots', depotRouter);
 app.use('/api/drivers', driverRouter);

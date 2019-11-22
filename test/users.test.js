@@ -13,7 +13,7 @@ const expect = chai.expect;
 
 chai.use(chaiHttp);
 
-describe('CozySpacesServer - Users', function () {
+describe('Delivery Tracking Server - Users', function () {
   const username = 'exampleUser';
   const password = 'examplePass';
   const email = 'test@gmail.com';
@@ -49,7 +49,7 @@ describe('CozySpacesServer - Users', function () {
             res = _res;
             expect(res).to.have.status(201);
             expect(res.body).to.be.an('object');
-            expect(res.body).to.have.keys('id', 'username', 'email', 'photos', 'ratings');
+            expect(res.body).to.have.keys('id', 'username', 'email');
             expect(res.body.id).to.exist;
             expect(res.body.username).to.equal(testUser.username);
             expect(res.body.email).to.equal(testUser.email);

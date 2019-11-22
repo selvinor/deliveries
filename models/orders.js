@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.Object, ref: 'User', required: true },  
+  // userId: { type: mongoose.Schema.Types.Object, ref: 'User', required: true },  
   vendor: { type: mongoose.Schema.Types.Object, ref: 'Vendor', required: true },
   vendorOrderRef: {type: String, unique: false, required:true },
   orderDate: { type: Date},
@@ -22,14 +22,13 @@ const orderSchema = new mongoose.Schema({
     recipient : {type: String, default: ''},
     contactPhone :  {type: String, default: ''}  
   },
-  pickup: { type: mongoose.Schema.Types.Object, ref: 'Pickup', required: true },
-  delivery: { type: mongoose.Schema.Types.Object, ref: 'Delivery', required: true }
-
+  pickup: { type: mongoose.Schema.Types.Object, ref: 'Pickup', required: false },
+  delivery: { type: mongoose.Schema.Types.Object, ref: 'Delivery', required: false }
 });
 
 orderSchema.methods.serialize = function() {
   return {
-    userId:this.userId || '',
+    // userId:this.userId || '',
     vendor: this.vendor || '',
     vendorOrderRef: this.vendorOrderRef || '',
     orderDate: this.orderDate || '',

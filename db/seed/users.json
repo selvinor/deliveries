@@ -1,4 +1,5 @@
-[ {"_id":"111111111111111111111001","username":"vendor1","email":"vendor1@fakeemail.com","password":"$2a$10$7QGPMellj8necAZTRbjY5eu3wBpy1Z20U7gwYYfksKVCr1kHBrCvG","vendor":"222222222222222222222001"},
+[ 
+  {"_id":"111111111111111111111001","username":"vendor1","email":"vendor1@fakeemail.com","password":"$2a$10$7QGPMellj8necAZTRbjY5eu3wBpy1Z20U7gwYYfksKVCr1kHBrCvG","vendor":"222222222222222222222001"},
   {"_id":"111111111111111111111002","username":"vendor2","email":"vendor2@fakeemail.com","password":"$2a$10$7QGPMellj8necAZTRbjY5eu3wBpy1Z20U7gwYYfksKVCr1kHBrCvG","vendor":"222222222222222222222002"},
   {"_id":"111111111111111111111003","username":"vendor3","email":"vendor3@fakeemail.com","password":"$2a$10$7QGPMellj8necAZTRbjY5eu3wBpy1Z20U7gwYYfksKVCr1kHBrCvG","vendor":"222222222222222222222003"},
   {"_id":"111111111111111111111004","username":"driver1","email":"driver1@fakeemail.com","password":"$2a$10$7QGPMellj8necAZTRbjY5eu3wBpy1Z20U7gwYYfksKVCr1kHBrCvG","driver":"333333333333333333333101"},
