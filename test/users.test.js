@@ -19,7 +19,7 @@ describe('Delivery Tracking Server - Users', function () {
   const email = 'test@gmail.com';
 
   before(function () {
-    return mongoose.connect(TEST_DATABASE_URL)
+    return mongoose.connect(TEST_DATABASE_URL,{ useNewUrlParser: true })
       .then(() => mongoose.connection.db.dropDatabase());
   });
 

@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const { MONGODB_URI } = require('../config');
 
 console.log(`Connecting to mongodb at ${MONGODB_URI}`);
-mongoose.connect(MONGODB_URI)
+mongoose.connect(MONGODB_URI,{ useNewUrlParser: true })
   .then(() => {
     console.log('Dropping database');
     return mongoose.connection.db.dropDatabase();

@@ -15,7 +15,7 @@ router.use('/', passport.authenticate('jwt', { session: false, failWithError: tr
 
 router.get('/', (req, res, next) => {
   const { searchTerm, vendorId } = req.query;
-  // const userId = req.user.id;
+  const userId = req.user.id;
   let filter = {};
 
   if (searchTerm) {
@@ -34,12 +34,11 @@ router.get('/', (req, res, next) => {
   // if (userId) {
   //   filter.userId = userId;
   // }
-
+console.log('filter: ', filter);
   return Order.find(filter)
     .populate('vendor', 'vendorName phone')
-    .populate('pickup', 'status updatedAt')
-    .populate('delivery', 'status updatedAt')
-    .populate('driver', 'driverName')
+    .populate('pickup', 'pickupDate status driver')
+    .populate('delivery', 'deliveryDate status driver')
     .then(result => {
       return res
       .status(200)
@@ -63,11 +62,13 @@ router.get('/:id', (req, res, next) => {
 
   Order.findOne({ _id: id })
   .populate('vendor', 'vendorName phone')
-  .populate('pickup', 'status updatedAt')
-  .populate('delivery', 'status updatedAt')
+  .populate('pickup', 'pickupDate status driver')
+  .populate('delivery', 'deliveryDate status driver')
   .then(result => {
-    res.json(result);
-  })
+    return res
+    .status(200)
+    .json(result);
+})
     .catch(err => {
       next(err);
     });
@@ -75,29 +76,36 @@ router.get('/:id', (req, res, next) => {
 
 /* ========== POST/CREATE AN ITEM ========== */
 router.post('/', (req, res, next) => {
-  const { title, content, driver } = req.body;
+  const { userId, vendor, orderDate, deliveryDate, vendorOrderRef, destination, pickup, delivery } = req.body;
   const user = req.user.id;
-  //console.log('req.user', req.user);
+  
   /***** Never trust users - validate input *****/
-  if (!title) {
-    const err = new Error('Missing `title` in request body');
+  if (!vendorOrderRef) {
+    const err = new Error('Missing `vendorOrderRef` in request body');
+    err.status = 400;
+    return next(err);
+  }
+  
+  if (!destination) {
+    const err = new Error('Missing `destination` in request body');
     err.status = 400;
     return next(err);
   }
 
-  if (driver && !mongoose.Types.Object.isValid(driver)) {
-    const err = new Error('The `driver` is not valid');
-    err.status = 400;
-    return next(err);
-  }
-  if (driver && !mongoose.Types.Object.isValid(user)) {
-    const err = new Error('The `user` is not valid');
-    err.status = 400;
-    return next(err);
-  }
+  // if (vendor && !mongoose.Types.Object.isValid(vendor)) {
+  //   const err = new Error('The `vendor` is not valid');
+  //   err.status = 400;
+  //   return next(err);
+  // }
+  // console.log('req.user', req.user);
+  // if (userId && !mongoose.Types.Object.isValid(userId)) {
+  //   const err = new Error('The `user` is not valid');
+  //   err.status = 400;
+  //   return next(err);
+  // }
 
-  const newOrder = { title, content, driver, user };
-
+  const newOrder = { userId, vendor, orderDate, deliveryDate, vendorOrderRef, destination, pickup, delivery };
+// console.log('newOrder: ', newOrder);
   Order.create(newOrder) //
     .then(result => {
       res
@@ -115,7 +123,7 @@ router.put('/:id', (req, res, next) => {
   const { id } = req.params;
   const { title, content, driver } = req.body;
   const updateOrder = {};
-  const updateFields = ['title', 'content', 'driver']
+  const updateFields = ['orderDate', 'deliveryDate', 'vendorOrderRef', 'destination', 'pickup', 'delivery']
 
   updateFields.forEach(field => {
     if (field in req.body) {
@@ -124,18 +132,25 @@ router.put('/:id', (req, res, next) => {
   });
 
   /***** Never trust users - validate input *****/
+  if (vendor && !mongoose.Types.Object.isValid(vendor)) {
+    const err = new Error('The `vendor` is not valid');
+    err.status = 400;
+    return next(err);
+  }
   if (!mongoose.Types.Object.isValid(id)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
-  if (driver && !mongoose.Types.Object.isValid(driver)) {
-    const err = new Error('The `driver` is not valid');
+
+  if (userId && !mongoose.Types.Object.isValid(userId)) {
+    const err = new Error('The `user` is not valid');
     err.status = 400;
     return next(err);
   }
-  if (title === '') {
-    const err = new Error('Missing `title` in request body');
+
+  if (!vendorOrderRef) {
+    const err = new Error('Missing `vendorOrderRef` in request body');
     err.status = 400;
     return next(err);
   }
@@ -164,8 +179,13 @@ router.delete('/:id', (req, res, next) => {
     err.status = 400;
     return next(err);
   }
+  if (userId && !mongoose.Types.Object.isValid(userId)) {
+    const err = new Error('The `user` is not valid');
+    err.status = 400;
+    return next(err);
+  }
 
-  Order.deleteOne({ _id: id, user })
+  Order.deleteOne({ _id: id, userId })
     .then(result => {
       if (result.n) {
         res.sendStatus(204);

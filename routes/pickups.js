@@ -15,6 +15,7 @@ router.use('/', passport.authenticate('jwt', { session: false, failWithError: tr
 router.get('/', (req, res, next) => {
   return Pickup.find()
   .populate('orders') 
+  .populate('drivers') 
   .then(result => {
       return res
       .status(200)

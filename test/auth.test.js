@@ -23,7 +23,7 @@ describe('Auth API resource', function() {
   let token;
 
   before(function () {
-    return mongoose.connect(TEST_DATABASE_URL)
+    return mongoose.connect(TEST_DATABASE_URL,{ useNewUrlParser: true })
       .then(() => mongoose.connection.db.dropDatabase());
   });
 

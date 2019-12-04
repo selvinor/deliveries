@@ -3,8 +3,7 @@
 const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
-  // userId: { type: mongoose.Schema.Types.Object, ref: 'User', required: true },  
-  vendor: { type: mongoose.Schema.Types.Object, ref: 'Vendor', required: true },
+  userId: { type: mongoose.Schema.Types.Object, ref: 'User', required: false },  
   vendorOrderRef: {type: String, unique: false, required:true },
   orderDate: { type: Date},
   deliveryDate: { type: Date},
@@ -22,18 +21,20 @@ const orderSchema = new mongoose.Schema({
     recipient : {type: String, default: ''},
     contactPhone :  {type: String, default: ''}  
   },
-  pickup: { type: mongoose.Schema.Types.Object, ref: 'Pickup', required: false },
-  delivery: { type: mongoose.Schema.Types.Object, ref: 'Delivery', required: false }
+  vendor: { type: mongoose.Schema.Types.Object, ref: 'Vendor', required: true },
+  pickup: { type: mongoose.Schema.Types.Object, ref: 'Pickup', required: true },
+  delivery: { type: mongoose.Schema.Types.Object, ref: 'Delivery', required: true }
+
 });
 
 orderSchema.methods.serialize = function() {
   return {
-    // userId:this.userId || '',
-    vendor: this.vendor || '',
+    userId:this.userId || '',
     vendorOrderRef: this.vendorOrderRef || '',
     orderDate: this.orderDate || '',
     deliveryDate: this.deliveryDate || '',                    
     destination: this.destination|| '',
+    vendor: this.vendor || '',
     pickup: this.pickup|| '',
     delivery: this.delivery|| ''
   };
@@ -47,7 +48,8 @@ orderSchema.set('toObject', {
   virtuals: true,     // include built-in virtual `id`
   versionKey: false,  // remove `__v` version key
   transform: (doc, ret) => {
-    delete ret._id; // delete `_id`
+    delete ret._id; // delete `_id`,
+    delete ret.__v; // delete `__v`
   }
 });
 module.exports = mongoose.model('Order', orderSchema);

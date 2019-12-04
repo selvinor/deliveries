@@ -14,12 +14,12 @@ const vendorSchema = new mongoose.Schema({
     coordinates: []
   },
   phone: {type: String, default: ''},
-  pickups : [{
-    type: mongoose.Schema.Types.Object, ref: 'Pickup'
-  }],  
-  deliveries :[{
-    type: mongoose.Schema.Types.Object, ref: 'Delivery'
-  }],  
+  // pickups : [{
+  //   type: mongoose.Schema.Types.Object, ref: 'Pickup'
+  // }],  
+  // deliveries :[{
+  //   type: mongoose.Schema.Types.Object, ref: 'Delivery'
+  // }],  
   orders: [{
     type: mongoose.Schema.Types.Object, ref: 'Order'
   }]  
@@ -35,8 +35,8 @@ vendorSchema.methods.serialize = function() {
     zipcode: this.zipcode|| '',
     geocode: this.geocode|| '',
     phone: this.phone|| '',
-    pickups: this.pickups|| '',
-    deliveries: this.deliveries || '',
+    // pickups: this.pickups|| '',
+    // deliveries: this.deliveries || '',
     orders: this.orders || ''
   };
 };
