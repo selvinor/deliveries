@@ -250,7 +250,9 @@ describe('Orders API', function () {
           expect(newItem.destination.instructions).to.equal(data.destination.instructions);
           expect(newItem.destination.recipient).to.equal(data.destination.recipient);
           expect(newItem.destination.contactPhone).to.equal(data.destination.contactPhone);      
-      });
+          expect(newItem.pickups_id).to.eql(data.pickups);
+          expect(newItem.deliveries_id).to.eql(data.deliveries);
+        });
     });
   });
 });

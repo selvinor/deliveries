@@ -31,10 +31,7 @@ router.get('/', (req, res, next) => {
     }
     filter.vendorId = vendorId;
   }
-  // if (userId) {
-  //   filter.userId = userId;
-  // }
-console.log('filter: ', filter);
+// console.log('filter: ', filter);
   return Order.find(filter)
     .populate('vendor', 'vendorName phone')
     .populate('pickup', 'pickupDate status driver')
