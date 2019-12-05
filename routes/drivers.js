@@ -8,14 +8,13 @@ const Driver = require('../models/drivers');
 
 const router = express.Router();
 
-/* ===============USE PASSPORT AUTH JWT ============= */
 router.use('/', passport.authenticate('jwt', { session: false, failWithError: true }));
 
 /* ========== GET/READ ALL ITEMS ========== */
 router.get('/', (req, res, next) => {
   return Driver.find()
-    .populate('pickups') 
-    .populate('deliveries') 
+  .populate('pickups', 'pickupDate status updatedAt')
+  .populate('deliveries', 'deliveryDate status updatedAt')
     .then(result => {
       return res
       .status(200)
@@ -27,25 +26,26 @@ router.get('/', (req, res, next) => {
 });
 
 /* ========== GET/READ A SINGLE ITEM ========== */
+
 router.get('/:id', (req, res, next) => {
-  const { id } = req.params;
-//   const user = req.user.id;
-  if (!mongoose.Types.Object.isValid(id)) {
+  // const { id } = req.params;
+  const id = req.params.id;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
 
   Driver.findOne({ _id: id })
-    .populate('pickups') 
-    .populate('deliveries') 
-    .then(result => {
-      if (result) {
-        res.json(result);
-      } else {
-        next();
-      }
-    })
+  // .populate('orders', 'vendorOrderRef destination pickup delivery')
+  .populate('pickups', 'pickupDate status driver')
+  .populate('deliveries', 'deliveryDate status driver')
+  .then(result => {
+    return res
+    .status(200)
+    .json(result);
+})
     .catch(err => {
       next(err);
     });
@@ -53,13 +53,43 @@ router.get('/:id', (req, res, next) => {
 
 /* ========== POST/CREATE AN ITEM ========== */
 router.post('/', (req, res, next) => {
-  if (!req.body) {
-    const err = new Error('Missing `driver` in request body');
+  const { driverName, driverPhone, driverVehicleMake, driverVehicleModel, driverVehiclePlate } = req.body;
+  const user = req.user.id;
+  
+  /***** Never trust users - validate input *****/
+  if (!driverName) {
+    const err = new Error('Missing `driverName` in request body');
     err.status = 400;
     return next(err);
   }
-
-  Driver.create(req.body).then(result => {
+  
+  if (!driverPhone) {
+    const err = new Error('Missing `driverPhone` in request body');
+    err.status = 400;
+    return next(err);
+  }
+  
+  if (!driverVehicleMake) {
+    const err = new Error('Missing `driverVehicleMake` in request body');
+    err.status = 400;
+    return next(err);
+  }
+  
+  if (!driverVehicleModel) {
+    const err = new Error('Missing `driverVehicleModel` in request body');
+    err.status = 400;
+    return next(err);
+  }
+  
+  if (!driverVehiclePlate) {
+    const err = new Error('Missing `driverVehiclePlate` in request body');
+    err.status = 400;
+    return next(err);
+  }
+  
+  const newDriver = {  user, driverName, driverPhone, driverVehicleMake, driverVehicleModel, driverVehiclePlate };
+// console.log('newDriver: ', newDriver);
+  Driver.create(newDriver).then(result => {
     res
       .location(`${req.originalUrl}/${result.id}`)
       .status(201)
@@ -74,7 +104,7 @@ router.put('/:id', (req, res, next) => {
   const { id } = req.params;
 
   const updateDriver = {};
-  const updateFields = ['driverName', 'driverPhone', 'driverVehicleMake', 'driverVehicleModel', 'driverVehiclePlate']
+  const updateFields = ['driverName', 'driverPhone', 'driverVehicleMake', 'driverVehicleModel', 'driverVehiclePlate', 'deliveries', 'orders']
   updateFields.forEach(field => {
     if (field in req.body) {
       updateDriver[field] = req.body[field];
@@ -86,7 +116,8 @@ router.put('/:id', (req, res, next) => {
     err.status = 400;
     return next(err);
   }
-  Driver.findByAndUpdate(id, updateDriver, { new: true })
+  
+  Driver.findByAndUpdate(id, updateDriver,   { $push: { vendors: updateDriver } })
     .then(result => {
       if (result) {
         res.json(result);

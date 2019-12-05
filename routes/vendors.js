@@ -72,7 +72,7 @@ router.post('/', (req, res, next) => {
 
   const newVendor = {  user, vendorName, streetAddress, city, state, zipcode, geocode, phone, pickups, deliveries, orders };
 // console.log('newVendor: ', newVendor);
-  Vendor.create(req.body).then(result => {
+  Vendor.create(newVendor).then(result => {
     res
       .location(`${req.originalUrl}/${result.id}`)
       .status(201)
