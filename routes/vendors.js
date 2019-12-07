@@ -54,25 +54,20 @@ router.get('/:id', (req, res, next) => {
 
 /* ========== POST/CREATE AN ITEM ========== */
 router.post('/', (req, res, next) => {
-  const { vendorName, streetAddress, city, state, zipcode, geocode, phone, pickups, deliveries, orders } = req.body;
+  const { userId, vendorName, streetAddress, city, state, zipcode, geocode, phone, orders } = req.body;
   const user = req.user.id;
   
   /***** Never trust users - validate input *****/
-  if (!vendorOrderRef) {
-    const err = new Error('Missing `vendorOrderRef` in request body');
+  if (!vendorName) {
+    const err = new Error('Missing `vendorName` in request body');
     err.status = 400;
     return next(err);
   }
   
-  if (!destination) {
-    const err = new Error('Missing `destination` in request body');
-    err.status = 400;
-    return next(err);
-  }
-
-  const newVendor = {  user, vendorName, streetAddress, city, state, zipcode, geocode, phone, pickups, deliveries, orders };
+  const newVendor = {  userId, vendorName, streetAddress, city, state, zipcode, geocode, phone, orders };
 // console.log('newVendor: ', newVendor);
-  Vendor.create(newVendor).then(result => {
+  Vendor.create(newVendor)
+  .then(result => {
     res
       .location(`${req.originalUrl}/${result.id}`)
       .status(201)

@@ -102,6 +102,14 @@ router.post('/', (req, res, next) => {
 /* ========== GET/READ A SINGLE ITEM ========== */
 router.put('/:id', (req, res, next) => {
   const { id } = req.params;
+  const user = req.user.id;
+  
+  /***** Never trust users - validate input *****/
+  if (!driverName) {
+    const err = new Error('Missing `driverName` in request body');
+    err.status = 400;
+    return next(err);
+  }
 
   const updateDriver = {};
   const updateFields = ['driverName', 'driverPhone', 'driverVehicleMake', 'driverVehicleModel', 'driverVehiclePlate', 'deliveries', 'orders']
@@ -117,7 +125,7 @@ router.put('/:id', (req, res, next) => {
     return next(err);
   }
   
-  Driver.findByAndUpdate(id, updateDriver,   { $push: { vendors: updateDriver } })
+  Driver.findByAndUpdate(id, updateDriver,   { $push: { drivers: updateDriver } })
     .then(result => {
       if (result) {
         res.json(result);

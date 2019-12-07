@@ -29,7 +29,7 @@ const expect = chai.expect;
 describe('Vendors API', function () {
 
   before(function () {
-    return mongoose.connect(TEST_DATABASE_URL,{useNewUrlParser: true })
+    return mongoose.connect(TEST_DATABASE_URL,{'useNewUrlParser': true, 'useCreateIndex': true})
       .then(() => mongoose.connection.db.dropDatabase());
   });
 
@@ -98,7 +98,7 @@ describe('Vendors API', function () {
 
       return Promise.all([dbPromise, apiPromise])
         .then(([data, res]) => {
-          console.log('DATA: ', data);
+          // console.log('DATA: ', data);
           expect(res).to.have.status(200);
           expect(res).to.be.json;
           expect(res.body).to.be.a('array');
@@ -107,7 +107,7 @@ describe('Vendors API', function () {
               expect(item).to.be.a('object');
               expect(item).to.include.all.keys(
               'vendorName',  
-              'user',
+              'userId',
               'streetAddress', 
               'city',
               'state', 
@@ -121,7 +121,7 @@ describe('Vendors API', function () {
             );
             // console.log('item: ', item);
             // console.log('data[i]: ',data[i]);
-            expect(item.user).to.equal(data[i].user);
+            expect(item.userId).to.equal(data[i].userId);
             expect(item.vendorName).to.equal(data[i].vendorName);
             expect(item.streetAddress).to.equal(data[i].streetAddress);
             expect(item.city).to.equal(data[i].city);
@@ -130,22 +130,24 @@ describe('Vendors API', function () {
             expect(item.phone).to.equal(data[i].phone);
             expect(item.geocode.coordinates).to.eql(data[i].geocode.coordinates);
             expect(item.orders[0]._id).to.equal(data[i].orders[0]);
-            // expect(item.orders[0].vendorOrderRef).to.equal(data[i].orders[0].vendorOrderRef);
-            // expect(item.orders[0].destination).to.equal(data[i].orders[0].destination);
-            // expect(item.orders[0].pickup.pickupDate).to.equal(data[i].pickups[0].pickupDate);
-            // expect(item.orders[0].pickup.status).to.equal(data[i].pickups[0].status);
-            // expect(item.orders[0].pickup.driver).to.equal(data[i].pickups[0].driver);
-            // expect(item.orders[0].delivery.deliveryDate).to.equal(data[i].deliveries[0].deliveryDate);
-            // expect(item.orders[0].delivery.status).to.equal(data[i].deliveries[0].status);
-            // expect(item.orders[0].delivery.driver).to.equal(data[i].deliveries[0].driver);
-        });
+            if(item.orders[0]){
+              expect(item.orders[0].vendorOrderRef).to.equal(data[i].orders[0].vendorOrderRef);
+              expect(item.orders[0].destination).to.equal(data[i].orders[0].destination);
+              expect(item.orders[0].pickup.pickupDate).to.equal(data[i].pickups[0].pickupDate);
+              expect(item.orders[0].pickup.status).to.equal(data[i].pickups[0].status);
+              expect(item.orders[0].pickup.driver).to.equal(data[i].pickups[0].driver);
+              expect(item.orders[0].delivery.deliveryDate).to.equal(data[i].deliveries[0].deliveryDate);
+              expect(item.orders[0].delivery.status).to.equal(data[i].deliveries[0].status);
+              expect(item.orders[0].delivery.driver).to.equal(data[i].deliveries[0].driver);
+            }
+          });
         });
 
     });
 
   });
 
-  describe.only('GET /api/vendors/:id', function () {
+  describe('GET /api/vendors/:id', function () {
     it('should return correct vendors', function () {
       let data;
       return Vendor.findOne()
@@ -157,11 +159,11 @@ describe('Vendors API', function () {
         })
         .then((res) => {
           const item = res.body;
-          console.log('item is: ', item);
+          // console.log('item is: ', item);
           expect(item).to.be.a('object');
           expect(item).to.include.all.keys(
             'vendorName',  
-            'user',
+            'userId',
             'streetAddress', 
             'city',
             'state', 
@@ -174,8 +176,8 @@ describe('Vendors API', function () {
             'updatedAt'            
           );
           // console.log('item: ', item);
-          console.log('data: ',data);
-          expect(item.user).to.equal(data.user);
+          // console.log('data: ',data);
+          expect(item.userId).to.equal(data.userId);
           expect(item.vendorName).to.equal(data.vendorName);
           expect(item.streetAddress).to.equal(data.streetAddress);
           expect(item.city).to.equal(data.city);
@@ -217,7 +219,7 @@ describe('Vendors API', function () {
             "zipcode": "97204",
             "phone": "555-555-1111",
             "_id": "222222222222222222222001",
-            "user": "111111111111111111111001",
+            "userId": "111111111111111111111001",
             "createdAt": "2019-12-04T21:23:52.263Z",
             "updatedAt": "2019-12-04T21:23:52.263Z"
         }      
@@ -233,8 +235,7 @@ describe('Vendors API', function () {
           expect(res).to.be.json;
           expect(res.body).to.be.a('object');
           expect(res.body).to.have.all.keys(
-            'geocode.coordinates', 
-            'user', 
+            'userId', 
             'vendorName', 
             'streetAddress', 
             'city', 
@@ -242,9 +243,12 @@ describe('Vendors API', function () {
             'zipcode', 
             'geocode', 
             'phone', 
-            'pickups', 
-            'deliveries', 
-            'orders'
+            'orders', 
+            '_id',
+            '__v',
+            'createdAt',
+            'updatedAt'
+
           );
           return Vendor.findById(res.body._id);
         })
@@ -252,15 +256,12 @@ describe('Vendors API', function () {
           // console.log('newItem: ', newItem, ' data: ', data);
           expect(newItem.vendorName).to.equal(data.vendorName);
           expect(newItem.geocode.coordinates).to.eql(data.geocode.coordinates);
-          expect(newItem.user).to.equal(data.user);
+          expect(newItem.userId).to.equal(data.userId);
           expect(newItem.streetAddress).to.equal(data.streetAddress);
           expect(newItem.city).to.equal(data.city);
           expect(newItem.state).to.equal(data.state);
           expect(newItem.zipcode).to.equal(data.zipcode);
-          expect(newItem.phone).to.equal(data.phone);      
-          expect(newItem.pickups).to.equal(data.pickups);      
-          expect(newItem.deliveries).to.equal(data.deliveries);      
-          expect(newItem.orders_id).to.equal(data.orders);      
+          expect(newItem.phone).to.equal(data.phone);           
       });
     });
   });

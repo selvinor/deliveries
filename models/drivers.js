@@ -8,7 +8,7 @@ const driverSchema = new mongoose.Schema({
   driverPhone: {type: String, default: ''},
   driverVehicleMake: {type: String, default: ''},
   driverVehicleModel: {type: String, default: ''},
-  driverVehiclePlate: {type: String, default: ''},
+  driverVehiclePlate: {type: String, default: '', unique: true},
    pickups : [{
      type: mongoose.Schema.Types.Object, ref: 'Pickup' 
    }],  
