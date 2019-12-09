@@ -27,24 +27,27 @@ router.get('/', (req, res, next) => {
 });
 
 /* ========== GET/READ A SINGLE ITEM ========== */
+
 router.get('/:id', (req, res, next) => {
-  const { id } = req.params;
-//   const user = req.user.id;
-  if (!mongoose.Types.Object.isValid(id)) {
+  // const { id } = req.params;
+  const id = req.params.id;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
 
   Pickup.findOne({ _id: id })
-    .populate('orders') 
-    .then(result => {
-      if (result) {
-        res.json(result);
-      } else {
-        next();
-      }
-    })
+  // .populate('orders', 'vendorOrderRef destination pickup delivery')
+  .populate('depot', 'depotName')
+  .populate('driver', 'driverName driverPhone')
+  .populate('vendor', 'vendorName phone')
+  .then(result => {
+    return res
+    .status(200)
+    .json(result);
+})
     .catch(err => {
       next(err);
     });
@@ -68,35 +71,37 @@ router.post('/', (req, res, next) => {
       next(err);
     });
 }); 
-/* ========== GET/READ A SINGLE ITEM ========== */
-router.put('/:id', (req, res, next) => {
-  const { id } = req.params;
+/* ========== UPDATE A SINGLE ITEM ========== */
 
+router.put('/:id', (req, res, next) => {
+  // const { id } = req.params;
+  const id = req.params.id;
   const updatePickup = {};
-  const updateFields = ['orders']
+  const updateFields = ['depot', 'driver', 'zone', 'status']
+//  console.log('req.body: ', req.body);
   updateFields.forEach(field => {
     if (field in req.body) {
       updatePickup[field] = req.body[field];
     }
   });
+  // console.log('updatePickup: ', updatePickup);
 
-  if (!mongoose.Types.Object.isValid(id)) {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
-  
-  Pickup.findByAndUpdate(id, updatePickup,   { $push: { orders: updatePickup } })
-    .then(result => {
-      if (result) {
-        res.json(result);
-      } else {
-        next();
-      }
-    })
-    .catch(err => {
-      next(err);
-    });
+  Pickup.findByIdAndUpdate( {_id: id}, updatePickup,   { $push: { pickup: updatePickup } })
+  .then(result => {
+    if (result) {
+      res.json(result);
+    } else {
+      next();
+    }
+  })
+  .catch(err => {
+    next(err);
+  });
 });
 
 

@@ -17,22 +17,27 @@ router.get('/', (req, res, next) => {
       next(err);
     });
 });
+/* ========== GET/READ A SINGLE ITEM ========== */
+
 router.get('/:id', (req, res, next) => {
+  // const { id } = req.params;
+  const id = req.params.id;
 
-  const user = req.params.id;
-
-  if (!mongoose.Types.Object.isValid(user)) {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
 
-  return User.findBy(user)
-    .then(result => {
-      return res
-      .status(200)
-      .json(result);
-    })
+  User.findOne({ _id: id })
+  .populate('vendor', 'vendorName phone')
+  .populate('driver', 'driverName driverPhone')
+  .populate('depot', 'depotName ')
+  .then(result => {
+    return res
+    .status(200)
+    .json(result);
+})
     .catch(err => {
       next(err);
     });

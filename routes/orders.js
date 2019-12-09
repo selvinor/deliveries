@@ -116,53 +116,78 @@ router.post('/', (req, res, next) => {
 });
 
 /* ========== PUT/UPDATE A SINGLE ITEM ========== */
-router.put('/:id', (req, res, next) => {
-  const { id } = req.params;
-  const { title, content, driver } = req.body;
-  const updateOrder = {};
-  const updateFields = ['orderDate', 'deliveryDate', 'vendorOrderRef', 'destination', 'pickup', 'delivery']
+// router.put('/:id', (req, res, next) => {
+//   const id = req.params.id;
+//   const updateOrder = {};
+//   const updateFields = ['orderDate', 'deliveryDate', 'vendorOrderRef', 'destination', 'pickup', 'delivery']
 
+//   updateFields.forEach(field => {
+//     if (field in req.body) {
+//       updateOrder[field] = req.body[field];
+//     }
+//   });
+
+//   /***** Never trust users - validate input *****/
+
+//   if (!mongoose.Types.Object.isValid(id)) {
+//     const err = new Error('The `id` is not valid');
+//     err.status = 400;
+//     return next(err);
+//   }
+
+//   if (userId && !mongoose.Types.Object.isValid(userId)) {
+//     const err = new Error('The `user` is not valid');
+//     err.status = 400;
+//     return next(err);
+//   }
+
+//   if (!vendorOrderRef) {
+//     const err = new Error('Missing `vendorOrderRef` in request body');
+//     err.status = 400;
+//     return next(err);
+//   }
+
+//   Order.findByIdAndUpdate({_id: id}, updateOrder, { new: true })
+//     .then(result => {
+//       if (result) {
+//         res.json(result);
+//       } else {
+//         next();
+//       }
+//     })
+//     .catch(err => {
+//       next(err);
+//     });
+// });
+router.put('/:id', (req, res, next) => {
+  // const { id } = req.params;
+  const id = req.params.id;
+  const updateOrder = {};
+  const updateFields = ['orderDate', 'deliveryDate', 'vendorOrderRef', 'destination', 'vendor', 'pickup', 'delivery']
+//  console.log('req.body: ', req.body);
   updateFields.forEach(field => {
     if (field in req.body) {
       updateOrder[field] = req.body[field];
     }
   });
+  // console.log('updateOrder: ', updateOrder);
 
-  /***** Never trust users - validate input *****/
-  if (vendor && !mongoose.Types.Object.isValid(vendor)) {
-    const err = new Error('The `vendor` is not valid');
-    err.status = 400;
-    return next(err);
-  }
-  if (!mongoose.Types.Object.isValid(id)) {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
-
-  if (userId && !mongoose.Types.Object.isValid(userId)) {
-    const err = new Error('The `user` is not valid');
-    err.status = 400;
-    return next(err);
-  }
-
-  if (!vendorOrderRef) {
-    const err = new Error('Missing `vendorOrderRef` in request body');
-    err.status = 400;
-    return next(err);
-  }
-
-  Order.findByAndUpdate(id, updateOrder, { new: true })
-    .then(result => {
-      if (result) {
-        res.json(result);
-      } else {
-        next();
-      }
-    })
-    .catch(err => {
-      next(err);
-    });
+  Order.findByIdAndUpdate( {_id: id}, updateOrder,   { $push: { order: updateOrder } })
+  .then(result => {
+    if (result) {
+      res.json(result);
+    } else {
+      next();
+    }
+  })
+  .catch(err => {
+    next(err);
+  });
 });
 
 /* ========== DELETE/REMOVE A SINGLE ITEM ========== */

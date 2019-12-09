@@ -77,37 +77,37 @@ router.post('/', (req, res, next) => {
       next(err);
     });
 }); 
-/* ========== GET/READ A SINGLE ITEM ========== */
-router.put('/:id', (req, res, next) => {
-  const { id } = req.params;
 
+router.put('/:id', (req, res, next) => {
+  // const { id } = req.params;
+  const id = req.params.id;
   const updateVendor = {};
-  const updateFields = ['geocode.coordinates', 'vendorName', 'streetAddress', 'city', 'state', 'zipcode', 'geocode', 'phone', 'pickups', 'deliveries', 'orders']
+  const updateFields = ['geocode', 'vendorName', 'streetAddress', 'city', 'state', 'zipcode', 'phone', 'pickup', 'delivery', 'order']
+//  console.log('req.body: ', req.body);
   updateFields.forEach(field => {
     if (field in req.body) {
       updateVendor[field] = req.body[field];
     }
   });
+  // console.log('updateVendor: ', updateVendor);
 
-  if (!mongoose.Types.Object.isValid(id)) {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
-  
-  Vendor.findByAndUpdate(id, updateVendor,   { $push: { vendors: updateVendor } })
-    .then(result => {
-      if (result) {
-        res.json(result);
-      } else {
-        next();
-      }
-    })
-    .catch(err => {
-      next(err);
-    });
+  Vendor.findByIdAndUpdate( {_id: id}, updateVendor,   { $push: { vendor: updateVendor } })
+  .then(result => {
+    if (result) {
+      res.json(result);
+    } else {
+      next();
+    }
+  })
+  .catch(err => {
+    next(err);
+  });
 });
-
 
 /* ========== DELETE/REMOVE A SINGLE ITEM ========== */
 router.delete('/:id', (req, res, next) => {

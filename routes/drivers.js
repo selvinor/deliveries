@@ -138,6 +138,34 @@ router.put('/:id', (req, res, next) => {
     });
 });
 
+router.put('/:id', (req, res, next) => {
+  // const { id } = req.params;
+  const id = req.params.id;
+  const updateDriver = {};
+  const updateFields = ['driverName', 'driverPhone', 'driverVehicleMake', 'driverVehicleModel', 'driverVehiclePlate', 'deliveries', 'pickups']
+  updateFields.forEach(field => {
+    if (field in req.body) {
+      updateDriver[field] = req.body[field];
+    }
+  });
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    const err = new Error('The `id` is not valid');
+    err.status = 400;
+    return next(err);
+  }
+  Driver.findByIdAndUpdate( {_id: id}, updateDriver,   { $push: { driver: updateDriver } })
+  .then(result => {
+    if (result) {
+      res.json(result);
+    } else {
+      next();
+    }
+  })
+  .catch(err => {
+    next(err);
+  });
+});
+
 
 /* ========== DELETE/REMOVE A SINGLE ITEM ========== */
 router.delete('/:id', (req, res, next) => {
