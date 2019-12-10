@@ -8,6 +8,9 @@ const deliverySchema = new mongoose.Schema({
   driver  : { type: mongoose.Schema.Types.Object, ref: 'Driver' },  
   status    : {type: String, default: ''},
   zone      : { type: mongoose.Schema.Types.Object, ref: 'Zone' },
+  vendors    : [{ 
+    type: mongoose.Schema.Types.Object, ref: 'Vendor' 
+  }],
   orders    : [{ 
     type: mongoose.Schema.Types.Object, ref: 'Order' 
   }]
@@ -20,8 +23,9 @@ deliverySchema.methods.serialize = function() {
     driver  :  this.driver || '',
     status    :  this.status || '',
     zone      : this.zone|| '',
+    vendors    : this.vendors|| '',
     orders    : this.orders|| ''
-   };
+      };
 };
 
 

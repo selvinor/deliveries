@@ -13,9 +13,11 @@ router.use('/', passport.authenticate('jwt', { session: false, failWithError: tr
 
 /* ========== GET/READ ALL ITEMS ========== */
 router.get('/', (req, res, next) => {
-  return Delivery.find()
-  .populate('orders') 
-  .populate('drivers') 
+  Delivery.find()
+  .populate('depot', 'depotName')
+  .populate('driver', 'driverName driverPhone')
+  .populate('vendors', 'vendorName phone')
+  .populate('orders', 'vendorOrderRef destination')
     .then(result => {
       return res
       .status(200)
@@ -27,31 +29,31 @@ router.get('/', (req, res, next) => {
 });
 
 /* ========== GET/READ A SINGLE ITEM ========== */
-router.get('/:id', (req, res, next) => {
-  const { id } = req.params;
-  // const user = req.user.id;
-  // console.log('user: ', user);
 
-  if (!mongoose.Types.Object.isValid(id)) {
+router.get('/:id', (req, res, next) => {
+  // const { id } = req.params;
+  const id = req.params.id;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
 
   Delivery.findOne({ _id: id })
-    .populate('orders') 
-    .then(result => {
-      if (result) {
-        res.json(result);
-      } else {
-        next();
-      }
-    })
+  .populate('depot', 'depotName')
+  .populate('driver', 'driverName driverPhone')
+  .populate('vendors', 'vendorName phone')
+  .populate('orders', 'vendorOrderRef destination')
+  .then(result => {
+    return res
+    .status(200)
+    .json(result);
+})
     .catch(err => {
       next(err);
     });
 });
-
 /* ========== POST/CREATE AN ITEM ========== */
 router.post('/', (req, res, next) => {
   if (!req.body) {
@@ -72,10 +74,10 @@ router.post('/', (req, res, next) => {
 }); 
 /* ========== GET/READ A SINGLE ITEM ========== */
 router.put('/:id', (req, res, next) => {
-  const { id } = req.params;
-
+  const id = req.params.id;
   const updateDelivery = {};
-  const updateFields = ['routing', 'driver', 'status', 'zone', 'orders', 'orders']
+  const updateFields = ['depot', 'driver', 'zone', 'status']
+
   updateFields.forEach(field => {
     if (field in req.body) {
       updateDelivery[field] = req.body[field];
@@ -87,7 +89,7 @@ router.put('/:id', (req, res, next) => {
     err.status = 400;
     return next(err);
   }
-  Delivery.findByAndUpdate(id, updateDelivery, { new: true })
+  Delivery.findByAndUpdate({_id: id}, updateDelivery, { $push: { delivery: updateDelivery } })
     .then(result => {
       if (result) {
         res.json(result);

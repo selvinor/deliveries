@@ -16,6 +16,12 @@ const vendorSchema = new mongoose.Schema({
   phone: {type: String, default: ''},
   orders: [{
     type: mongoose.Schema.Types.Object, ref: 'Order', required: false
+  }],  
+  pickups: [{
+    type: mongoose.Schema.Types.Object, ref: 'Pickup', required: false
+  }],  
+  deliveries: [{
+    type: mongoose.Schema.Types.Object, ref: 'Delivery', required: false
   }]  
 });
 
@@ -29,7 +35,9 @@ vendorSchema.methods.serialize = function() {
     zipcode: this.zipcode|| '',
     geocode: this.geocode|| '',
     phone: this.phone|| '',
-    orders: this.orders || ''
+    orders: this.orders || '',
+    pickups: this.pickups || '',
+    deliveries: this.deliveries || ''
   };
 };
 

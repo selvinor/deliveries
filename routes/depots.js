@@ -13,7 +13,7 @@ router.use('/', passport.authenticate('jwt', { session: false, failWithError: tr
 
 /* ========== GET/READ ALL ITEMS ========== */
 router.get('/', (req, res, next) => {
-  return Depot.find()
+   Depot.find()
     .populate('pickups') 
     .populate('deliveries') 
     .populate('orders') 

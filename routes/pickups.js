@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 
 const Pickup = require('../models/pickups');
+const Vendor = require('../models/vendors');
+const Order = require('../models/orders');
 
 const router = express.Router();
 
@@ -13,9 +15,11 @@ router.use('/', passport.authenticate('jwt', { session: false, failWithError: tr
 
 /* ========== GET/READ ALL ITEMS ========== */
 router.get('/', (req, res, next) => {
-  return Pickup.find()
-  .populate('orders') 
-  .populate('drivers') 
+  Pickup.find()
+  .populate('depot', 'depotName') 
+  .populate('driver', 'driverName driverPhone') 
+  .populate('vendors', 'vendorName phone') 
+  .populate('orders', 'vendor vendorOrderRef destination pickup delivery')
   .then(result => {
       return res
       .status(200)
@@ -39,18 +43,18 @@ router.get('/:id', (req, res, next) => {
   }
 
   Pickup.findOne({ _id: id })
-  // .populate('orders', 'vendorOrderRef destination pickup delivery')
   .populate('depot', 'depotName')
   .populate('driver', 'driverName driverPhone')
-  .populate('vendor', 'vendorName phone')
+  .populate('vendors', 'vendorName phone')
+  .populate('orders', 'vendor vendorOrderRef destination pickup delivery')
   .then(result => {
     return res
     .status(200)
     .json(result);
-})
+  })
     .catch(err => {
       next(err);
-    });
+  });
 });
 
 /* ========== POST/CREATE AN ITEM ========== */
@@ -78,13 +82,12 @@ router.put('/:id', (req, res, next) => {
   const id = req.params.id;
   const updatePickup = {};
   const updateFields = ['depot', 'driver', 'zone', 'status']
-//  console.log('req.body: ', req.body);
+
   updateFields.forEach(field => {
     if (field in req.body) {
       updatePickup[field] = req.body[field];
     }
   });
-  // console.log('updatePickup: ', updatePickup);
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     const err = new Error('The `id` is not valid');
@@ -104,30 +107,28 @@ router.put('/:id', (req, res, next) => {
   });
 });
 
-
-/* ========== DELETE/REMOVE A SINGLE ITEM ========== */
 router.delete('/:id', (req, res, next) => {
-  const { id } = req.params;
-  const user = req.user.id;
-
-  /***** Never trust users - validate input *****/
-  if (!mongoose.Types.Object.isValid(id)) {
+  // const { id } = req.params;
+  const id = req.params.id;
+  const userId = req.user.id;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
 
-  Pickup.deleteOne({ _id: id, user })
-    .then(result => {
-      if (result.n) {
-        res.sendStatus(204);
-      } else {
-        res.sendStatus(404);
-      }
+  const pickupRemovePromise = Pickup.findByIdAndRemove({ _id: id, userId });
+  const vendorUpdatePromise = Vendor.updateMany({ pickups: id, userId }, { $pull: { pickups: id } })
+  const orderUpdatePromise = Order.update({ pickup: id, userId }, { $pull: { pickup: id } })
+
+  Promise.all([pickupRemovePromise, vendorUpdatePromise, orderUpdatePromise])
+    .then(() => {
+      res.status(204).end();
     })
     .catch(err => {
       next(err);
     });
+ 
 });
 
 module.exports = router;

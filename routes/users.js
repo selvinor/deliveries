@@ -7,7 +7,7 @@ const User = require('../models/users');
 
 const router = express.Router();
 router.get('/', (req, res, next) => {
-  return User.find()
+  User.find()
     .then(result => {
       return res
       .status(200)

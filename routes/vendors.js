@@ -12,9 +12,9 @@ router.use('/', passport.authenticate('jwt', { session: false, failWithError: tr
 
 /* ========== GET/READ ALL ITEMS ========== */
 router.get('/', (req, res, next) => {
-  return Vendor.find()
-  // .populate('pickups', 'pickupDate status updatedAt')
-  // .populate('deliveries', 'deliveryDate status updatedAt')
+  Vendor.find()
+  .populate('pickups', 'pickupDate status updatedAt')
+  .populate('deliveries', 'deliveryDate status updatedAt')
   .populate('orders', 'vendorOrderRef orderDate deliveryDate pickup delivery') 
     .then(result => {
       return res
@@ -40,8 +40,8 @@ router.get('/:id', (req, res, next) => {
 
   Vendor.findOne({ _id: id })
   .populate('orders', 'vendorOrderRef destination pickup delivery')
-  // .populate('pickups', 'pickupDate status driver')
-  // .populate('deliveries', 'deliveryDate status driver')
+  .populate('pickups', 'pickupDate status driver')
+  .populate('deliveries', 'deliveryDate status driver')
   .then(result => {
     return res
     .status(200)
@@ -112,7 +112,7 @@ router.put('/:id', (req, res, next) => {
 /* ========== DELETE/REMOVE A SINGLE ITEM ========== */
 router.delete('/:id', (req, res, next) => {
   const { id } = req.params;
-  const user = req.user.id;
+  const userId = req.user.id;
 
   /***** Never trust users - validate input *****/
   if (!mongoose.Types.Object.isValid(id)) {
@@ -120,8 +120,13 @@ router.delete('/:id', (req, res, next) => {
     err.status = 400;
     return next(err);
   }
+  if (userId && !mongoose.Types.Object.isValid(userId)) {
+    const err = new Error('The `user` is not valid');
+    err.status = 400;
+    return next(err);
+  }
 
-  Vendor.deleteOne({ _id: id, user })
+  Vendor.findByIdAndRemove({ _id: id })
     .then(result => {
       if (result.n) {
         res.sendStatus(204);

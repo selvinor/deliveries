@@ -9,6 +9,9 @@ const pickupSchema = new mongoose.Schema({
   zone    : { type: mongoose.Schema.Types.Object, ref: 'Zone' },
   vendors: [{
     type: mongoose.Schema.Types.Object, ref: 'Vendor'
+  }],  
+  orders: [{
+    type: mongoose.Schema.Types.Object, ref: 'Order'
   }]  
 });
 
@@ -20,7 +23,8 @@ pickupSchema.methods.serialize = function() {
     driver  :  this.driver || '',
     status    :  this.status || '',
     zone      : this.zone|| '',
-    vendors    : this.orders|| ''
+    vendors    : this.vendors|| '',
+    orders    : this.orders|| ''
   };
 };
 

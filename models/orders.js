@@ -7,6 +7,9 @@ const orderSchema = new mongoose.Schema({
   vendorOrderRef: {type: String, unique: false, required:true },
   orderDate: { type: Date},
   deliveryDate: { type: Date},
+  vendor: { type: mongoose.Schema.Types.Object, ref: 'Vendor', required: true },
+  pickup: { type: mongoose.Schema.Types.Object, ref: 'Pickup', required: true },
+  delivery: { type: mongoose.Schema.Types.Object, ref: 'Delivery', required: true },
   destination : {
     businessName :  {type: String, default: ''},
     streetAddress :  {type: String, default: ''},
@@ -20,10 +23,7 @@ const orderSchema = new mongoose.Schema({
     instructions:{type: String, default: ''},
     recipient : {type: String, default: ''},
     contactPhone :  {type: String, default: ''}  
-  },
-  vendor: { type: mongoose.Schema.Types.Object, ref: 'Vendor', required: true },
-  pickup: { type: mongoose.Schema.Types.Object, ref: 'Pickup', required: true },
-  delivery: { type: mongoose.Schema.Types.Object, ref: 'Delivery', required: true }
+  }
 
 });
 
@@ -33,10 +33,10 @@ orderSchema.methods.serialize = function() {
     vendorOrderRef: this.vendorOrderRef || '',
     orderDate: this.orderDate || '',
     deliveryDate: this.deliveryDate || '',                    
-    destination: this.destination|| '',
     vendor: this.vendor || '',
     pickup: this.pickup|| '',
-    delivery: this.delivery|| ''
+    delivery: this.delivery|| '',
+    destination: this.destination|| ''
   };
 };
 // const Order = mongoose.model('Order', OrderSchema);

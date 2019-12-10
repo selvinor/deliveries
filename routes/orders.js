@@ -32,7 +32,7 @@ router.get('/', (req, res, next) => {
     filter.vendorId = vendorId;
   }
 // console.log('filter: ', filter);
-  return Order.find(filter)
+  Order.find(filter)
     .populate('vendor', 'vendorName phone')
     .populate('pickup', 'pickupDate status driver')
     .populate('delivery', 'deliveryDate status driver')
@@ -193,7 +193,7 @@ router.put('/:id', (req, res, next) => {
 /* ========== DELETE/REMOVE A SINGLE ITEM ========== */
 router.delete('/:id', (req, res, next) => {
   const { id } = req.params;
-  const user = req.user.id;
+  const userId = req.user.id;
 
   /***** Never trust users - validate input *****/
   if (!mongoose.Types.Object.isValid(id)) {
@@ -207,7 +207,7 @@ router.delete('/:id', (req, res, next) => {
     return next(err);
   }
 
-  Order.deleteOne({ _id: id, userId })
+  Order.findByIdAndRemove({ _id: id })
     .then(result => {
       if (result.n) {
         res.sendStatus(204);

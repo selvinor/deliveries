@@ -3,15 +3,16 @@ const mongoose = require('mongoose');
 
 
 const depotSchema = new mongoose.Schema({ 
-  depotName:  { type: String, required: true },
-  streetAddress:  {type: String, required: true },
-  city:  {type: String,  required: true },
-  state:  {type: String,  required: true },
-  zipcode:  { type: String, required: true, default: '' },
+  depotName:  { type: String },
+  streetAddress:  {type: String },
+  city:  {type: String },
+  state:  {type: String },
+  zipcode:  { type: String},
   geocode: {
     type:  {type: String, default: 'Point'},
     coordinates: []
   },
+  phone:  { type: String },
   zones : [{
    type: mongoose.Schema.Types.Object, ref: 'Zone' 
   }],
@@ -37,6 +38,7 @@ depotSchema.methods.serialize = function() {
     state: this.state || '',
     zipcode: this.zipcode || '',
     geocode: this.geocode || '',
+    phone: this.phone || '',
     zones: this.zones || '',
     drivers: this.drivers || '',
     pickups: this.pickups|| '',
