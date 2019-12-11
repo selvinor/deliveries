@@ -5,6 +5,9 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 
 const Order = require('../models/orders');
+const Pickup = require('../models/pickups');
+const Vendor = require('../models/vendors');
+const Delivery = require('../models/deliveries');
 
 const router = express.Router();
 
@@ -34,8 +37,8 @@ router.get('/', (req, res, next) => {
 // console.log('filter: ', filter);
   Order.find(filter)
     .populate('vendor', 'vendorName phone')
-    .populate('pickup', 'pickupDate status driver')
-    .populate('delivery', 'deliveryDate status driver')
+    .populate('pickup', 'pickupDate createdAt updatedAt status driver')
+    .populate('delivery', 'deliveryDate createdAt updatedAt status driver')
     .then(result => {
       return res
       .status(200)
@@ -59,9 +62,9 @@ router.get('/:id', (req, res, next) => {
 
   Order.findOne({ _id: id })
   .populate('vendor', 'vendorName phone')
-  .populate('pickup', 'pickupDate status driver')
-  .populate('delivery', 'deliveryDate status driver')
-  .then(result => {
+  .populate('pickup', 'pickupDate createdAt updatedAt status driver')
+  .populate('delivery', 'deliveryDate createdAt updatedAt status driver')
+.then(result => {
     return res
     .status(200)
     .json(result);
@@ -89,17 +92,17 @@ router.post('/', (req, res, next) => {
     return next(err);
   }
 
-  // if (vendor && !mongoose.Types.Object.isValid(vendor)) {
-  //   const err = new Error('The `vendor` is not valid');
-  //   err.status = 400;
-  //   return next(err);
-  // }
-  // console.log('req.user', req.user);
-  // if (userId && !mongoose.Types.Object.isValid(userId)) {
-  //   const err = new Error('The `user` is not valid');
-  //   err.status = 400;
-  //   return next(err);
-  // }
+  if (vendor && !mongoose.Types.Object.isValid(vendor)) {
+    const err = new Error('The `vendor` is not valid');
+    err.status = 400;
+    return next(err);
+  }
+
+  if (userId && !mongoose.Types.Object.isValid(userId)) {
+    const err = new Error('The `userId` is not valid');
+    err.status = 400;
+    return next(err);
+  }
 
   const newOrder = { userId, vendor, orderDate, deliveryDate, vendorOrderRef, destination, pickup, delivery };
 // console.log('newOrder: ', newOrder);
@@ -116,54 +119,24 @@ router.post('/', (req, res, next) => {
 });
 
 /* ========== PUT/UPDATE A SINGLE ITEM ========== */
-// router.put('/:id', (req, res, next) => {
-//   const id = req.params.id;
-//   const updateOrder = {};
-//   const updateFields = ['orderDate', 'deliveryDate', 'vendorOrderRef', 'destination', 'pickup', 'delivery']
-
-//   updateFields.forEach(field => {
-//     if (field in req.body) {
-//       updateOrder[field] = req.body[field];
-//     }
-//   });
-
-//   /***** Never trust users - validate input *****/
-
-//   if (!mongoose.Types.Object.isValid(id)) {
-//     const err = new Error('The `id` is not valid');
-//     err.status = 400;
-//     return next(err);
-//   }
-
-//   if (userId && !mongoose.Types.Object.isValid(userId)) {
-//     const err = new Error('The `user` is not valid');
-//     err.status = 400;
-//     return next(err);
-//   }
-
-//   if (!vendorOrderRef) {
-//     const err = new Error('Missing `vendorOrderRef` in request body');
-//     err.status = 400;
-//     return next(err);
-//   }
-
-//   Order.findByIdAndUpdate({_id: id}, updateOrder, { new: true })
-//     .then(result => {
-//       if (result) {
-//         res.json(result);
-//       } else {
-//         next();
-//       }
-//     })
-//     .catch(err => {
-//       next(err);
-//     });
-// });
 router.put('/:id', (req, res, next) => {
   // const { id } = req.params;
   const id = req.params.id;
   const updateOrder = {};
-  const updateFields = ['orderDate', 'deliveryDate', 'vendorOrderRef', 'destination', 'vendor', 'pickup', 'delivery']
+  const updateFields = [
+    'orderDate', 
+    'deliveryDate', 
+    'vendorOrderRef', 
+    'destination.geocode.coordinates', 
+    'destination.businessName', 
+    'destination.streetAddress', 
+    'destination.city', 
+    'destination.state', 
+    'destination.zipcode', 
+    'destination.instructions', 
+    'destination.recipient', 
+    'destination.contactPhone'
+  ]
 //  console.log('req.body: ', req.body);
   updateFields.forEach(field => {
     if (field in req.body) {
@@ -188,36 +161,34 @@ router.put('/:id', (req, res, next) => {
   .catch(err => {
     next(err);
   });
+
+
 });
 
 /* ========== DELETE/REMOVE A SINGLE ITEM ========== */
 router.delete('/:id', (req, res, next) => {
-  const { id } = req.params;
+  // const { id } = req.params;
+  const id = req.params.id;
   const userId = req.user.id;
-
-  /***** Never trust users - validate input *****/
-  if (!mongoose.Types.Object.isValid(id)) {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
-  if (userId && !mongoose.Types.Object.isValid(userId)) {
-    const err = new Error('The `user` is not valid');
-    err.status = 400;
-    return next(err);
-  }
 
-  Order.findByIdAndRemove({ _id: id })
-    .then(result => {
-      if (result.n) {
-        res.sendStatus(204);
-      } else {
-        res.sendStatus(404);
-      }
+  const orderRemovePromise = Order.findByIdAndRemove({ _id: id, userId });
+  const vendorUpdatePromise = Vendor.update({  vendor: id, userId }, { $pull: { vendor: id } })
+  // const pickupUpdatePromise = Pickup.updateOne({ pickup: id, userId }, { $pull: { pickup: id } })
+  // const deliveryUpdatePromise = Delivery.updateOne({ delivery: id, userId }, { $pull: { delivery: id } })
+
+  Promise.all([orderRemovePromise, vendorUpdatePromise])
+  // Promise.all([orderRemovePromise, vendorUpdatePromise, pickupUpdatePromise, deliveryUpdatePromise])
+    .then(() => {
+      res.status(204).end();
     })
     .catch(err => {
       next(err);
     });
+ 
 });
-
 module.exports = router;

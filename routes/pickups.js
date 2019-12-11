@@ -16,10 +16,18 @@ router.use('/', passport.authenticate('jwt', { session: false, failWithError: tr
 /* ========== GET/READ ALL ITEMS ========== */
 router.get('/', (req, res, next) => {
   Pickup.find()
-  .populate('depot', 'depotName') 
-  .populate('driver', 'driverName driverPhone') 
-  .populate('vendors', 'vendorName phone') 
-  .populate('orders', 'vendor vendorOrderRef destination pickup delivery')
+  .populate('depot', 'depotName')
+  .populate('pickupDriver', 'driverName driverPhone')
+  .populate({
+    path: 'vendor', 
+    model: Vendor,
+    select: 'vendorName vendorLocation vendorPhone',
+    populate: {
+      path: 'orders',
+      model: Order,
+      select: 'vendorOrderRef deliveryDate destination'
+    }
+  })
   .then(result => {
       return res
       .status(200)
@@ -44,9 +52,17 @@ router.get('/:id', (req, res, next) => {
 
   Pickup.findOne({ _id: id })
   .populate('depot', 'depotName')
-  .populate('driver', 'driverName driverPhone')
-  .populate('vendors', 'vendorName phone')
-  .populate('orders', 'vendor vendorOrderRef destination pickup delivery')
+  .populate('pickupDriver', 'driverName driverPhone')
+  .populate({
+    path: 'vendor', 
+    model: Vendor,
+    select: 'vendorName vendorLocation vendorPhone',
+    populate: {
+      path: 'orders',
+      model: Order,
+      select: 'vendorOrderRef deliveryDate destination'
+    }
+  })
   .then(result => {
     return res
     .status(200)
@@ -81,7 +97,7 @@ router.put('/:id', (req, res, next) => {
   // const { id } = req.params;
   const id = req.params.id;
   const updatePickup = {};
-  const updateFields = ['depot', 'driver', 'zone', 'status']
+  const updateFields = ['depot', 'pickupDriver', 'zone', 'pickupStatus']
 
   updateFields.forEach(field => {
     if (field in req.body) {
@@ -118,10 +134,13 @@ router.delete('/:id', (req, res, next) => {
   }
 
   const pickupRemovePromise = Pickup.findByIdAndRemove({ _id: id, userId });
-  const vendorUpdatePromise = Vendor.updateMany({ pickups: id, userId }, { $pull: { pickups: id } })
-  const orderUpdatePromise = Order.update({ pickup: id, userId }, { $pull: { pickup: id } })
+  const vendorUpdatePromise = Vendor.update({ pickups: id, userId }, { $pull: { pickups: id } })
+//  const orderUpdatePromise = Order.update({ pickup: id, userId } , { $pull: { pickup: id }})
 
-  Promise.all([pickupRemovePromise, vendorUpdatePromise, orderUpdatePromise])
+  // Promise.all([pickupRemovePromise, vendorUpdatePromise, orderUpdatePromise])
+  // Promise.all([vendorUpdatePromise])
+  // Promise.all([orderUpdatePromise])
+  Promise.all([pickupRemovePromise, vendorUpdatePromise])
     .then(() => {
       res.status(204).end();
     })

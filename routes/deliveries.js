@@ -16,8 +16,15 @@ router.get('/', (req, res, next) => {
   Delivery.find()
   .populate('depot', 'depotName')
   .populate('driver', 'driverName driverPhone')
-  .populate('vendors', 'vendorName phone')
-  .populate('orders', 'vendorOrderRef destination')
+  .populate({
+    path: 'orders', 
+    select: 'vendorOrderRef destination',
+    populate: {
+      path: 'vendor',
+      model: 'Vendor',
+      select: 'vendorName'
+    }
+  })
     .then(result => {
       return res
       .status(200)
@@ -43,8 +50,15 @@ router.get('/:id', (req, res, next) => {
   Delivery.findOne({ _id: id })
   .populate('depot', 'depotName')
   .populate('driver', 'driverName driverPhone')
-  .populate('vendors', 'vendorName phone')
-  .populate('orders', 'vendorOrderRef destination')
+  .populate({
+    path: 'orders', 
+    select: 'vendorOrderRef destination',
+    populate: {
+      path: 'vendor',
+      model: 'Vendor',
+      select: 'vendorName'
+    }
+  })
   .then(result => {
     return res
     .status(200)

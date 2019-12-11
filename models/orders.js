@@ -39,8 +39,7 @@ orderSchema.methods.serialize = function() {
     destination: this.destination|| ''
   };
 };
-// const Order = mongoose.model('Order', OrderSchema);
-// Add `createdAt` and `updatedAt` fields
+
 orderSchema.set('timestamps', true);
 
 // Customize output for `res.json(data)`, `console.log(data)` etc.

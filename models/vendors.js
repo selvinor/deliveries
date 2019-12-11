@@ -5,15 +5,17 @@ const mongoose = require('mongoose');
 const vendorSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.Object, ref: 'User', required: true },
   vendorName: {type: String, default: ''},
-  streetAddress: {type: String, default: ''},
-  city: {type: String, default: ''},
-  state: {type: String, default: ''},
-  zipcode: {type: String, default: ''},
-  geocode: {
-    type: { type: String },
-    coordinates: []
+  vendorLocation: {
+    streetAddress: {type: String, default: ''},
+    city: {type: String, default: ''},
+    state: {type: String, default: ''},
+    zipcode: {type: String, default: ''},
+    geocode: {
+      type: { type: String },
+      coordinates: []
+    }
   },
-  phone: {type: String, default: ''},
+  vendorPhone: {type: String, default: ''},
   orders: [{
     type: mongoose.Schema.Types.Object, ref: 'Order', required: false
   }],  
@@ -29,12 +31,8 @@ vendorSchema.methods.serialize = function() {
   return {
     userId: this.user || '',
     vendorName: this.vendorName || '',
-    streetAddress: this.streetAddress|| '',
-    city: this.city|| '',
-    state: this.state|| '',
-    zipcode: this.zipcode|| '',
-    geocode: this.geocode|| '',
-    phone: this.phone|| '',
+    vendorLocation: this.location|| '',
+    vendorPhone: this.vendorPhone|| '',
     orders: this.orders || '',
     pickups: this.pickups || '',
     deliveries: this.deliveries || ''
