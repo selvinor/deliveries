@@ -36,7 +36,7 @@ router.get('/', (req, res, next) => {
   }
 // console.log('filter: ', filter);
   Order.find(filter)
-    .populate('pickupDetails', 'vendorName phone')
+    .populate('pickupVendor', 'vendorName phone')
     .populate('vendor' , 'vendorLocation vendorName vendorPhone')
     .populate('pickup',  'pickupDate pickupTimeSlot pickupStatus  pickupDriver createdAt updatedAt')
     .populate('delivery' ,'zone deliveryDate deliveryStatus deliveryDriver createdAt updatedAt')
@@ -62,7 +62,7 @@ router.get('/:id', (req, res, next) => {
   }
 
   Order.findOne({ _id: id })
-  .populate('pickupDetails', 'vendorName phone')
+  .populate('pickupVendor', 'vendorName phone')
   .populate('vendor' , 'vendorLocation vendorName vendorPhone')
   .populate('pickup',  'pickupDate pickupTimeSlot pickupStatus  pickupDriver createdAt updatedAt')
   .populate('delivery' ,'zone deliveryDate deliveryStatus deliveryDriver createdAt updatedAt')
@@ -127,7 +127,7 @@ router.put('/:id', (req, res, next) => {
   const updateOrder = {};
   const updateFields = [
     'orderDate', 
-    'pickupDetails',
+    'pickupVendor',
     'deliveryDate', 
     'orderNumber', 
     'orderDetails',
@@ -186,8 +186,8 @@ router.delete('/:id', (req, res, next) => {
   const vendorUpdatePromise = Vendor.update({  "orders": id, userId }, { "$pull": { orders: id } })
   const deliveryUpdatePromise = Delivery.update({ "order": id, userId }, { $pull: { order: id } })
 
-  Promise.all([orderRemovePromise, vendorUpdatePromise])
-  // Promise.all([orderRemovePromise, vendorUpdatePromise, pickupUpdatePromise, deliveryUpdatePromise])
+  // Promise.all([orderRemovePromise, vendorUpdatePromise])
+  Promise.all([orderRemovePromise, vendorUpdatePromise, deliveryUpdatePromise])
     .then(() => {
       res.status(204).end();
     })

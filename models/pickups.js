@@ -5,7 +5,7 @@ const pickupSchema = new mongoose.Schema({
   pickupDate: { type: Date},
   depot   : { type: mongoose.Schema.Types.Object, ref: 'Depot' },   
   pickupTimeSlot: { type: String, default: 'pm'},
-  pickupDetails: { type: mongoose.Schema.Types.Object, ref: 'Vendor' },
+  pickupVendor: { type: mongoose.Schema.Types.Object, ref: 'Vendor' },
   pickupStatus : {type: String, default: ''},
   pickupDriver: { type: mongoose.Schema.Types.Object, ref: 'Driver', required: false },  
   zone   : { type: mongoose.Schema.Types.Object, ref: 'Zone' }
@@ -17,7 +17,7 @@ pickupSchema.methods.serialize = function() {
     pickupDate:  this.pickupDate || '',
     depot   :  this.depot || '', 
     pickupTimeSlot    : this.pickupTimeSlot|| '',
-    pickupDetails    : this.pickupDetails|| '',
+    pickupVendor    : this.pickupVendor|| '',
     pickupStatus    :  this.pickupStatus || '',
     pickupDriver  :  this.pickupDriver || '',
     zone      : this.zone|| ''

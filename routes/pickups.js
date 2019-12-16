@@ -18,14 +18,15 @@ router.get('/', (req, res, next) => {
   Pickup.find()
   .populate('depot', 'depotName')
   .populate('pickupDriver', 'driverName driverPhone')
-  .populate({
-    path: 'pickupDetails', 
-    select: 'vendorName vendorLocation vendorPhone',
-    populate: {
-      path: 'orders',
-      select: 'orderNumber deliveryDate destination'
-    }
-  })
+  .populate('pickupVendor', 'vendorName vendorLocation vendorPhone')
+  // .populate({
+  //   path: 'pickupVendor', 
+  //   select: 'vendorName vendorLocation vendorPhone',
+  //   populate: {
+  //     path: 'orders',
+  //     select: 'orderNumber deliveryDate destination'
+  //   }
+  // })
   .then(result => {
       return res
       .status(200)
