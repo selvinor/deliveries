@@ -5,27 +5,21 @@ const mongoose = require('mongoose');
 const deliverySchema = new mongoose.Schema({
   deliveryDate: { type: Date},
   depot   : { type: mongoose.Schema.Types.Object, ref: 'Depot' },   
-  driver  : { type: mongoose.Schema.Types.Object, ref: 'Driver' },  
-  status    : {type: String, default: ''},
+  deliveryStatus    : {type: String, default: ''},
+  deliveryDriver  : { type: mongoose.Schema.Types.Object, ref: 'Driver' },  
+  order: {type: mongoose.Schema.Types.Object, ref: 'Order'  },
   zone      : { type: mongoose.Schema.Types.Object, ref: 'Zone' },
-  // vendors    : [{ 
-  //   type: mongoose.Schema.Types.Object, ref: 'Vendor' 
-  // }],
-  orders    : [{ 
-    type: mongoose.Schema.Types.Object, ref: 'Order' 
-  }]
  });
 
 deliverySchema.methods.serialize = function() { 
   return {
     deliveryDate: this.deliveryDate || '',
     depot   :  this.depot || '', 
-    driver  :  this.driver || '',
-    status    :  this.status || '',
-    zone      : this.zone|| '',
-    // vendors    : this.vendors|| '',
-    orders    : this.orders|| ''
-      };
+    deliveryStatus    :  this.deliveryStatus || '',
+    deliveryDriver  :  this.deliveryDriver || '',
+    order    : this.order || '',
+    zone      : this.zone|| ''
+  };
 };
 
 

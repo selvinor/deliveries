@@ -22,8 +22,8 @@ router.get('/', (req, res, next) => {
   let filter = {};
 
   if (searchTerm) {
-    // filter.vendorOrderRef = { $regex: searchTerm, $options: 'i' };
-    filter.vendorOrderRef = searchTerm;
+    // filter.orderNumber = { $regex: searchTerm, $options: 'i' };
+    filter.orderNumber = searchTerm;
   }
 
   if (vendorId) {
@@ -36,9 +36,10 @@ router.get('/', (req, res, next) => {
   }
 // console.log('filter: ', filter);
   Order.find(filter)
-    .populate('vendor', 'vendorName phone')
-    .populate('pickup', 'pickupDate createdAt updatedAt status driver')
-    .populate('delivery', 'deliveryDate createdAt updatedAt status driver')
+    .populate('pickupDetails', 'vendorName phone')
+    .populate('vendor' , 'vendorLocation vendorName vendorPhone')
+    .populate('pickup',  'pickupDate pickupTimeSlot pickupStatus  pickupDriver createdAt updatedAt')
+    .populate('delivery' ,'zone deliveryDate deliveryStatus deliveryDriver createdAt updatedAt')
     .then(result => {
       return res
       .status(200)
@@ -61,9 +62,10 @@ router.get('/:id', (req, res, next) => {
   }
 
   Order.findOne({ _id: id })
-  .populate('vendor', 'vendorName phone')
-  .populate('pickup', 'pickupDate createdAt updatedAt status driver')
-  .populate('delivery', 'deliveryDate createdAt updatedAt status driver')
+  .populate('pickupDetails', 'vendorName phone')
+  .populate('vendor' , 'vendorLocation vendorName vendorPhone')
+  .populate('pickup',  'pickupDate pickupTimeSlot pickupStatus  pickupDriver createdAt updatedAt')
+  .populate('delivery' ,'zone deliveryDate deliveryStatus deliveryDriver createdAt updatedAt')
 .then(result => {
     return res
     .status(200)
@@ -76,12 +78,12 @@ router.get('/:id', (req, res, next) => {
 
 /* ========== POST/CREATE AN ITEM ========== */
 router.post('/', (req, res, next) => {
-  const { userId, vendor, orderDate, deliveryDate, vendorOrderRef, destination, pickup, delivery } = req.body;
+  const { userId, vendor, orderDate, deliveryDate, orderNumber, destination, pickup, delivery } = req.body;
   const user = req.user.id;
   
   /***** Never trust users - validate input *****/
-  if (!vendorOrderRef) {
-    const err = new Error('Missing `vendorOrderRef` in request body');
+  if (!orderNumber) {
+    const err = new Error('Missing `orderNumber` in request body');
     err.status = 400;
     return next(err);
   }
@@ -104,7 +106,7 @@ router.post('/', (req, res, next) => {
     return next(err);
   }
 
-  const newOrder = { userId, vendor, orderDate, deliveryDate, vendorOrderRef, destination, pickup, delivery };
+  const newOrder = { userId, vendor, orderDate, orderDetails, orderStatus, orderSize, deliveryDate, orderNumber, destination, pickup, delivery };
 // console.log('newOrder: ', newOrder);
   Order.create(newOrder) //
     .then(result => {
@@ -125,8 +127,12 @@ router.put('/:id', (req, res, next) => {
   const updateOrder = {};
   const updateFields = [
     'orderDate', 
+    'pickupDetails',
     'deliveryDate', 
-    'vendorOrderRef', 
+    'orderNumber', 
+    'orderDetails',
+    'orderStatus',
+    'orderSize',
     'destination.geocode.coordinates', 
     'destination.businessName', 
     'destination.streetAddress', 
@@ -177,9 +183,8 @@ router.delete('/:id', (req, res, next) => {
   }
 
   const orderRemovePromise = Order.findByIdAndRemove({ _id: id, userId });
-  const vendorUpdatePromise = Vendor.update({  vendor: id, userId }, { $pull: { vendor: id } })
-  // const pickupUpdatePromise = Pickup.updateOne({ pickup: id, userId }, { $pull: { pickup: id } })
-  // const deliveryUpdatePromise = Delivery.updateOne({ delivery: id, userId }, { $pull: { delivery: id } })
+  const vendorUpdatePromise = Vendor.update({  "orders": id, userId }, { "$pull": { orders: id } })
+  const deliveryUpdatePromise = Delivery.update({ "order": id, userId }, { $pull: { order: id } })
 
   Promise.all([orderRemovePromise, vendorUpdatePromise])
   // Promise.all([orderRemovePromise, vendorUpdatePromise, pickupUpdatePromise, deliveryUpdatePromise])

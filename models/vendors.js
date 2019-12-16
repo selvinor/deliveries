@@ -35,7 +35,7 @@ vendorSchema.methods.serialize = function() {
     vendorPhone: this.vendorPhone|| '',
     orders: this.orders || '',
     pickups: this.pickups || '',
-    deliveries: this.deliveries || ''
+    deliveries: this.deliveries || []
   };
 };
 

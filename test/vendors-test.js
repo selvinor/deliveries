@@ -131,7 +131,7 @@ describe('Vendors API', function () {
             expect(item.geocode.coordinates).to.eql(data[i].geocode.coordinates);
             expect(item.orders[0]._id).to.equal(data[i].orders[0]);
             if(item.orders[0]){
-              expect(item.orders[0].vendorOrderRef).to.equal(data[i].orders[0].vendorOrderRef);
+              expect(item.orders[0].orderNumber).to.equal(data[i].orders[0].orderNumber);
               expect(item.orders[0].destination).to.equal(data[i].orders[0].destination);
               expect(item.orders[0].pickup.pickupDate).to.equal(data[i].pickups[0].pickupDate);
               expect(item.orders[0].pickup.status).to.equal(data[i].pickups[0].status);

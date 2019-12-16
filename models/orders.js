@@ -4,13 +4,18 @@ const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.Object, ref: 'User', required: false },  
-  vendorOrderRef: {type: String, unique: false, required:true },
+  orderNumber: {type: String, unique: false },
   orderDate: { type: Date},
+  orderDetails : {type: Object},
+  orderStatus : {type: String, default: 'pending'},
+  orderSize : {type: String, default: ''},
+  vendor: { type: mongoose.Schema.Types.Object, ref: 'Vendor' },
+  pickup: { type: mongoose.Schema.Types.Object, ref: 'Pickup' },
+  delivery: { type: mongoose.Schema.Types.Object, ref: 'Delivery' },
   deliveryDate: { type: Date},
-  vendor: { type: mongoose.Schema.Types.Object, ref: 'Vendor', required: true },
-  pickup: { type: mongoose.Schema.Types.Object, ref: 'Pickup', required: true },
-  delivery: { type: mongoose.Schema.Types.Object, ref: 'Delivery', required: true },
   destination : {
+    recipient : {type: String, default: ''},
+    contactPhone :  {type: String, default: ''},  
     businessName :  {type: String, default: ''},
     streetAddress :  {type: String, default: ''},
     city: {type: String, default: ''},
@@ -20,22 +25,22 @@ const orderSchema = new mongoose.Schema({
       type: { type: String },
       coordinates: []
     },
-    instructions:{type: String, default: ''},
-    recipient : {type: String, default: ''},
-    contactPhone :  {type: String, default: ''}  
-  }
-
+    instructions:{type: String, default: ''}
+  },
 });
 
 orderSchema.methods.serialize = function() {
   return {
     userId:this.userId || '',
-    vendorOrderRef: this.vendorOrderRef || '',
+    orderNumber: this.orderNumber || '',
     orderDate: this.orderDate || '',
-    deliveryDate: this.deliveryDate || '',                    
+    orderDetails: this.orderDetails|| {},
+    orderStatus: this.orderNumber || '',
+    orderSize: this.orderSize || '',
     vendor: this.vendor || '',
-    pickup: this.pickup|| '',
-    delivery: this.delivery|| '',
+    pickup: this.pickup || '',
+    delivery: this.delivery || '',                    
+    deliveryDate: this.deliveryDate || '',                    
     destination: this.destination|| ''
   };
 };

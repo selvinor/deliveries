@@ -107,7 +107,7 @@ describe('Orders API', function () {
               expect(item).to.include.all.keys(
               'userId',  
               'vendor', 
-              'vendorOrderRef',
+              'orderNumber',
               'orderDate', 
               'deliveryDate', 
               'destination', 
@@ -117,7 +117,7 @@ describe('Orders API', function () {
             item.OrderDate = new Date(item.orderDate);
             item.DeliveryDate = new Date(item.deliveryDate);
             expect(item.vendor._id).to.equal(data[i].vendor);
-            expect(item.vendorOrderRef).to.equal(data[i].vendorOrderRef);
+            expect(item.orderNumber).to.equal(data[i].orderNumber);
             expect(item.OrderDate).to.eql(new Date(data[i].orderDate));
             expect(item.DeliveryDate).to.eql(new Date(data[i].deliveryDate));
             expect(item.destination.businessName).to.equal(data[i].destination.businessName);
@@ -153,7 +153,7 @@ describe('Orders API', function () {
           expect(item).to.be.a('object');
           expect(item).to.include.all.keys(
           'vendor', 
-          'vendorOrderRef',
+          'orderNumber',
           'orderDate', 
           'deliveryDate', 
           'destination', 
@@ -163,7 +163,7 @@ describe('Orders API', function () {
         let isoOrderDate = new Date(item.orderDate);
         let isoDeliveryDate = new Date(item.deliveryDate);
         expect(item.vendor._id).to.equal(data.vendor);
-        expect(item.vendorOrderRef).to.equal(data.vendorOrderRef);
+        expect(item.orderNumber).to.equal(data.orderNumber);
         expect(isoOrderDate).to.eql(new Date(data.orderDate));
         expect(isoDeliveryDate).to.eql(new Date(data.deliveryDate));
         // expect(item.destination).to.equal(data[i].destination);
@@ -191,7 +191,7 @@ describe('Orders API', function () {
           "vendor": "222222222222222222222001",
           "orderDate": "2019-11-21T00:00:00.000Z",
           "deliveryDate": "2019-11-22T00:00:00.000Z",
-          "vendorOrderRef": "CAT140",
+          "orderNumber": "CAT140",
           "destination": {
               "geocode": {
                   "coordinates": [
@@ -226,7 +226,7 @@ describe('Orders API', function () {
           expect(res.body).to.have.all.keys(
             'userId',
             'vendor', 
-            'vendorOrderRef',
+            'orderNumber',
             'orderDate', 
             'deliveryDate', 
             'destination', 

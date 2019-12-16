@@ -38,7 +38,7 @@ router.get('/:id', (req, res, next) => {
   }
 
   Driver.findOne({ _id: id })
-  // .populate('orders', 'vendorOrderRef destination pickup delivery')
+  // .populate('orders', 'orderNumber destination pickup delivery')
   .populate('pickups', 'pickupDate status driver')
   .populate('deliveries', 'deliveryDate status driver')
   .then(result => {

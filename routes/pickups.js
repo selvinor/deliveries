@@ -19,13 +19,11 @@ router.get('/', (req, res, next) => {
   .populate('depot', 'depotName')
   .populate('pickupDriver', 'driverName driverPhone')
   .populate({
-    path: 'vendor', 
-    model: Vendor,
+    path: 'pickupDetails', 
     select: 'vendorName vendorLocation vendorPhone',
     populate: {
       path: 'orders',
-      model: Order,
-      select: 'vendorOrderRef deliveryDate destination'
+      select: 'orderNumber deliveryDate destination'
     }
   })
   .then(result => {
@@ -55,12 +53,10 @@ router.get('/:id', (req, res, next) => {
   .populate('pickupDriver', 'driverName driverPhone')
   .populate({
     path: 'vendor', 
-    model: Vendor,
     select: 'vendorName vendorLocation vendorPhone',
     populate: {
       path: 'orders',
-      model: Order,
-      select: 'vendorOrderRef deliveryDate destination'
+      select: 'orderNumber deliveryDate destination'
     }
   })
   .then(result => {
@@ -135,12 +131,12 @@ router.delete('/:id', (req, res, next) => {
 
   const pickupRemovePromise = Pickup.findByIdAndRemove({ _id: id, userId });
   const vendorUpdatePromise = Vendor.update({ pickups: id, userId }, { $pull: { pickups: id } })
-//  const orderUpdatePromise = Order.update({ pickup: id, userId } , { $pull: { pickup: id }})
+  const orderUpdatePromise = Order.update({pickup: id, userId }, { $pull: { pickup: id }})
 
-  // Promise.all([pickupRemovePromise, vendorUpdatePromise, orderUpdatePromise])
+  Promise.all([pickupRemovePromise, vendorUpdatePromise, orderUpdatePromise])
   // Promise.all([vendorUpdatePromise])
   // Promise.all([orderUpdatePromise])
-  Promise.all([pickupRemovePromise, vendorUpdatePromise])
+  // Promise.all([pickupRemovePromise, vendorUpdatePromise])
     .then(() => {
       res.status(204).end();
     })
