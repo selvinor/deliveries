@@ -18,15 +18,15 @@ router.get('/', (req, res, next) => {
   Pickup.find()
   .populate('depot', 'depotName')
   .populate('pickupDriver', 'driverName driverPhone')
-  .populate('pickupVendor', 'vendorName vendorLocation vendorPhone')
-  // .populate({
-  //   path: 'pickupVendor', 
-  //   select: 'vendorName vendorLocation vendorPhone',
-  //   populate: {
-  //     path: 'orders',
-  //     select: 'orderNumber deliveryDate destination'
-  //   }
-  // })
+  // .populate('pickupVendor', 'vendorName vendorLocation vendorPhone')
+  .populate({
+    path: 'pickupVendor', 
+    select: 'vendorName vendorLocation vendorPhone',
+    populate: {
+      path: 'orders',
+      select: 'orderNumber orderDetails orderSize deliveryDate destination'
+    }
+  })
   .then(result => {
       return res
       .status(200)
@@ -53,11 +53,11 @@ router.get('/:id', (req, res, next) => {
   .populate('depot', 'depotName')
   .populate('pickupDriver', 'driverName driverPhone')
   .populate({
-    path: 'vendor', 
+    path: 'pickupVendor', 
     select: 'vendorName vendorLocation vendorPhone',
     populate: {
       path: 'orders',
-      select: 'orderNumber deliveryDate destination'
+      select: 'orderNumber orderDetails orderSize deliveryDate destination'
     }
   })
   .then(result => {
