@@ -5,6 +5,10 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 
 const Delivery = require('../models/deliveries');
+const Depot = require('../models/depots');
+const Driver = require('../models/drivers');
+const Vendor = require('../models/vendors');
+
 
 const router = express.Router();
 
@@ -16,7 +20,8 @@ router.get('/', (req, res, next) => {
   Delivery.find()
   .populate('depot', 'depotName')
   .populate('deliveryDriver', 'driverName driverPhone')
-  .populate('order', 'orderNumber orderSize orderDetails deliveryDate destination')
+  .populate('vendor')
+  .populate('zone')
     .then(result => {
       return res
       .status(200)
@@ -41,10 +46,8 @@ router.get('/:id', (req, res, next) => {
   Delivery.findOne({ _id: id })
   .populate('depot', 'depotName')
   .populate('deliveryDriver', 'driverName driverPhone')
-  .populate({
-    path: 'orders', 
-    select: 'orderNumber orderSize orderDetails deliveryDate destination'
-  })
+  .populate('vendor')
+  .populate('zone')
   .then(result => {
     return res
     .status(200)
@@ -115,13 +118,11 @@ router.delete('/:id', (req, res, next) => {
   }
 
   const deliveryRemovePromise = Delivery.findByIdAndRemove({ _id: id, userId });
-  // const orderUpdatePromise = Order.update({ delivery: id, userId }, { $pull: { delivery: id } })
-//  const orderUpdatePromise = Order.update({ delivery: id, userId } , { $pull: { delivery: id }})
+  const depotUpdatePromise = Depot.update({ deliveries: id, userId }, { $pull: { deliveries: id } })
+  const vendorUpdatePromise = Vendor.update({deliveries: id, userId }, { $pull: { deliveries: id }})
+  const driverUpdatePromise = Driver.update({deliveries: id, userId }, { $pull: { deliveries: id }})
 
-  // Promise.all([deliveryRemovePromise, orderUpdatePromise, orderUpdatePromise])
-  // Promise.all([orderUpdatePromise])
-  // Promise.all([orderUpdatePromise])
-  Promise.all([deliveryRemovePromise])
+  Promise.all([deliveryRemovePromise , depotUpdatePromise,  driverUpdatePromise , vendorUpdatePromise ])
     .then(() => {
       res.status(204).end();
     })

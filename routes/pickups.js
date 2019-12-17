@@ -129,15 +129,15 @@ router.delete('/:id', (req, res, next) => {
     err.status = 400;
     return next(err);
   }
-
+//  When deleting Pickup, remove pointer on the Vendor, Driver and Depot
   const pickupRemovePromise = Pickup.findByIdAndRemove({ _id: id, userId });
   const vendorUpdatePromise = Vendor.update({ pickups: id, userId }, { $pull: { pickups: id } })
-  const orderUpdatePromise = Order.update({pickup: id, userId }, { $pull: { pickup: id }})
+  // const orderUpdatePromise = Order.update({pickup: id, userId }, { $pull: { pickup: id }})
 
-  Promise.all([pickupRemovePromise, vendorUpdatePromise, orderUpdatePromise])
+// Promise.all([pickupRemovePromise, vendorUpdatePromise, orderUpdatePromise])
   // Promise.all([vendorUpdatePromise])
   // Promise.all([orderUpdatePromise])
-  // Promise.all([pickupRemovePromise, vendorUpdatePromise])
+  Promise.all([pickupRemovePromise, vendorUpdatePromise])
     .then(() => {
       res.status(204).end();
     })
