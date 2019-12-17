@@ -25,8 +25,8 @@ const depotSchema = new mongoose.Schema({
   deliveries :[{
     type: mongoose.Schema.Types.Object, ref: 'Delivery' 
   }],  
-  orders: [{
-    type: mongoose.Schema.Types.Object, ref: 'Order'
+  vendors: [{
+    type: mongoose.Schema.Types.Object, ref: 'Vendor'
   }]  
 });
 
@@ -43,7 +43,7 @@ depotSchema.methods.serialize = function() {
     drivers: this.drivers || '',
     pickups: this.pickups|| '',
     deliveries: this.deliveries || '',
-    orders: this.orders || ''
+    vendors: this.vendors || ''
   };
 };
 

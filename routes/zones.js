@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 
 const Zone = require('../models/zones');
+const Pickup = require('../models/pickups');
+const Delivery = require('../models/deliveries');
 
 const router = express.Router();
 
@@ -16,7 +18,6 @@ router.get('/', (req, res, next) => {
   return Zone.find()
     .populate('pickups') 
     .populate('deliveries') 
-    .populate('drivers') 
     .then(result => {
       return res
       .status(200)
@@ -30,26 +31,22 @@ router.get('/', (req, res, next) => {
 
 /* ========== GET/READ A SINGLE ITEM ========== */
 router.get('/:id', (req, res, next) => {
-  const { id } = req.params;
-  const user = req.user.id;
+  const id = req.params.id;
 
-  if (!mongoose.Types.Object.isValid(id)) {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
 
-  Zone.findOne({ _id: id, user })
-    .populate('pickups') 
-    .populate('deliveries') 
-    .populate('drivers') 
-    .then(result => {
-      if (result) {
-        res.json(result);
-      } else {
-        next();
-      }
-    })
+  Zone.findOne({ _id: id })
+  .populate('pickups')
+  .populate('deliveries')
+  .then(result => {
+    return res
+    .status(200)
+    .json(result);
+})
     .catch(err => {
       next(err);
     });
@@ -78,7 +75,7 @@ router.put('/:id', (req, res, next) => {
   const { id } = req.params;
 
   const updateZone = {};
-  const updateFields = ['drivers', 'pickups', 'deliveries']
+  const updateFields = ['depots', 'pickups', 'deliveries']
   updateFields.forEach(field => {
     if (field in req.body) {
       updateZone[field] = req.body[field];
@@ -106,27 +103,26 @@ router.put('/:id', (req, res, next) => {
 
 /* ========== DELETE/REMOVE A SINGLE ITEM ========== */
 router.delete('/:id', (req, res, next) => {
-  const { id } = req.params;
-  const user = req.user.id;
-
-  /***** Never trust users - validate input *****/
-  if (!mongoose.Types.Object.isValid(id)) {
+  const id = req.params.id;
+  const userId = req.user.id;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
 
-  Zone.deleteOne({ _id: id, user })
-    .then(result => {
-      if (result.n) {
-        res.sendStatus(204);
-      } else {
-        res.sendStatus(404);
-      }
+  const zoneRemovePromise = Zone.findByIdAndRemove({ _id: id, userId });
+ const pickupUpdatePromise = Pickup.update({ pickups: id, userId }, { $pull: { pickups: id } })
+ const deliveryUpdatePromise = Delivery.update({deliveries: id, userId }, { $pull: { deliveries: id }})
+
+  Promise.all([zoneRemovePromise /* , pickupUpdatePromise,  deliveryUpdatePromise */])
+    .then(() => {
+      res.status(204).end();
     })
     .catch(err => {
       next(err);
     });
+ 
 });
 
 module.exports = router;
