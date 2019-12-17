@@ -1,7 +1,7 @@
  [
   {
    "_id":"333333333333333333333101",
-   "user":   "111111111111111111111004",
+   "userId":   "111111111111111111111004",
    "driverName": "Bob Driver",
    "driverPhone": "555-555-1111",
    "driverVehicleMake": "Subaru",
@@ -16,7 +16,7 @@
   },
   {
     "_id":"333333333333333333333102",
-    "user":   "111111111111111111111005",
+    "userId":   "111111111111111111111005",
     "driverName": "Jill Driver",
     "driverPhone": "555-555-1111",
     "driverVehicleMake": "Subaru",
@@ -31,11 +31,12 @@
    },
    {
     "_id":"333333333333333333333103",
-    "user":   "111111111111111111111006",
+    "userId":   "111111111111111111111006",
     "driverName": "Debra Driver",
     "driverPhone": "555-555-1111",
-    "driverVehicleType": "Subaru Outback",
-    "driverVehiclePlate": "deliver3",
+    "driverVehicleMake": "Subaru",
+    "driverVehicleModel": "Outback",
+     "driverVehiclePlate": "deliver3",
     "pickups": 
      ["888888888888888888888053" ],
      "deliveries" : 
@@ -45,7 +46,7 @@
    },
    {
     "_id":"333333333333333333333104",
-    "user":   "111111111111111111111007",
+    "userId":   "111111111111111111111007",
     "driverName": "Zoe Driver",
     "driverPhone": "555-555-1111",
     "driverVehicleMake": "Subaru",
@@ -64,7 +65,7 @@
    },
    {
     "_id":"333333333333333333333105",
-    "user":   "111111111111111111111008",
+    "userId":   "111111111111111111111008",
     "driverName": "Fred Driver",
     "driverPhone": "555-555-1111",
     "driverVehicleMake": "Subaru",
@@ -80,11 +81,12 @@
    },
    {
     "_id":"333333333333333333333106",
-    "user":   "111111111111111111111010",
+    "userId":   "111111111111111111111010",
     "driverName": "Fiona Driver",
     "driverPhone": "555-555-1111",
-    "driverVehicleType": "Subaru Outback",
-    "driverVehiclePlate": "deliver6",
+    "driverVehicleMake": "Subaru",
+    "driverVehicleModel": "Outback",
+     "driverVehiclePlate": "deliver6",
     "pickups": 
      [],
      "deliveries" : 
@@ -94,7 +96,7 @@
    },
   {
    "_id":"333333333333333333333107",
-   "user":   "111111111111111111111011",
+   "userId":   "111111111111111111111011",
    "driverName": "Larry Driver",
    "driverPhone": "555-555-1111",
    "driverVehicleMake": "Subaru",

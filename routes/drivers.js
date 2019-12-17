@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 
 const Driver = require('../models/drivers');
+const Pickup = require('../models/pickups');
+const Delivery = require('../models/deliveries');
 
 const router = express.Router();
 
@@ -13,8 +15,9 @@ router.use('/', passport.authenticate('jwt', { session: false, failWithError: tr
 /* ========== GET/READ ALL ITEMS ========== */
 router.get('/', (req, res, next) => {
   Driver.find()
-  .populate('pickups', 'pickupDate status updatedAt')
-  .populate('deliveries', 'deliveryDate status updatedAt')
+  .populate('pickupVendor', 'vendorName vendorLocation vendorPhone orders')
+  .populate('pickups', 'pickupDate pickupTimeSlot depot pickupStatus updatedAt')
+  .populate('deliveries', 'deliveryDate depot zone deliveryStatus order updatedAt')
     .then(result => {
       return res
       .status(200)
@@ -38,9 +41,9 @@ router.get('/:id', (req, res, next) => {
   }
 
   Driver.findOne({ _id: id })
-  // .populate('orders', 'orderNumber destination pickup delivery')
-  .populate('pickups', 'pickupDate status driver')
-  .populate('deliveries', 'deliveryDate status driver')
+  .populate('pickupVendor', 'vendorName vendorLocation vendorPhone orders')
+  .populate('pickups', 'pickupDate pickupTimeSlot depot pickupStatus updatedAt')
+  .populate('deliveries', 'deliveryDate depot zone deliveryStatus order updatedAt')
   .then(result => {
     return res
     .status(200)
@@ -54,7 +57,7 @@ router.get('/:id', (req, res, next) => {
 /* ========== POST/CREATE AN ITEM ========== */
 router.post('/', (req, res, next) => {
   const { driverName, driverPhone, driverVehicleMake, driverVehicleModel, driverVehiclePlate } = req.body;
-  const user = req.user.id;
+  const userId = req.user.id;
   
   /***** Never trust users - validate input *****/
   if (!driverName) {
@@ -87,7 +90,7 @@ router.post('/', (req, res, next) => {
     return next(err);
   }
   
-  const newDriver = {  user, driverName, driverPhone, driverVehicleMake, driverVehicleModel, driverVehiclePlate };
+  const newDriver = {  userId, driverName, driverPhone, driverVehicleMake, driverVehicleModel, driverVehiclePlate };
 // console.log('newDriver: ', newDriver);
   Driver.create(newDriver).then(result => {
     res
@@ -102,7 +105,7 @@ router.post('/', (req, res, next) => {
 /* ========== GET/READ A SINGLE ITEM ========== */
 router.put('/:id', (req, res, next) => {
   const { id } = req.params;
-  const user = req.user.id;
+  const userId = req.user.id;
   
   /***** Never trust users - validate input *****/
   if (!driverName) {
@@ -169,23 +172,23 @@ router.put('/:id', (req, res, next) => {
 
 /* ========== DELETE/REMOVE A SINGLE ITEM ========== */
 router.delete('/:id', (req, res, next) => {
-  const { id } = req.params;
-  const user = req.user.id;
-
-  /***** Never trust users - validate input *****/
-  if (!mongoose.Types.Object.isValid(id)) {
+  const id = req.params.id;
+  const userId = req.user.id;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
 
-  Driver.deleteOne({ _id: id, user })
-    .then(result => {
-      if (result.n) {
-        res.sendStatus(204);
-      } else {
-        res.sendStatus(404);
-      }
+  const driverRemovePromise = Driver.findByIdAndRemove({ _id: id, userId });
+  const pickupUpdatePromise = Pickup.update({ pickupDriver: id, userId }, { $pull: { pickupDriver: id } })
+  const deliveryUpdatePromise = Delivery.update({deliveryDriver: id, userId }, { $pull: { deliveryDriver: id }})
+
+  Promise.all([driverRemovePromise, pickupUpdatePromise, deliveryUpdatePromise])
+  // Promise.all([driverRemovePromise, pickupUpdatePromise])
+
+    .then(() => {
+      res.status(204).end();
     })
     .catch(err => {
       next(err);

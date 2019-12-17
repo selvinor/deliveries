@@ -4,7 +4,10 @@ const express = require('express');
 const mongoose = require('mongoose');
 const passport = require('passport');
 
+const Pickup = require('../models/pickups');
 const Vendor = require('../models/vendors');
+const Order = require('../models/orders');
+const Delivery = require('../models/deliveries');
 
 const router = express.Router();
 
@@ -111,32 +114,31 @@ router.put('/:id', (req, res, next) => {
 
 /* ========== DELETE/REMOVE A SINGLE ITEM ========== */
 router.delete('/:id', (req, res, next) => {
-  const { id } = req.params;
+  // const { id } = req.params;
+  const id = req.params.id;
   const userId = req.user.id;
-
-  /***** Never trust users - validate input *****/
-  if (!mongoose.Types.Object.isValid(id)) {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
-  if (userId && !mongoose.Types.Object.isValid(userId)) {
-    const err = new Error('The `user` is not valid');
-    err.status = 400;
-    return next(err);
-  }
 
-  Vendor.findByIdAndRemove({ _id: id })
-    .then(result => {
-      if (result.n) {
-        res.sendStatus(204);
-      } else {
-        res.sendStatus(404);
-      }
+  const vendorRemovePromise = Vendor.findByIdAndRemove({ _id: id, userId });
+  const ordersUpdatePromise = Order.update({ pickup: id, userId }, { $pull: { pickup: id } })
+  const pickupUpdatePromise = Pickup.update({pickupVendor: id, userId }, { $pull: { pickupVendor: id }})
+  const deliveryUpdatePromise = Delivery.update({deliveryVendor: id, userId }, { $pull: { deliveryVendor: id }})
+
+  // Promise.all([vendorRemovePromise, orderUpdatePromise, pickupUpdatePromise, deliveryupUpdatePromise])
+  Promise.all([vendorRemovePromise])
+  // Promise.all([orderUpdatePromise])
+  // Promise.all([pickupRemovePromise, vendorUpdatePromise])
+    .then(() => {
+      res.status(204).end();
     })
     .catch(err => {
       next(err);
     });
+ 
 });
 
 module.exports = router;

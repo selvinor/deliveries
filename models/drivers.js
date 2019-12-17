@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 
 const driverSchema = new mongoose.Schema({
-  user: { type: mongoose.Schema.Types.Object, ref: 'User', required: true },
+  userId: { type: mongoose.Schema.Types.Object, ref: 'User', required: true },
   driverName: {type: String, default: ''},
   driverPhone: {type: String, default: ''},
   driverVehicleMake: {type: String, default: ''},
@@ -19,7 +19,7 @@ const driverSchema = new mongoose.Schema({
 
 driverSchema.methods.serialize = function() {
   return {
-    user: this.user || '',
+    userId: this.user || '',
     driverName: this.driverName || '',
     driverPhone: this.driverPhone|| '',
     driverVehicleMake: this.driverVehicleMake|| '',

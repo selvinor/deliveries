@@ -186,7 +186,6 @@ router.delete('/:id', (req, res, next) => {
   const vendorUpdatePromise = Vendor.update({  "orders": id, userId }, { "$pull": { orders: id } })
   const deliveryUpdatePromise = Delivery.update({ "order": id, userId }, { $pull: { order: id } })
 
-  // Promise.all([orderRemovePromise, vendorUpdatePromise])
   Promise.all([orderRemovePromise, vendorUpdatePromise, deliveryUpdatePromise])
     .then(() => {
       res.status(204).end();
