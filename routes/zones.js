@@ -7,6 +7,7 @@ const passport = require('passport');
 const Zone = require('../models/zones');
 const Pickup = require('../models/pickups');
 const Delivery = require('../models/deliveries');
+const Driver = require('../models/drivers');
 
 const router = express.Router();
 
@@ -16,8 +17,82 @@ router.use('/', passport.authenticate('jwt', { session: false, failWithError: tr
 /* ========== GET/READ ALL ITEMS ========== */
 router.get('/', (req, res, next) => {
   return Zone.find()
-    .populate('pickups') 
-    .populate('deliveries') 
+  .populate(
+    {
+      path: 'pickups', 
+      model: 'Pickup',
+      select: 'pickupDate pickupTimeSlot pickupStatus ',
+      populate: [{
+        path: 'pickupDriver', 
+        model: 'Driver', 
+        select: 'driverName driverPhone'
+      },
+      {
+        path: 'pickupVendor',
+        model: 'Vendor',
+        select: 'vendorName vendorLocation vendorPhone',
+        populate: {
+          path: 'orders',
+          model: 'Order',
+          select: 'orderNumber deliveryDate destination'
+        }
+      }]
+    }
+  )
+  .populate(
+    {
+      path: 'deliveries', 
+      model: 'Delivery',
+      select: 'deliveryDate  deliveryStatus ',
+      populate: [{
+        path: 'deliveryDriver', 
+        model: 'Driver', 
+        select: 'driverName driverPhone'
+      },
+      {
+        path: 'order',
+        model: 'Order',
+        select: 'vendorName vendorLocation vendorPhone',
+        populate: {
+          path: 'orders',
+          model: 'Order',
+          select: 'orderNumber deliveryDate destination'
+        }
+      }]
+    }
+  )
+  .populate(
+    {
+      path: 'drivers', 
+      model: 'Driver',
+      select: 'driverName driverPhone',
+      populate: [{
+        path: 'pickups', 
+        model: 'Pickup', 
+        select: 'pickupDate pickupTimeSlot pickupStatus ',
+        populate: [{
+          path: 'pickupVendor',
+          model: 'Vendor',
+          select: 'vendorName vendorLocation vendorPhone',
+          populate: {
+            path: 'orders',
+            model: 'Order',
+            select: 'orderNumber deliveryDate destination'
+          }
+        }]
+        },
+      {
+        path: 'order',
+        model: 'Order',
+        select: 'vendorName vendorLocation vendorPhone',
+        populate: {
+          path: 'orders',
+          model: 'Order',
+          select: 'orderNumber deliveryDate destination'
+        }
+      }]
+    }
+  )
     .then(result => {
       return res
       .status(200)
@@ -40,16 +115,90 @@ router.get('/:id', (req, res, next) => {
   }
 
   Zone.findOne({ _id: id })
-  .populate('pickups')
-  .populate('deliveries')
+  .populate(
+    {
+      path: 'pickups', 
+      model: 'Pickup',
+      select: 'pickupDate pickupTimeSlot pickupStatus ',
+      populate: [{
+        path: 'pickupDriver', 
+        model: 'Driver', 
+        select: 'driverName driverPhone'
+      },
+      {
+        path: 'pickupVendor',
+        model: 'Vendor',
+        select: 'vendorName vendorLocation vendorPhone',
+        populate: {
+          path: 'orders',
+          model: 'Order',
+          select: 'orderNumber deliveryDate destination'
+        }
+      }]
+    }
+  )
+  .populate(
+    {
+      path: 'deliveries', 
+      model: 'Delivery',
+      select: 'deliveryDate  deliveryStatus ',
+      populate: [{
+        path: 'deliveryDriver', 
+        model: 'Driver', 
+        select: 'driverName driverPhone'
+      },
+      {
+        path: 'order',
+        model: 'Order',
+        select: 'vendorName vendorLocation vendorPhone',
+        populate: {
+          path: 'orders',
+          model: 'Order',
+          select: 'orderNumber deliveryDate destination'
+        }
+      }]
+    }
+  )
+  .populate(
+    {
+      path: 'drivers', 
+      model: 'Driver',
+      select: 'driverName driverPhone',
+      populate: [{
+        path: 'pickups', 
+        model: 'Pickup', 
+        select: 'pickupDate pickupTimeSlot pickupStatus ',
+        populate: [{
+          path: 'pickupVendor',
+          model: 'Vendor',
+          select: 'vendorName vendorLocation vendorPhone',
+          populate: {
+            path: 'orders',
+            model: 'Order',
+            select: 'orderNumber deliveryDate destination'
+          }
+        }]
+        },
+      {
+        path: 'order',
+        model: 'Order',
+        select: 'vendorName vendorLocation vendorPhone',
+        populate: {
+          path: 'orders',
+          model: 'Order',
+          select: 'orderNumber deliveryDate destination'
+        }
+      }]
+    }
+  )
   .then(result => {
     return res
     .status(200)
     .json(result);
-})
-    .catch(err => {
-      next(err);
-    });
+  })
+  .catch(err => {
+    next(err);
+  });
 });
 
 /* ========== POST/CREATE AN ITEM ========== */
@@ -75,7 +224,7 @@ router.put('/:id', (req, res, next) => {
   const { id } = req.params;
 
   const updateZone = {};
-  const updateFields = ['depots', 'pickups', 'deliveries']
+  const updateFields = ['depots', 'pickups', 'deliveries', 'drivers']
   updateFields.forEach(field => {
     if (field in req.body) {
       updateZone[field] = req.body[field];
@@ -111,9 +260,10 @@ router.delete('/:id', (req, res, next) => {
     return next(err);
   }
 
-  const zoneRemovePromise = Zone.findByIdAndRemove({ _id: id, userId });
+ const zoneRemovePromise = Zone.findByIdAndRemove({ _id: id, userId });
  const pickupUpdatePromise = Pickup.update({ pickups: id, userId }, { $pull: { pickups: id } })
  const deliveryUpdatePromise = Delivery.update({deliveries: id, userId }, { $pull: { deliveries: id }})
+ const ddiversUpdatePromise = Driver.update({drivers: id, userId }, { $pull: { drivers: id }})
 
   Promise.all([zoneRemovePromise /* , pickupUpdatePromise,  deliveryUpdatePromise */])
     .then(() => {
