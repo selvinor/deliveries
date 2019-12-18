@@ -102,44 +102,7 @@ router.post('/', (req, res, next) => {
       next(err);
     });
 }); 
-/* ========== GET/READ A SINGLE ITEM ========== */
-router.put('/:id', (req, res, next) => {
-  const { id } = req.params;
-  const userId = req.user.id;
-  
-  /***** Never trust users - validate input *****/
-  if (!driverName) {
-    const err = new Error('Missing `driverName` in request body');
-    err.status = 400;
-    return next(err);
-  }
-
-  const updateDriver = {};
-  const updateFields = ['driverName', 'driverPhone', 'driverVehicleMake', 'driverVehicleModel', 'driverVehiclePlate', 'deliveries', 'orders']
-  updateFields.forEach(field => {
-    if (field in req.body) {
-      updateDriver[field] = req.body[field];
-    }
-  });
-
-  if (!mongoose.Types.Object.isValid(id)) {
-    const err = new Error('The `id` is not valid');
-    err.status = 400;
-    return next(err);
-  }
-  
-  Driver.findByAndUpdate(id, updateDriver,   { $push: { drivers: updateDriver } })
-    .then(result => {
-      if (result) {
-        res.json(result);
-      } else {
-        next();
-      }
-    })
-    .catch(err => {
-      next(err);
-    });
-});
+/* ========== UPDATE A SINGLE ITEM ========== */
 
 router.put('/:id', (req, res, next) => {
   // const { id } = req.params;

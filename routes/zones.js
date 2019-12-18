@@ -219,36 +219,33 @@ router.post('/', (req, res, next) => {
       next(err);
     });
 }); 
-/* ========== GET/READ A SINGLE ITEM ========== */
+/* ========== UPDATE A SINGLE ITEM ========== */
 router.put('/:id', (req, res, next) => {
-  const { id } = req.params;
-
+  const id = req.params.id;
   const updateZone = {};
-  const updateFields = ['depots', 'pickups', 'deliveries', 'drivers']
+  const updateFields = ['zoneName', 'zoneBoundaries']
   updateFields.forEach(field => {
     if (field in req.body) {
       updateZone[field] = req.body[field];
     }
   });
-
-  if (!mongoose.Types.Object.isValid(id)) {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
-  Zone.findByAndUpdate(id, updateZone, { new: true })
-    .then(result => {
-      if (result) {
-        res.json(result);
-      } else {
-        next();
-      }
-    })
-    .catch(err => {
-      next(err);
-    });
+  Zone.findByIdAndUpdate( {_id: id}, updateZone,   { $push: { zone: updateZone } })
+  .then(result => {
+    if (result) {
+      res.json(result);
+    } else {
+      next();
+    }
+  })
+  .catch(err => {
+    next(err);
+  });
 });
-
 
 /* ========== DELETE/REMOVE A SINGLE ITEM ========== */
 router.delete('/:id', (req, res, next) => {

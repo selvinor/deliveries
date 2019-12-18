@@ -91,7 +91,6 @@ router.post('/', (req, res, next) => {
 /* ========== UPDATE A SINGLE ITEM ========== */
 
 router.put('/:id', (req, res, next) => {
-  // const { id } = req.params;
   const id = req.params.id;
   const updatePickup = {};
   const updateFields = ['depot', 'pickupDriver', 'zone', 'pickupStatus']
@@ -107,7 +106,7 @@ router.put('/:id', (req, res, next) => {
     err.status = 400;
     return next(err);
   }
-  Pickup.findByIdAndUpdate( {_id: id}, updatePickup,   { $push: { pickup: updatePickup } })
+  Pickup.findByIdAndUpdate( {_id: id}, updatePickup, { $push: { pickup: updatePickup } })
   .then(result => {
     if (result) {
       res.json(result);
@@ -132,11 +131,6 @@ router.delete('/:id', (req, res, next) => {
 //  When deleting Pickup, remove pointer on the Vendor, Driver and Depot
   const pickupRemovePromise = Pickup.findByIdAndRemove({ _id: id, userId });
   const vendorUpdatePromise = Vendor.update({ pickups: id, userId }, { $pull: { pickups: id } })
-  // const orderUpdatePromise = Order.update({pickup: id, userId }, { $pull: { pickup: id }})
-
-// Promise.all([pickupRemovePromise, vendorUpdatePromise, orderUpdatePromise])
-  // Promise.all([vendorUpdatePromise])
-  // Promise.all([orderUpdatePromise])
   Promise.all([pickupRemovePromise, vendorUpdatePromise])
     .then(() => {
       res.status(204).end();

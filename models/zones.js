@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 
 const zoneSchema = new mongoose.Schema({ 
   zone :   {type: String, default: ''},
+  zoneName :   {type: String, default: ''},
+  zoneBoundaries :   {type: String, default: ''},
    drivers : [{
      type: mongoose.Schema.Types.Object, ref: 'Driver' 
    }],  
@@ -18,6 +20,8 @@ const zoneSchema = new mongoose.Schema({
 zoneSchema.methods.serialize = function() { 
   return {
     zone: this.zone|| '',
+    zoneName: this.zone|| '',
+    zoneBoundaries: this.zone|| '',
     drivers: this.drivers || '',
     pickups: this.pickups|| '',
     deliveries: this.deliveries || ''
