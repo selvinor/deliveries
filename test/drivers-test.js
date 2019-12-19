@@ -26,7 +26,7 @@ const app = require('../server');
 chai.use(chaiHttp);
 const expect = chai.expect;
 
-describe.only('Drivers API', function () {
+describe('Drivers API', function () {
 
   before(function () {
     return mongoose.connect(TEST_DATABASE_URL,{'useNewUrlParser': true, 'useCreateIndex': true})
@@ -139,7 +139,7 @@ describe.only('Drivers API', function () {
 
   });
 
-  describe.only('GET /api/drivers/:id', function () {
+  describe('GET /api/drivers/:id', function () {
     it('should return correct drivers', function () {
       let data;
       return Driver.findOne()

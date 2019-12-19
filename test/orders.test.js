@@ -26,7 +26,7 @@ const app = require('../server');
 chai.use(chaiHttp);
 const expect = chai.expect;
 
-describe('Orders API', function () {
+describe.only('Orders API', function () {
 
   before(function () {
     return mongoose.connect(TEST_DATABASE_URL,{'useNewUrlParser': true, 'useCreateIndex': true})
@@ -103,22 +103,32 @@ describe('Orders API', function () {
           expect(res.body).to.be.a('array');
           expect(res.body).to.have.length(data.length);
           res.body.forEach(function (item, i) {
+            // console.log('data[',i,'].vendor: ', data[i].vendor);
+            // console.log('item.vendor._id: ', item.vendor._id);
+            // console.log('item.vendor: ', item.vendor);
+            // console.log('')
               expect(item).to.be.a('object');
               expect(item).to.include.all.keys(
               'userId',  
-              'vendor', 
               'orderNumber',
               'orderDate', 
-              'deliveryDate', 
-              'destination', 
+              'orderDetails',
+              'orderSize',
+              'vendor', 
               'pickup', 
-              'delivery'            
+              'delivery',            
+              'deliveryDate', 
+              'destination' 
             );
             item.OrderDate = new Date(item.orderDate);
             item.DeliveryDate = new Date(item.deliveryDate);
-            expect(item.vendor._id).to.equal(data[i].vendor);
             expect(item.orderNumber).to.equal(data[i].orderNumber);
             expect(item.OrderDate).to.eql(new Date(data[i].orderDate));
+            expect(item.orderDetails).to.equal(data[i].orderDetails);
+            expect(item.orderSize).to.equal(data[i].orderSize);
+            expect(item.vendor._id).to.equal(data[i].vendor);
+            expect(item.pickup._id).to.equal(data[i].pickup);
+            expect(item.delivery._id).to.equal(data[i].delivery);
             expect(item.DeliveryDate).to.eql(new Date(data[i].deliveryDate));
             expect(item.destination.businessName).to.equal(data[i].destination.businessName);
             expect(item.destination.geocode.coordinates).to.eql(data[i].destination.geocode.coordinates);
@@ -129,8 +139,6 @@ describe('Orders API', function () {
             expect(item.destination.instructions).to.equal(data[i].destination.instructions);
             expect(item.destination.recipient).to.equal(data[i].destination.recipient);
             expect(item.destination.contactPhone).to.equal(data[i].destination.contactPhone);      
-            expect(item.pickup._id).to.equal(data[i].pickup);
-            expect(item.delivery._id).to.equal(data[i].delivery);
           });
         });
 
@@ -152,24 +160,37 @@ describe('Orders API', function () {
           const item = res.body;
           expect(item).to.be.a('object');
           expect(item).to.include.all.keys(
-          'vendor', 
-          'orderNumber',
-          'orderDate', 
-          'deliveryDate', 
-          'destination', 
-          'pickup', 
-          'delivery'            
-        );
-        let isoOrderDate = new Date(item.orderDate);
-        let isoDeliveryDate = new Date(item.deliveryDate);
-        expect(item.vendor._id).to.equal(data.vendor);
-        expect(item.orderNumber).to.equal(data.orderNumber);
-        expect(isoOrderDate).to.eql(new Date(data.orderDate));
-        expect(isoDeliveryDate).to.eql(new Date(data.deliveryDate));
-        // expect(item.destination).to.equal(data[i].destination);
-        expect(item.pickup._id).to.equal(data.pickup);
-        // expect(item.delivery._id).to.equal(data[i].delivery);
-     });
+            'userId',  
+            'orderNumber',
+            'orderDate', 
+            'orderDetails',
+            'orderSize',
+            'vendor', 
+            'pickup', 
+            'delivery',            
+            'deliveryDate', 
+            'destination' 
+      );
+      item.OrderDate = new Date(item.orderDate);
+      item.DeliveryDate = new Date(item.deliveryDate);
+      expect(item.orderNumber).to.equal(data.orderNumber);
+      expect(item.OrderDate).to.eql(new Date(data.orderDate));
+      expect(item.orderDetails).to.equal(data.orderDetails);
+      expect(item.orderSize).to.equal(data.orderSize);
+      expect(item.vendor._id).to.equal(data.vendor);
+      expect(item.pickup._id).to.equal(data.pickup);
+      expect(item.delivery._id).to.equal(data.delivery);
+      expect(item.DeliveryDate).to.eql(new Date(data.deliveryDate));
+      expect(item.destination.businessName).to.equal(data.destination.businessName);
+      expect(item.destination.geocode.coordinates).to.eql(data.destination.geocode.coordinates);
+      expect(item.destination.streetAddress).to.equal(data.destination.streetAddress);
+      expect(item.destination.city).to.equal(data.destination.city);
+      expect(item.destination.state).to.equal(data.destination.state);
+      expect(item.destination.zipcode).to.equal(data.destination.zipcode);
+      expect(item.destination.instructions).to.equal(data.destination.instructions);
+      expect(item.destination.recipient).to.equal(data.destination.recipient);
+      expect(item.destination.contactPhone).to.equal(data.destination.contactPhone);      
+});
   });
 
     it('should respond with status 400 and an error message when `id` is not valid', function () {
@@ -190,6 +211,9 @@ describe('Orders API', function () {
           "userId": "111111111111111111111001",
           "vendor": "222222222222222222222001",
           "orderDate": "2019-11-21T00:00:00.000Z",
+          "orderDetails": "12 Red Roses",
+          "orderStatus": "pending",
+          "orderSize": "1",
           "deliveryDate": "2019-11-22T00:00:00.000Z",
           "orderNumber": "CAT140",
           "destination": {
@@ -225,11 +249,22 @@ describe('Orders API', function () {
           expect(res.body).to.be.a('object');
           expect(res.body).to.have.all.keys(
             'userId',
-            'vendor', 
-            'orderNumber',
             'orderDate', 
+            'pickupVendor',
             'deliveryDate', 
-            'destination', 
+            'orderNumber', 
+            'orderDetails',
+            'orderStatus',
+            'orderSize',
+            'destination.geocode.coordinates', 
+            'destination.businessName', 
+            'destination.streetAddress', 
+            'destination.city', 
+            'destination.state', 
+            'destination.zipcode', 
+            'destination.instructions', 
+            'destination.recipient', 
+            'destination.contactPhone',
             'pickup', 
             'delivery',
             '__v',
@@ -241,8 +276,15 @@ describe('Orders API', function () {
         })
         .then(data => {
           // console.log('newItem: ', newItem, ' data: ', data);
-          expect(newItem.destination.businessName).to.equal(data.destination.businessName);
+          expect(newItem.orderDate).to.equal(data.orderDate);
+          expect(newItem.pickupVendor).to.equal(data.pickupVendor);
+          expect(newItem.deliveryDate).to.equal(data.deliveryDate);
+          expect(newItem.orderNumber).to.equal(data.orderNumber);
+          expect(newItem.orderDetails).to.equal(data.orderDetails);
+          expect(newItem.orderStatus).to.equal(data.orderStatus);
+          expect(newItem.orderSize).to.equal(data.orderSize);
           expect(newItem.destination.geocode.coordinates).to.eql(data.destination.geocode.coordinates);
+          expect(newItem.destination.businessName).to.equal(data.destination.businessName);
           expect(newItem.destination.streetAddress).to.equal(data.destination.streetAddress);
           expect(newItem.destination.city).to.equal(data.destination.city);
           expect(newItem.destination.state).to.equal(data.destination.state);
