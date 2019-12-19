@@ -141,7 +141,7 @@ router.post('/', (req, res, next) => {
 router.delete('/:id', (req, res, next) => {
   const user = req.params.id;
 
-  if (!mongoose.Types.Object.isValid(user)) {
+  if (!mongoose.Types.ObjectId.isValid(user)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);

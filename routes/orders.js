@@ -78,48 +78,7 @@ router.get('/:id', (req, res, next) => {
 });
 
 /* ========== POST/CREATE AN ITEM ========== */
-// router.post('/', (req, res, next) => {
-//   const { vendor, orderDate, orderDetails, orderStatus, orderSize, deliveryDate, orderNumber, destination, pickup, delivery } = req.body;
-//   const userId = req.user.id;
-  
-//   /***** Never trust users - validate input *****/
-//   if (!orderNumber) {
-//     const err = new Error('Missing `orderNumber` in request body');
-//     err.status = 400;
-//     return next(err);
-//   }
-  
-//   if (!destination) {
-//     const err = new Error('Missing `destination` in request body');
-//     err.status = 400;
-//     return next(err);
-//   }
 
-//   if (vendor && !mongoose.Types.Object.isValid(vendor)) {
-//     const err = new Error('The `vendor` is not valid');
-//     err.status = 400;
-//     return next(err);
-//   }
-
-//   if (userId && !mongoose.Types.Object.isValid(userId)) {
-//     const err = new Error('The `userId` is not valid');
-//     err.status = 400;
-//     return next(err);
-//   }
-
-//   const newOrder = { userId, vendor, orderDate, orderNumber, orderDetails, orderStatus, orderSize, deliveryDate, destination, pickup, delivery };
-// // console.log('newOrder: ', newOrder);
-//   Order.create(newOrder) //
-//     .then(result => {
-//       res
-//         .location(`${req.originalUrl}/${result.id}`)
-//         .status(201)
-//         .json(result); //
-//     })
-//     .catch(err => {
-//       next(err);
-//     });
-// });
 router.post('/', (req, res, next) => {
   const {  orderNumber, orderDate, orderDetails, orderStatus, orderSize, vendor, pickup, delivery, deliveryDate, destination } = req.body;
   console.log('req.body: ',req.body);
@@ -138,22 +97,20 @@ router.post('/', (req, res, next) => {
     return next(err);
   }
 
-  if (vendor && !mongoose.Types.Object.isValid(vendor)) {
+  if (vendor && !mongoose.Types.ObjectId.isValid(vendor)) {
     const err = new Error('The `vendor` is not valid');
     err.status = 400;
     return next(err);
   }
 
-  if (userId && !mongoose.Types.Object.isValid(userId)) {
+  if (userId && !mongoose.Types.ObjectId.isValid(userId)) {
     const err = new Error('The `userId` is not valid');
     err.status = 400;
     return next(err);
   }
   
  const newOrder = { userId, orderNumber, orderDate, orderDetails, orderStatus, orderSize, vendor, pickup, delivery, deliveryDate, destination };
-console.log('newOrder: ',newOrder);
- //  const newOrder = {"userId": "111111111111111111111001","orderNumber":"xyz321","orderDate":"2019-10-22","orderDetails":"","orderStatus":"pending","orderSize":"1","vendor":"222222222222222222222003","pickup":"888888888888888888888053","delivery":"777777777777777777777507","deliveryDate":"2019-10-23","destination":{"recipient":"Jo Williams","phone":"555-555-1212","businessName":"Knight Diagnostic Labs","streetAddress":"2525 SW 3rd Ave, Suite 350","city":"Portland","state":"OR","zipcode":"97201","geocode":{"type":"Point","coordinates":[-122.68143,45.50467]},"instructions":""}}
-// console.log('newDriver: ', newDriver);
+
   Order.create(newOrder).then(result => {
     res
       .location(`${req.originalUrl}/${result.id}`)
