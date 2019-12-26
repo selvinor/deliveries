@@ -26,7 +26,7 @@ const app = require('../server');
 chai.use(chaiHttp);
 const expect = chai.expect;
 
-describe.only('Orders API', function () {
+describe('Orders API', function () {
 
   before(function () {
     return mongoose.connect(TEST_DATABASE_URL,{'useNewUrlParser': true, 'useCreateIndex': true})
@@ -211,11 +211,11 @@ describe.only('Orders API', function () {
           "userId": "111111111111111111111001",
           "vendor": "222222222222222222222001",
           "orderDate": "2019-11-21T00:00:00.000Z",
+          "orderNumber": "CAT140",
           "orderDetails": "12 Red Roses",
           "orderStatus": "pending",
           "orderSize": "1",
           "deliveryDate": "2019-11-22T00:00:00.000Z",
-          "orderNumber": "CAT140",
           "destination": {
               "geocode": {
                   "coordinates": [
@@ -250,21 +250,13 @@ describe.only('Orders API', function () {
           expect(res.body).to.have.all.keys(
             'userId',
             'orderDate', 
-            'pickupVendor',
+            'vendor',
             'deliveryDate', 
             'orderNumber', 
             'orderDetails',
             'orderStatus',
             'orderSize',
-            'destination.geocode.coordinates', 
-            'destination.businessName', 
-            'destination.streetAddress', 
-            'destination.city', 
-            'destination.state', 
-            'destination.zipcode', 
-            'destination.instructions', 
-            'destination.recipient', 
-            'destination.contactPhone',
+            'destination',
             'pickup', 
             'delivery',
             '__v',
@@ -275,10 +267,11 @@ describe.only('Orders API', function () {
           return Order.findById(res.body._id);
         })
         .then(data => {
-          // console.log('newItem: ', newItem, ' data: ', data);
-          expect(newItem.orderDate).to.equal(data.orderDate);
+          let strOrderDate = new Date(newItem.orderDate);
+          let strDeliveryDate = new Date(newItem.deliveryDate);
+          expect(strOrderDate).to.eql(data.orderDate);
           expect(newItem.pickupVendor).to.equal(data.pickupVendor);
-          expect(newItem.deliveryDate).to.equal(data.deliveryDate);
+          expect(strDeliveryDate).to.eql(data.deliveryDate);
           expect(newItem.orderNumber).to.equal(data.orderNumber);
           expect(newItem.orderDetails).to.equal(data.orderDetails);
           expect(newItem.orderStatus).to.equal(data.orderStatus);
@@ -297,4 +290,62 @@ describe.only('Orders API', function () {
         });
     });
   });
-});
+  describe('PUT /api/orders/:id', function () {
+    it('should update the order when provided valid data', function () {
+      let order;
+      let res;
+      const updateOrder = { 
+        'orderDate': '12-20-2019', 
+        'orderSize': '2',
+        'orderNumber': 'XXX100', 
+        'orderDetails': '12 Yellow Roses',
+        'orderStatus': 'ready',
+        'destination.businessName': 'Bloomz' 
+      };
+
+      return Order.findOne()
+        .then(_order => {
+          order = _order;
+          return chai.request(app)
+          .put(`/api/orders/${order.id}`)
+          .set('Authorization', `Bearer ${token}`)
+          .send(updateOrder);
+        })
+        .then(_res => {
+          res =_res;
+          console.log('****res.body: ', res.body);
+          expect(res).to.have.status(200);
+          expect(res).to.be.json;
+          expect(res.body).to.be.a('object');
+          expect(res.body).to.have.all.keys(
+            '_id',
+            'userId',
+            'orderDate', 
+            'orderSize',
+            'orderNumber', 
+            'orderDetails',
+            'orderStatus',
+            'destination',
+            'vendor',
+            'pickup',
+            'delivery',
+            'deliveryDate',
+            'createdAt',
+            'updatedAt'
+          );
+          expect(res.body._id).to.equal(order.id);
+          expect(res.body.name).to.equal(updateOrder.name);
+          expect(new Date(res.body.createdAt)).to.eql(order.createdAt);
+          expect(res.body.userId).to.equal(order.userId);
+          expect(res.body.orderName).to.equal(order.orderName);
+          expect(res.body.orderPhone).to.equal(order.orderPhone);      
+          expect(res.body.orderVehicleMake).to.equal(order.orderVehicleMake);
+          expect(res.body.orderVehicleModel).to.equal(order.orderVehicleModel);
+          expect(res.body.orderVehiclePlate).to.equal(order.orderVehiclePlate);
+          expect(res.body.pickup).to.equal(order.pickup);      
+          expect(res.body.delivery).to.equal(order.delivery);      
+          // expect item to have been updated
+        });
+    });
+  });
+});  

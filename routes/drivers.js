@@ -128,6 +128,11 @@ router.put('/:id', (req, res, next) => {
     }
   })
   .catch(err => {
+    if (err.name === 'MongoError' && err.code === 11000) {
+      err = new Error('Driver Vehicle Plate already exists');
+      err.status = 400;
+      return next(err);
+    } 
     next(err);
   });
 });
@@ -143,13 +148,11 @@ router.delete('/:id', (req, res, next) => {
     return next(err);
   }
 
-  const driverRemovePromise = Driver.findByIdAndRemove({ _id: id, userId });
-  const pickupUpdatePromise = Pickup.update({ pickupDriver: id, userId }, { $pull: { pickupDriver: id } })
-  const deliveryUpdatePromise = Delivery.update({deliveryDriver: id, userId }, { $pull: { deliveryDriver: id }})
+  const driverRemovePromise = Driver.findOneAndDelete({ _id: id, userId });
+  const pickupUpdatePromise = Pickup.updateOne({ pickupDriver: id, userId }, { $pull: { pickupDriver: id } })
+  const deliveryUpdatePromise = Delivery.updateOne({deliveryDriver: id, userId }, { $pull: { deliveryDriver: id }})
 
   Promise.all([driverRemovePromise, pickupUpdatePromise, deliveryUpdatePromise])
-  // Promise.all([driverRemovePromise, pickupUpdatePromise])
-
     .then(() => {
       res.status(204).end();
     })

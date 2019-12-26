@@ -81,7 +81,7 @@ router.get('/:id', (req, res, next) => {
 
 router.post('/', (req, res, next) => {
   const {  orderNumber, orderDate, orderDetails, orderStatus, orderSize, vendor, pickup, delivery, deliveryDate, destination } = req.body;
-  console.log('req.body: ',req.body);
+  // console.log('req.body: ',req.body);
   const userId = req.user.id;
   
   /***** Never trust users - validate input *****/
@@ -129,7 +129,6 @@ router.put('/:id', (req, res, next) => {
   const updateOrder = {};
   const updateFields = [
     'orderDate', 
-    'pickupVendor',
     'deliveryDate', 
     'orderNumber', 
     'orderDetails',

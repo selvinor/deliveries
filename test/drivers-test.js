@@ -98,7 +98,7 @@ describe('Drivers API', function () {
 
       return Promise.all([dbPromise, apiPromise])
         .then(([data, res]) => {
-          console.log('DATA: ', data);
+          // console.log('DATA: ', data);
           expect(res).to.have.status(200);
           expect(res).to.be.json;
           expect(res.body).to.be.a('array');
@@ -106,21 +106,21 @@ describe('Drivers API', function () {
           res.body.forEach(function (item, i) {
               expect(item).to.be.a('object');
               expect(item).to.include.all.keys(
-              'user',
-              'driverName',  
-              'driverVehicleMake', 
-              'driverVehicleModel',
-              'driverVehiclePlate', 
-              'driverPhone', 
-              'pickups',
-              'deliveries',
-              '_id',
-              'createdAt',
-              'updatedAt'            
-            );
-            console.log('item: ', item);
-            console.log('data[i]: ',data[i]);
-            expect(item.user).to.equal(data[i].user);
+                'userId',
+                'driverName',  
+                'driverVehicleMake', 
+                'driverVehicleModel',
+                'driverVehiclePlate', 
+                'driverPhone', 
+                'pickups',
+                'deliveries',
+                '_id',
+                'createdAt',
+                'updatedAt'            
+              );
+            // console.log('item: ', item);
+            // console.log('data[i]: ',data[i]);
+            expect(item.userId).to.equal(data[i].userId);
             expect(item.driverName).to.equal(data[i].driverName);
             expect(item.driverVehicleMake).to.equal(data[i].driverVehicleMake);
             expect(item.driverVehicleModel).to.equal(data[i].driverVehicleModel);
@@ -132,7 +132,7 @@ describe('Drivers API', function () {
             if(item.deliveries[0]){
               expect(item.deliveries[0]._id).to.equal(data[i].deliveries[0]);
             }
-        });
+          });
         });
 
     });
@@ -151,10 +151,10 @@ describe('Drivers API', function () {
         })
         .then((res) => {
           const item = res.body;
-          console.log('item is: ', item);
+          // console.log('item is: ', item);
           expect(item).to.be.a('object');
           expect(item).to.include.all.keys(
-            'user',
+            'userId',
             'driverName',  
             'driverVehicleMake', 
             'driverVehicleModel',
@@ -165,10 +165,10 @@ describe('Drivers API', function () {
             '_id',
             'createdAt',
             'updatedAt'            
-          );
+        );
           // console.log('item: ', item);
-          // console.log('data[i]: ',data[i]);
-          expect(item.user).to.equal(data.user);
+          // console.log('data: ',data);
+          expect(item.userId).to.equal(data.userId);
           expect(item.driverName).to.equal(data.driverName);
           expect(item.driverVehicleMake).to.equal(data.driverVehicleMake);
           expect(item.driverVehicleModel).to.equal(data.driverVehicleModel);
@@ -181,7 +181,7 @@ describe('Drivers API', function () {
             expect(item.deliveries[0]._id).to.equal(data.deliveries[0]);            
           }
         });
-    });
+  });
 
     it('should respond with status 400 and an error message when `id` is not valid', function () {
       return chai.request(app)
@@ -199,7 +199,7 @@ describe('Drivers API', function () {
     it('should create and return a new driver when provided valid data', function () {
       const newItem = 
       {
-            "user": "111111111111111111111001",
+            "userId": "111111111111111111111001",
             "driverName": "NewDriver",
             "driverPhone": "555-555-1212",
             "driverVehicleMake": "Toyota",
@@ -220,7 +220,7 @@ describe('Drivers API', function () {
           expect(res).to.be.json;
           expect(res.body).to.be.a('object');
           expect(res.body).to.have.all.keys(
-            'user', 
+            'userId', 
             'driverName', 
             'driverVehicleMake', 
             'driverVehicleModel', 
@@ -233,7 +233,7 @@ describe('Drivers API', function () {
         })
         .then(data => {
           // console.log('newItem: ', newItem, ' data: ', data);
-          expect(newItem.user).to.equal(data.user);
+          expect(newItem.userId).to.equal(data.userId);
           expect(newItem.driverName).to.equal(data.driverName);
           expect(newItem.driverPhone).to.equal(data.driverPhone);      
           expect(newItem.driverVehicleMake).to.equal(data.driverVehicleMake);
@@ -274,19 +274,22 @@ describe('Drivers API', function () {
           expect(res).to.be.json;
           expect(res.body).to.be.a('object');
           expect(res.body).to.have.all.keys(
-            'user', 
+            'userId', 
             'driverName', 
             'driverVehicleMake', 
             'driverVehicleModel', 
             'driverVehiclePlate', 
             'driverPhone', 
             'pickups', 
-            'deliveries' 
-          );
+            'deliveries',
+            '_id',
+            'createdAt',
+            'updatedAt'            
+        );
           expect(res.body.id).to.equal(driver.id);
           expect(res.body.name).to.equal(updateDriver.name);
           expect(new Date(res.body.createdAt)).to.eql(driver.createdAt);
-          expect(res.body.user).to.equal(data.user);
+          expect(res.body.userId).to.equal(data.userId);
           expect(res.body.driverName).to.equal(data.driverName);
           expect(res.body.driverPhone).to.equal(data.driverPhone);      
           expect(res.body.driverVehicleMake).to.equal(data.driverVehicleMake);
@@ -326,7 +329,7 @@ describe('Drivers API', function () {
       let res;
       const updateDriver = { 
         'driverName': 'Updated DriverName', 
-        'driverVehicleMake': 'Mecury', 
+        'driverVehicleMake': 'Mercury', 
         'driverVehicleModel': 'Cougar', 
         'driverVehiclePlate': 'Updated Plate', 
         'driverPhone': 'Updated phone', 
@@ -344,47 +347,6 @@ describe('Drivers API', function () {
         });
     });
 
-    it('should return an error when missing "driverName" field', function () {
-      let driver;
-      let res;
-      const updateDriver = {};
-      return Driver.findOne()
-        .then(_driver => {
-          driver = _driver;
-          return chai.request(app)
-            .put(`/api/drivers/${driver.id}`)
-            .set('Authorization', `Bearer ${token}`)
-            .send(updateDriver);
-        })
-        .then(_res => {
-          res =_res;
-          expect(res).to.have.status(400);
-          expect(res).to.be.json;
-          expect(res.body).to.be.a('object');
-          expect(res.body.message).to.equal('Missing `driverName` in request body');
-        });
-    });
-
-    it('should return an error when "driverName" field is empty string', function () {
-      let driver;
-      let res;
-      const updateDriver = { driverName: '' };
-      return Driver.findOne()
-        .then(_driver => {
-          driver = _driver;
-          return chai.request(app)
-            .put(`/api/drivers/${driver.id}`)
-            .set('Authorization', `Bearer ${token}`)
-            .send(updateDriver);
-        })
-        .then(_res => {
-          res =_res;
-          expect(res).to.have.status(400);
-          expect(res).to.be.json;
-          expect(res.body).to.be.a('object');
-          expect(res.body.message).to.equal('Missing `driverName` in request body');
-        });
-    });
 
     it('should return an error when given a duplicate driverVehiclePlate', function () {
       let res;
@@ -407,7 +369,7 @@ describe('Drivers API', function () {
     });
   });
 
-  describe('DELETE /api/drivers/:id', function () {
+  describe.only('DELETE /api/drivers/:id', function () {
     it('should delete an existing driver and respond with 204', function () {
       let driver;
       let res;
@@ -422,10 +384,6 @@ describe('Drivers API', function () {
           res = _res;
           expect(res).to.have.status(204);
           expect(res.body).to.be.empty;
-          return Driver.count({ _id: driver._id });
-        })
-        .then(count => {
-          expect(count).to.equal(0);
         });
     });
 
@@ -435,7 +393,7 @@ describe('Drivers API', function () {
         .delete('/api/drivers/NOT-A-VALID-ID')
         .set('Authorization', `Bearer ${token}`)
         .then(_res => {
-          res =_res;
+          const res =_res;
           expect(res).to.have.status(400);
           expect(res.body.message).to.equal('The `id` is not valid');
         });

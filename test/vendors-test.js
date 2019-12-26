@@ -106,15 +106,11 @@ describe('Vendors API', function () {
           res.body.forEach(function (item, i) {
               expect(item).to.be.a('object');
               expect(item).to.include.all.keys(
-              'vendorName',  
               'userId',
-              'streetAddress', 
-              'city',
-              'state', 
-              'zipcode', 
-              'phone', 
+              'vendorName', 
+              'vendorLocation', 
+              'vendorPhone', 
               'orders',
-              'geocode',
               '_id',
               'createdAt',
               'updatedAt'            
@@ -123,22 +119,15 @@ describe('Vendors API', function () {
             // console.log('data[i]: ',data[i]);
             expect(item.userId).to.equal(data[i].userId);
             expect(item.vendorName).to.equal(data[i].vendorName);
-            expect(item.streetAddress).to.equal(data[i].streetAddress);
-            expect(item.city).to.equal(data[i].city);
-            expect(item.state).to.equal(data[i].state);
-            expect(item.zipcode).to.equal(data[i].zipcode);
-            expect(item.phone).to.equal(data[i].phone);
-            expect(item.geocode.coordinates).to.eql(data[i].geocode.coordinates);
+            expect(item.vendorLocation.streetAddress).to.equal(data[i].vendorLocation.streetAddress);
+            expect(item.vendorLocation.city).to.equal(data[i].vendorLocation.city);
+            expect(item.vendorLocation.state).to.equal(data[i].vendorLocation.state);
+            expect(item.vendorLocation.zipcode).to.equal(data[i].vendorLocation.zipcode);
+            expect(item.vendorPhone).to.equal(data[i].vendorPhone);
+            expect(item.vendorLocation.geocode.coordinates).to.eql(data[i].vendorLocation.geocode.coordinates);
             expect(item.orders[0]._id).to.equal(data[i].orders[0]);
             if(item.orders[0]){
-              expect(item.orders[0].orderNumber).to.equal(data[i].orders[0].orderNumber);
-              expect(item.orders[0].destination).to.equal(data[i].orders[0].destination);
-              expect(item.orders[0].pickup.pickupDate).to.equal(data[i].pickups[0].pickupDate);
-              expect(item.orders[0].pickup.status).to.equal(data[i].pickups[0].status);
-              expect(item.orders[0].pickup.driver).to.equal(data[i].pickups[0].driver);
-              expect(item.orders[0].delivery.deliveryDate).to.equal(data[i].deliveries[0].deliveryDate);
-              expect(item.orders[0].delivery.status).to.equal(data[i].deliveries[0].status);
-              expect(item.orders[0].delivery.driver).to.equal(data[i].deliveries[0].driver);
+              expect(item.orders[0]._id).to.equal(data[i].orders[0]);
             }
           });
         });
@@ -162,29 +151,25 @@ describe('Vendors API', function () {
           // console.log('item is: ', item);
           expect(item).to.be.a('object');
           expect(item).to.include.all.keys(
-            'vendorName',  
             'userId',
-            'streetAddress', 
-            'city',
-            'state', 
-            'zipcode', 
-            'phone', 
+            'vendorName', 
+            'vendorLocation', 
+            'vendorPhone', 
             'orders',
-            'geocode',
             '_id',
             'createdAt',
             'updatedAt'            
-          );
+        );
           // console.log('item: ', item);
           // console.log('data: ',data);
           expect(item.userId).to.equal(data.userId);
           expect(item.vendorName).to.equal(data.vendorName);
-          expect(item.streetAddress).to.equal(data.streetAddress);
-          expect(item.city).to.equal(data.city);
-          expect(item.state).to.equal(data.state);
-          expect(item.zipcode).to.equal(data.zipcode);
-          expect(item.phone).to.equal(data.phone);
-          expect(item.geocode.coordinates).to.eql(data.geocode.coordinates);
+          expect(item.vendorLocation.streetAddress).to.equal(data.vendorLocation.streetAddress);
+          expect(item.vendorLocation.city).to.equal(data.vendorLocation.city);
+          expect(item.vendorLocation.state).to.equal(data.vendorLocation.state);
+          expect(item.vendorLocation.zipcode).to.equal(data.vendorLocation.zipcode);
+          expect(item.vendorPhone).to.equal(data.vendorPhone);
+          expect(item.vendorLocation.geocode.coordinates).to.eql(data.vendorLocation.geocode.coordinates);
           expect(item.orders[0]._id).to.equal(data.orders[0]);
 });
   });
@@ -203,23 +188,26 @@ describe('Vendors API', function () {
   describe('POST /api/vendors', function () {
 
     it('should create and return a new vendor when provided valid data', function () {
-      const newItem = 
-        {
-            "geocode": {
-                "coordinates": [
-                    -122.88389,
-                    45.536223
-                ],
-                "type": "Point"
+      const newItem = {
+        "userId": "111111111111111111111001",
+        "vendorName": "NewVendor",
+            "vendorLocation" :{
+              "geocode": {
+                  "coordinates": [
+                      -122.88389,
+                      45.536223
+                  ],
+                  "type": "Point"
+              },  
+              "streetAddress": "900 SW 5th Ave.",
+              "city": "Portland",
+              "state": "Oregon",
+              "zipcode": "97204"
             },
-            "vendorName": "NewVendor",
-            "streetAddress": "900 SW 5th Ave.",
-            "city": "Portland",
-            "state": "Oregon",
-            "zipcode": "97204",
-            "phone": "555-555-1111",
-            "_id": "222222222222222222222001",
-            "userId": "111111111111111111111001",
+            "vendorPhone": "555-555-1111",
+            "orders":[],
+            "pickups": [],
+            "deliveries": [],
             "createdAt": "2019-12-04T21:23:52.263Z",
             "updatedAt": "2019-12-04T21:23:52.263Z"
         }      
@@ -237,13 +225,11 @@ describe('Vendors API', function () {
           expect(res.body).to.have.all.keys(
             'userId', 
             'vendorName', 
-            'streetAddress', 
-            'city', 
-            'state', 
-            'zipcode', 
-            'geocode', 
-            'phone', 
+            'vendorLocation', 
+            'vendorPhone', 
             'orders', 
+            'pickups',
+            'deliveries',
             '_id',
             '__v',
             'createdAt',
@@ -257,11 +243,14 @@ describe('Vendors API', function () {
           expect(newItem.vendorName).to.equal(data.vendorName);
           expect(newItem.geocode.coordinates).to.eql(data.geocode.coordinates);
           expect(newItem.userId).to.equal(data.userId);
-          expect(newItem.streetAddress).to.equal(data.streetAddress);
-          expect(newItem.city).to.equal(data.city);
-          expect(newItem.state).to.equal(data.state);
-          expect(newItem.zipcode).to.equal(data.zipcode);
-          expect(newItem.phone).to.equal(data.phone);           
+          expect(newItem.vendorLocation.streetAddress).to.equal(data.streetAddress);
+          expect(newItem.vendorLocation.city).to.equal(data.city);
+          expect(newItem.vendorLocation.state).to.equal(data.state);
+          expect(newItem.vendorLocation.zipcode).to.equal(data.zipcode);
+          expect(newItem.vendorPhone).to.equal(data.vendorPhone);  
+          expect(newItem.orders).to.equal(data.orders);  
+          expect(newItem.pickups).to.equal(data.pickups);  
+          expect(newItem.deliveries).to.equal(data.deliveries);                  
       });
     });
   });
