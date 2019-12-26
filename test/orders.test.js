@@ -313,7 +313,7 @@ describe('Orders API', function () {
         })
         .then(_res => {
           res =_res;
-          console.log('****res.body: ', res.body);
+          // console.log('****res.body: ', res.body);
           expect(res).to.have.status(200);
           expect(res).to.be.json;
           expect(res.body).to.be.a('object');

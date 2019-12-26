@@ -119,7 +119,7 @@ router.put('/:id', (req, res, next) => {
     err.status = 400;
     return next(err);
   }
-  Driver.findByIdAndUpdate( {_id: id}, updateDriver,   { $push: { driver: updateDriver } })
+  Driver.findOneAndUpdate( {_id: id}, updateDriver,   { $push: { driver: updateDriver } })
   .then(result => {
     if (result) {
       res.json(result);

@@ -207,9 +207,7 @@ describe('Vendors API', function () {
             "vendorPhone": "555-555-1111",
             "orders":[],
             "pickups": [],
-            "deliveries": [],
-            "createdAt": "2019-12-04T21:23:52.263Z",
-            "updatedAt": "2019-12-04T21:23:52.263Z"
+            "deliveries": []
         }      
       let res;
       return chai.request(app)
@@ -241,16 +239,16 @@ describe('Vendors API', function () {
         .then(data => {
           // console.log('newItem: ', newItem, ' data: ', data);
           expect(newItem.vendorName).to.equal(data.vendorName);
-          expect(newItem.geocode.coordinates).to.eql(data.geocode.coordinates);
+          expect(newItem.vendorLocation.geocode.coordinates).to.eql(data.vendorLocation.geocode.coordinates);
           expect(newItem.userId).to.equal(data.userId);
-          expect(newItem.vendorLocation.streetAddress).to.equal(data.streetAddress);
-          expect(newItem.vendorLocation.city).to.equal(data.city);
-          expect(newItem.vendorLocation.state).to.equal(data.state);
-          expect(newItem.vendorLocation.zipcode).to.equal(data.zipcode);
+          expect(newItem.vendorLocation.streetAddress).to.equal(data.vendorLocation.streetAddress);
+          expect(newItem.vendorLocation.city).to.equal(data.vendorLocation.city);
+          expect(newItem.vendorLocation.state).to.equal(data.vendorLocation.state);
+          expect(newItem.vendorLocation.zipcode).to.equal(data.vendorLocation.zipcode);
           expect(newItem.vendorPhone).to.equal(data.vendorPhone);  
-          expect(newItem.orders).to.equal(data.orders);  
-          expect(newItem.pickups).to.equal(data.pickups);  
-          expect(newItem.deliveries).to.equal(data.deliveries);                  
+          expect(newItem.orders).to.eql(data.orders);  
+          expect(newItem.pickups).to.eql(data.pickups);  
+          expect(newItem.deliveries).to.eql(data.deliveries);                  
       });
     });
   });
