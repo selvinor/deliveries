@@ -41,8 +41,18 @@ router.get('/:id', (req, res, next) => {
   }
 
   Driver.findOne({ _id: id })
-  .populate('pickupVendor', 'vendorName vendorLocation vendorPhone orders')
-  .populate('pickups', 'pickupDate pickupTimeSlot depot pickupStatus updatedAt')
+  .populate({
+    path: 'pickups',
+    select: 'pickupDate pickupTimeSlot depot pickupStatus updatedAt',
+    populate: { 
+      path: 'pickupVendor', 
+      select: 'vendorName vendorLocation vendorPhone', 
+      populate: {
+        path: 'orders',
+        select: 'orderNumber orderDetails orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+      }
+    }
+  })
   .populate('deliveries', 'deliveryDate depot zone deliveryStatus order updatedAt')
   .then(result => {
     return res

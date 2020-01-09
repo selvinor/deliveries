@@ -30,14 +30,134 @@ router.get('/:id', (req, res, next) => {
   }
 
   User.findOne({ _id: id })
-  .populate('vendor', 'vendorName phone')
-  .populate('driver', 'driverName driverPhone')
-  .populate('depot', 'depotName ')
+  .populate({
+    path: 'vendor', 
+    select: 'vendorName vendorLocation vendorPhone', 
+    populate: {
+      path: 'orders',
+      select: 'orderNumber orderDetails orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+      populate: {
+        path: 'pickup',
+        select: 'pickupStatus updatedAt' 
+      }
+    }
+  })
+  .populate({
+    path: 'vendor', 
+    populate: {
+      path: 'orders',
+      populate: {
+        path: 'delivery',
+        select: 'deliveryStatus updatedAt' 
+      }
+    }
+  })
+  .populate({
+    path: 'driver', 
+    select: 'driverName driverPhone',
+    populate: {
+      path: 'pickups',
+      select: 'pickupDate pickupTimeSlot depot pickupStatus updatedAt',
+      populate: { 
+        path: 'pickupVendor', 
+        select: 'vendorName vendorLocation vendorPhone', 
+        populate: {
+          path: 'orders',
+          select: 'orderNumber orderDetails orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+        }
+      }
+    }
+  })
+  .populate({
+    path: 'driver', 
+    populate: {
+      path: 'deliveries',
+      select: 'deliveryDate depot deliveryStatus updatedAt',
+      populate: {
+        path: 'orders',
+        select: 'orderNumber orderDetails orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+      }
+    }
+  })
+
+  .populate({
+    path: 'depot', 
+    select: 'depotName streetAddress city state zipcode geocode.coordinates phone', 
+    populate: {
+      path: 'zones',
+      select: 'orderNumber orderDetails orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+    }
+  })
+  .populate({
+    path: 'depot', 
+    populate: {
+      path: 'drivers', 
+      populate: {
+        path: 'deliveries',
+        select: 'deliveryDate depot deliveryStatus updatedAt',
+        populate: {
+          path: 'orders',
+          select: 'orderNumber orderDetails orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+        }
+      }
+    }
+  })
+  .populate({
+    path: 'depot', 
+    populate: {
+      path: 'drivers', 
+      populate: {
+        path: 'pickups',
+        select: 'pickupDate pickupTimeSlot depot pickupStatus updatedAt',
+        populate: { 
+          path: 'pickupVendor', 
+          select: 'vendorName vendorLocation vendorPhone', 
+          populate: {
+            path: 'orders',
+            select: 'orderNumber orderDetails orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+          }
+        }
+      }
+    }
+  })
+  .populate({
+    path: 'depot',  
+    populate: {
+      path: 'pickups', 
+      select: 'vendorName vendorLocation vendorPhone', 
+      populate: {
+        path: 'orders',
+        select: 'orderNumber orderDetails orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+      }
+    }
+  })
+  .populate({
+    path: 'depot',  
+    populate: {
+      path: 'deliveries',
+      select: 'deliveryDate depot deliveryStatus updatedAt',
+      populate: {
+        path: 'orders',
+        select: 'orderNumber orderDetails orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+      }
+    }
+  })
+  .populate({
+    path: 'depot',  
+    populate: {
+      path: 'vendors',
+      select: 'vendorName vendorLocation.streetAddress vendorLocation.streetAddress vendorLocation.city vendorLocation.state vendorLocation.zipcode vendorPhone',
+      populate: {
+        path: 'orders',
+        select: 'orderNumber orderDetails orderStatus orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+      }
+    }
+  })
   .then(result => {
     return res
     .status(200)
     .json(result);
-})
+  })
     .catch(err => {
       next(err);
     });

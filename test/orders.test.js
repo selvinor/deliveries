@@ -138,7 +138,7 @@ describe('Orders API', function () {
             expect(item.destination.zipcode).to.equal(data[i].destination.zipcode);
             expect(item.destination.instructions).to.equal(data[i].destination.instructions);
             expect(item.destination.recipient).to.equal(data[i].destination.recipient);
-            expect(item.destination.contactPhone).to.equal(data[i].destination.contactPhone);      
+            expect(item.destination.recipientPhone).to.equal(data[i].destination.recipientPhone);      
           });
         });
 
@@ -189,7 +189,7 @@ describe('Orders API', function () {
       expect(item.destination.zipcode).to.equal(data.destination.zipcode);
       expect(item.destination.instructions).to.equal(data.destination.instructions);
       expect(item.destination.recipient).to.equal(data.destination.recipient);
-      expect(item.destination.contactPhone).to.equal(data.destination.contactPhone);      
+      expect(item.destination.recipientPhone).to.equal(data.destination.recipientPhone);      
 });
   });
 
@@ -231,7 +231,7 @@ describe('Orders API', function () {
               "zipcode": "97006",
               "instructions": "",
               "recipient": "Betty Sue",
-              "contactPhone": "555-555-1212"
+              "recipientPhone": "555-555-1212"
           },
           "pickup": "",
           "delivery": ""
@@ -284,7 +284,7 @@ describe('Orders API', function () {
           expect(newItem.destination.zipcode).to.equal(data.destination.zipcode);
           expect(newItem.destination.instructions).to.equal(data.destination.instructions);
           expect(newItem.destination.recipient).to.equal(data.destination.recipient);
-          expect(newItem.destination.contactPhone).to.equal(data.destination.contactPhone);      
+          expect(newItem.destination.recipientPhone).to.equal(data.destination.recipientPhone);      
           expect(newItem.pickups_id).to.eql(data.pickups);
           expect(newItem.deliveries_id).to.eql(data.deliveries);
         });
