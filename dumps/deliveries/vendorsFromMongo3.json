@@ -1,0 +1,33 @@
+  {
+  "_id": ObjectId("5dfbfac1b1ad6237e8d69eba"),
+  "vendorLocation": {
+    "geocode": {
+      "coordinates": [
+        -122.88389,
+        45.536223
+      ],
+      "type": "Point"
+    },
+    "streetAddress": "200 SW 2nd Ave.",
+    "city": "Portland",
+    "state": "Oregon",
+    "zipcode": "97204"
+  },
+  "vendorName": "Flowers R Us",
+  "vendorPhone": "555-555-1111",
+  "orders": [
+    {
+      "orderNumber": "xyz321",
+      "orderDate": "2019-10-22T00:00:00.000Z",
+      "pickup": "888888888888888888888053",
+      "delivery": "777777777777777777777507",
+      "deliveryDate": "2019-10-23T00:00:00.000Z"
+    }
+  ],
+  "pickups": [],
+  "deliveries": [],
+  "userId": "111111111111111111111003",
+  "createdAt": ISODate("2019-12-19T22:33:37.770Z"),
+  "updatedAt": ISODate("2019-12-19T22:33:37.770Z"),
+  "__v": 0
+}

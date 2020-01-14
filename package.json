@@ -1,28 +1,27 @@
 {
-  "name": "thinkful-backend-template",
+  "name": "delivery-tracking-server",
   "version": "1.0.0",
-  "description": "Template for an Express backend",
+  "description": "Express backend",
   "main": "server.js",
-  "scripts": {
-    "start": "nodemon server.js",
-    "mocha": "mocha --exit --file test/setup.test.js '!(node_modules)/**/*test.js'",
-    "mocha-exit0": "mocha --exit --file test/setup.test.js '!(node_modules)/**/*test.js' || true",
-    "test": "nodemon --exec npm run mocha-exit0",
-    "cover": "nodemon --exec nyc --reporter=lcov --reporter=text-summary npm run mocha-exit0",
-    "heroku": "node server.js",
-    "travis": "npm run mocha"
+  "directories": {
+    "test": "test"
   },
-  "author": "Joe Turner <jturner@thinkful.com>",
+  "scripts": {
+    "start": "node server.js",
+    "test": "nyc --reporter=lcov --reporter=text cross-env NODE_ENV=test mocha --file test/server.test.js --timeout 30000 --exit"
+  },
+  "author": "Selvin Norman",
   "license": "MIT",
   "dependencies": {
     "bcrypt": "^3.0.6",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "cors": "^2.8.4",
+    "cross-env": "^6.0.3",
     "dotenv": "^8.0.0",
     "express": "^4.16.3",
-    "knex": "^0.19.5",
-    "mongoose": "^5.8.7",
+    "knex": "^0.15.2",
+    "mongoose": "^5.4.16",
     "morgan": "^1.9.1",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
