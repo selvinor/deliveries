@@ -2,52 +2,30 @@
 
 const mongoose = require('mongoose');
 
-const { DATABASE_URL } = require('../config');
+const { MONGODB_URI } = require('../config');
 
-// const Orders = require('../models/orders');
-const Users = require('../models/users');
-const Zones = require('../models/zones');
-const Depots = require('../models/depots');
-const Drivers = require('../models/drivers');
-const Vendors = require('../models/vendors');
-const Orders = require('../models/orders');
-const Pickups = require('../models/pickups');
-const Deliveries = require('../models/deliveries');
+const Delivery = require('../models/deliveries');
+const Merchant = require('../models/merchants');
 
-const seedUsers = require('../db/seed/users');
-const seedZones = require('../db/seed/zones');
-const seedDepots = require('../db/seed/depots');
-const seedDrivers = require('../db/seed/drivers');
-const seedVendors = require('../db/seed/vendors');
-const seedOrders = require('../db/seed/orders');
-const seedPickups = require('../db/seed/pickups');
 const seedDeliveries = require('../db/seed/deliveries');
+const seedMerchants = require('../db/seed/merchants');
 
-mongoose.connect(DATABASE_URL,{'useNewUrlParser': true, 'useCreateIndex': true})
+console.log(`Connecting to mongodb at ${MONGODB_URI}`);
+mongoose.connect(MONGODB_URI)
   .then(() => {
     console.info('Dropping Database');
     return mongoose.connection.db.dropDatabase();
   })
   .then(() => {
-    delete mongoose.connection.models['Depot'];
     console.info('Seeding Database');
     return Promise.all([
-      Users.insertMany(seedUsers),
-      Users.createIndexes(),
-      Depots.insertMany(seedDepots),
-      Depots.createIndexes(),
-      Vendors.insertMany(seedVendors),
-      Vendors.createIndexes(),
-      Zones.insertMany(seedZones),
-      Zones.createIndexes(),
-      Orders.insertMany(seedOrders),
-      Orders.createIndexes(),
-      Drivers.insertMany(seedDrivers),
-      Drivers.createIndexes(),
-      Pickups.insertMany(seedPickups),
-      Pickups.createIndexes(),
-      Deliveries.insertMany(seedDeliveries),
-      Deliveries.createIndexes()      
+
+      Delivery.insertMany(seedDeliveries),
+      Delivery.createIndexes(),
+
+      Merchant.insertMany(seedMerchants),
+      Merchant.createIndexes()
+
     ]);
   })
   .then(() => {
