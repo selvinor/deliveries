@@ -14,7 +14,7 @@ const driverSchema = new mongoose.Schema({
   driverVehiclePlate: {type: String, default: ''},
   driverDeliveries: [
     {
-      order: { type: mongoose.Schema.Types.ObjectId, ref: 'order' }
+      delivery: { type: mongoose.Schema.Types.ObjectId, ref: 'delivery' }
     }
   ]
 });
@@ -41,7 +41,7 @@ driverSchema.statics.hashPassword = function(password) {
   return bcrypt.hash(password, 10);
 };
 
-const Driver = mongoose.model('driver', driverSchema);
+const driver = mongoose.model('driver', driverSchema);
 // Add `createdAt` and `updatedAt` fields
 driverSchema.set('timestamps', true);
 
@@ -56,4 +56,4 @@ driverSchema.set('toObject', {
 });
 
 
-module.exports = {Driver};
+module.exports = {driver};
