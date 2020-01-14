@@ -1,45 +1,59 @@
 'use strict';
 
 const mongoose = require('mongoose');
-mongoose.Promise = global.Promise;
 
-const OrderSchema = new mongoose.Schema({
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true },
-  orderNumber: {type: String, default: ''},
-  orderAddress :  {type: String, default: ''},
-  orderBusinessName :  {type: String, default: ''},
-  orderInstructions:{type: String, default: ''},
-  orderRecipient : {type: String, default: ''},
-  orderRecipientPhone :  {type: String, default: ''},
-  orderStatus: {type: String, default: 'pending'},
-  orderOrderRef: {type: String, default: ''},
-  orderZone: { type: mongoose.Schema.Types.ObjectId, ref: 'orderZone' }
+const orderSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.Object, ref: 'User', required: false },  
+  orderNumber: {type: String, unique: false },
+  orderDate: { type: Date},
+  orderDetails : {type: String, default: ''},
+  orderStatus : {type: String, default: 'pending'},
+  orderSize : {type: String, default: ''},
+  vendor: { type: mongoose.Schema.Types.Object, ref: 'Vendor' },
+  pickup: { type: mongoose.Schema.Types.Object, ref: 'Pickup' },
+  delivery: { type: mongoose.Schema.Types.Object, ref: 'Delivery' },
+  deliveryDate: { type: Date},
+  destination : {
+    recipient : {type: String, default: ''},
+    recipientPhone :  {type: String, default: ''},  
+    businessName :  {type: String, default: ''},
+    streetAddress :  {type: String, default: ''},
+    city: {type: String, default: ''},
+    state: {type: String, default: ''},
+    zipcode: {type: String, default: ''},
+    geocode: {
+      type: { type: String },
+      coordinates: []
+    },
+    instructions:{type: String, default: ''}
+  },
 });
 
-OrderSchema.methods.serialize = function() {
+orderSchema.methods.serialize = function() {
   return {
-    user: this.user || '',
+    userId:this.userId || '',
     orderNumber: this.orderNumber || '',
-    orderAddress :  this.orderAddress || '',
-    orderBusinessName :  this.orderBusinessName || '',    
-    orderInstructions: this.orderInstructions || '',
-    orderRecipient: this.orderRecipient || '',
-    orderRecipientPhone :  this.orderRecipientPhone || '',
-    orderStatus: this.orderStatus || '',
-    orderOrderRef :  this.orderOrderRef || '',
-    orderZone: this.orderZone || ''
+    orderDate: this.orderDate || '',
+    orderDetails: this.orderDetails|| '',
+    orderStatus: this.orderNumber || '',
+    orderSize: this.orderSize || '',
+    vendor: this.vendor || {},
+    pickup: this.pickup || {},
+    delivery: this.delivery || {},                    
+    deliveryDate: this.deliveryDate || '',                    
+    destination: this.destination|| ''
   };
 };
-const Order = mongoose.model('Order', OrderSchema);
-// Add `createdAt` and `updatedAt` fields
-OrderSchema.set('timestamps', true);
+
+orderSchema.set('timestamps', true);
 
 // Customize output for `res.json(data)`, `console.log(data)` etc.
-OrderSchema.set('toObject', {
+orderSchema.set('toObject', {
   virtuals: true,     // include built-in virtual `id`
   versionKey: false,  // remove `__v` version key
   transform: (doc, ret) => {
-    delete ret._id; // delete `_id`
+    delete ret._id; // delete `_id`,
+    delete ret.__v; // delete `__v`
   }
 });
-module.exports = { Order };
+module.exports = mongoose.model('Order', orderSchema);

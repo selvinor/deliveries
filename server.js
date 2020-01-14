@@ -11,14 +11,17 @@ const jwtStrategy = require('./passport/jwt');
 const { PORT, CLIENT_ORIGIN } = require('./config');
 const { dbConnect } = require('./db-mongoose');
 
-const userRouter = require('./routes/users');
+const authRouter = require('./routes/auth');
+const deliveryRouter = require('./routes/deliveries');
+const depotRouter = require('./routes/depots');
 const driverRouter = require('./routes/drivers');
 const orderRouter = require('./routes/orders');
-const authRouter = require('./routes/auth');
+const pickupRouter = require('./routes/pickups');
+const userRouter = require('./routes/users');
+const vendorRouter = require('./routes/vendors');
+const zoneRouter = require('./routes/zones');
 
-passport.use(localStrategy);
-passport.use(jwtStrategy);
-
+// Create an Express application
 const app = express();
 
 app.use(
@@ -33,12 +36,25 @@ app.use(
   })
 );
 
+// Create a static webserver
+app.use(express.static('public'));
+
+// Parse request body
 app.use(express.json());
 
-app.use('/api/login', authRouter);
-app.use('/api/users', userRouter);
+
+passport.use(localStrategy);
+passport.use(jwtStrategy);
+
+app.use('/api/auth', authRouter);
+app.use('/api/deliveries', deliveryRouter);
+app.use('/api/depots', depotRouter);
 app.use('/api/drivers', driverRouter);
 app.use('/api/orders', orderRouter);
+app.use('/api/pickups', pickupRouter);
+app.use('/api/users', userRouter);
+app.use('/api/vendors', vendorRouter);
+app.use('/api/zones', zoneRouter);
 
 
 app.use((req, res, next) => {
@@ -47,6 +63,7 @@ app.use((req, res, next) => {
   next(err);
 });
 
+// Custom Error Handler
 app.use((err, req, res, next) => {
   if (err.status) {
     const errBody = Object.assign({}, err, { message: err.message });
@@ -59,7 +76,7 @@ app.use((err, req, res, next) => {
 function runServer(port = PORT) {
   const server = app
     .listen(port, () => {
-      console.info(`App listening on port ${server.address().port}`);
+      console.info(`Server listening on port ${server.address().port}`);
     })
     .on('error', err => {
       console.error('Express failed to start');

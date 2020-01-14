@@ -1,63 +1,13 @@
-[
-  {
-    "_id":      "000000000000000000000001",
-    "username": "shop1",
-    "email":    "shop1@fakeemail.com",
-    "password": "$2a$10$7QGPMellj8necAZTRbjY5eu3wBpy1Z20U7gwYYfksKVCr1kHBrCvG",   
-    "orders": [
-      "111111111111111111111001",
-      "111111111111111111111002",
-      "111111111111111111111005",
-      "111111111111111111111006",
-      "111111111111111111111012"
-   ] 
-},
-  {
-    "_id":      "000000000000000000000002",
-    "username": "shop2",
-    "email":    "shop2@fakeemail.com",
-    "password": "$2a$10$7QGPMellj8necAZTRbjY5eu3wBpy1Z20U7gwYYfksKVCr1kHBrCvG",
-    "orders": [
-      "111111111111111111111017",
-      "111111111111111111111019",
-      "111111111111111111111022",
-      "111111111111111111111023",
-      "111111111111111111111028"
-   ]
-},
-  {
-    "_id":      "000000000000000000000003",
-    "username": "shop3",
-    "email":    "shop3@fakeemail.com",
-    "password": "$2a$10$7QGPMellj8necAZTRbjY5eu3wBpy1Z20U7gwYYfksKVCr1kHBrCvG",
-    "orders": [
-      "111111111111111111111003",
-      "111111111111111111111009",
-      "111111111111111111111013",
-      "111111111111111111111020",
-      "111111111111111111111029"
-   ]
-  },
-  {
-    "_id":      "000000000000000000000004",
-    "username": "shop4",
-    "email":    "shop4@fakeemail.com",
-    "password": "$2a$10$7QGPMellj8necAZTRbjY5eu3wBpy1Z20U7gwYYfksKVCr1kHBrCvG",
-    "orders": [
-      "111111111111111111111004",
-      "111111111111111111111010",
-      "111111111111111111111025",
-      "111111111111111111111033"
-    ]
-  },
-  {
-    "_id":      "000000000000000000000005",
-    "username": "shop5",
-    "email":    "shop5@fakeemail.com",
-    "password": "$2a$10$7QGPMellj8necAZTRbjY5eu3wBpy1Z20U7gwYYfksKVCr1kHBrCvG",
-    "orders": [
-      "111111111111111111111016",
-      "111111111111111111111030"
-   ] 
-  }
+[ 
+  {"_id":"111111111111111111111001","username":"vendor1","email":"vendor1@fakeemail.com","password":"$2a$10$7QGPMellj8necAZTRbjY5eu3wBpy1Z20U7gwYYfksKVCr1kHBrCvG","vendor":"222222222222222222222001"},
+  {"_id":"111111111111111111111002","username":"vendor2","email":"vendor2@fakeemail.com","password":"$2a$10$7QGPMellj8necAZTRbjY5eu3wBpy1Z20U7gwYYfksKVCr1kHBrCvG","vendor":"222222222222222222222002"},
+  {"_id":"111111111111111111111003","username":"vendor3","email":"vendor3@fakeemail.com","password":"$2a$10$7QGPMellj8necAZTRbjY5eu3wBpy1Z20U7gwYYfksKVCr1kHBrCvG","vendor":"222222222222222222222003"},
+  {"_id":"111111111111111111111004","username":"driver1","email":"driver1@fakeemail.com","password":"$2a$10$7QGPMellj8necAZTRbjY5eu3wBpy1Z20U7gwYYfksKVCr1kHBrCvG","driver":"333333333333333333333101"},
+  {"_id":"111111111111111111111005","username":"driver2","email":"driver2@fakeemail.com","password":"$2a$10$7QGPMellj8necAZTRbjY5eu3wBpy1Z20U7gwYYfksKVCr1kHBrCvG","driver":"333333333333333333333102"},
+  {"_id":"111111111111111111111006","username":"driver3","email":"driver3@fakeemail.com","password":"$2a$10$7QGPMellj8necAZTRbjY5eu3wBpy1Z20U7gwYYfksKVCr1kHBrCvG","driver":"333333333333333333333103"},
+  {"_id":"111111111111111111111007","username":"driver4","email":"driver4@fakeemail.com","password":"$2a$10$7QGPMellj8necAZTRbjY5eu3wBpy1Z20U7gwYYfksKVCr1kHBrCvG","driver":"333333333333333333333104"},
+  {"_id":"111111111111111111111008","username":"driver5","email":"driver5@fakeemail.com","password":"$2a$10$7QGPMellj8necAZTRbjY5eu3wBpy1Z20U7gwYYfksKVCr1kHBrCvG","driver":"333333333333333333333105"},
+  {"_id":"111111111111111111111009","username":"depot1","email":"depot1@fakeemail.com","password":"$2a$10$7QGPMellj8necAZTRbjY5eu3wBpy1Z20U7gwYYfksKVCr1kHBrCvG","depot":"444444444444444444444001"},
+  {"_id":"111111111111111111111010","username":"driver6","email":"driver6@fakeemail.com","password":"$2a$10$7QGPMellj8necAZTRbjY5eu3wBpy1Z20U7gwYYfksKVCr1kHBrCvG","driver":"333333333333333333333106"},
+  {"_id":"111111111111111111111011","username":"driver7","email":"driver7@fakeemail.com","password":"$2a$10$7QGPMellj8necAZTRbjY5eu3wBpy1Z20U7gwYYfksKVCr1kHBrCvG","driver":"333333333333333333333107"}
 ]

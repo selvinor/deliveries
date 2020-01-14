@@ -7,7 +7,7 @@ const User = require('../models/users');
 
 const router = express.Router();
 router.get('/', (req, res, next) => {
-  return User.find()
+  User.find()
     .then(result => {
       return res
       .status(200)
@@ -17,28 +17,154 @@ router.get('/', (req, res, next) => {
       next(err);
     });
 });
+/* ========== GET/READ A SINGLE ITEM ========== */
+
 router.get('/:id', (req, res, next) => {
+  // const { id } = req.params;
+  const id = req.params.id;
 
-  const userId = req.params.id;
-
-  if (!mongoose.Types.ObjectId.isValid(userId)) {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
 
-  return User.findById(userId)
-    .then(result => {
-      return res
-      .status(200)
-      .json(result);
-    })
+  User.findOne({ _id: id })
+  .populate({
+    path: 'vendor', 
+    select: 'vendorName vendorLocation vendorPhone', 
+    populate: {
+      path: 'orders',
+      select: 'orderNumber orderDetails orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+      populate: {
+        path: 'pickup',
+        select: 'pickupStatus updatedAt' 
+      }
+    }
+  })
+  .populate({
+    path: 'vendor', 
+    populate: {
+      path: 'orders',
+      populate: {
+        path: 'delivery',
+        select: 'deliveryStatus updatedAt' 
+      }
+    }
+  })
+  .populate({
+    path: 'driver', 
+    select: 'driverName driverPhone',
+    populate: {
+      path: 'pickups',
+      select: 'pickupDate pickupTimeSlot depot pickupStatus updatedAt',
+      populate: { 
+        path: 'pickupVendor', 
+        select: 'vendorName vendorLocation vendorPhone', 
+        populate: {
+          path: 'orders',
+          select: 'orderNumber orderDetails orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+        }
+      }
+    }
+  })
+  .populate({
+    path: 'driver', 
+    populate: {
+      path: 'deliveries',
+      select: 'deliveryDate depot deliveryStatus updatedAt',
+      populate: {
+        path: 'orders',
+        select: 'orderNumber orderDetails orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+      }
+    }
+  })
+
+  .populate({
+    path: 'depot', 
+    select: 'depotName streetAddress city state zipcode geocode.coordinates phone', 
+    populate: {
+      path: 'zones',
+      select: 'orderNumber orderDetails orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+    }
+  })
+  .populate({
+    path: 'depot', 
+    populate: {
+      path: 'drivers', 
+      populate: {
+        path: 'deliveries',
+        select: 'deliveryDate depot deliveryStatus updatedAt',
+        populate: {
+          path: 'orders',
+          select: 'orderNumber orderDetails orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+        }
+      }
+    }
+  })
+  .populate({
+    path: 'depot', 
+    populate: {
+      path: 'drivers', 
+      populate: {
+        path: 'pickups',
+        select: 'pickupDate pickupTimeSlot depot pickupStatus updatedAt',
+        populate: { 
+          path: 'pickupVendor', 
+          select: 'vendorName vendorLocation vendorPhone', 
+          populate: {
+            path: 'orders',
+            select: 'orderNumber orderDetails orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+          }
+        }
+      }
+    }
+  })
+  .populate({
+    path: 'depot',  
+    populate: {
+      path: 'pickups', 
+      select: 'vendorName vendorLocation vendorPhone', 
+      populate: {
+        path: 'orders',
+        select: 'orderNumber orderDetails orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+      }
+    }
+  })
+  .populate({
+    path: 'depot',  
+    populate: {
+      path: 'deliveries',
+      select: 'deliveryDate depot deliveryStatus updatedAt',
+      populate: {
+        path: 'orders',
+        select: 'orderNumber orderDetails orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+      }
+    }
+  })
+  .populate({
+    path: 'depot',  
+    populate: {
+      path: 'vendors',
+      select: 'vendorName vendorLocation.streetAddress vendorLocation.streetAddress vendorLocation.city vendorLocation.state vendorLocation.zipcode vendorPhone',
+      populate: {
+        path: 'orders',
+        select: 'orderNumber orderDetails orderStatus orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+      }
+    }
+  })
+  .then(result => {
+    return res
+    .status(200)
+    .json(result);
+  })
     .catch(err => {
       next(err);
     });
 });
 
 router.post('/', (req, res, next) => {
+  const { username, email, password  } = req.body;
   const requiredFields = ['username', 'email', 'password'];
   const missingField = requiredFields.find(field => !(field in req.body));
 
@@ -107,8 +233,6 @@ router.post('/', (req, res, next) => {
     return next(err);
   }
 
-  let { username, email, password } = req.body;
-
   return User.hashPassword(password)
     .then(digest => {
       const newUser = {
@@ -135,15 +259,15 @@ router.post('/', (req, res, next) => {
 });
 
 router.delete('/:id', (req, res, next) => {
-  const userId = req.params.id;
+  const user = req.params.id;
 
-  if (!mongoose.Types.ObjectId.isValid(userId)) {
+  if (!mongoose.Types.ObjectId.isValid(user)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
 
-  User.findByIdAndDelete(userId)
+  User.findByAndDelete(user)
     .then(() => {
 
       res.sendStatus(204);
