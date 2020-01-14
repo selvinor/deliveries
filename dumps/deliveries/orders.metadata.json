@@ -1,1 +1,0 @@
-{"options":{,"indexes":[{"v":2,"key":{"_id":1,"name":"_id_","ns":"deliveries.orders"},{"v":2,"key":{"orderNumber":1,"name":"orderNumber_1","ns":"deliveries.orders","background":true}],"uuid":"bb1c67422f1849248f854403be06acbf"}
