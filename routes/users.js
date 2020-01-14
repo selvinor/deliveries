@@ -1,8 +1,9 @@
 'use strict';
-const express = require('express');
-const bodyParser = require('body-parser');
 
-const {merchant} = require('./models');
+const express = require('express');
+const mongoose = require('mongoose');
+
+const User = require('../models/users');
 
 const router = express.Router();
 router.get('/', (req, res, next) => {
@@ -207,82 +208,68 @@ router.post('/', (req, res, next) => {
   const missingField = requiredFields.find(field => !(field in req.body));
 
   if (missingField) {
-    return res.status(422).json({
-      code: 422,
-      reason: 'ValidationError',
-      message: 'Missing field',
-      location: missingField
-    });
+    const err = new Error(`Missing '${missingField}' in request body`);
+    err.status = 422;
+    return next(err);
   }
 
-  const stringFields = ['merchant', 'password', 'firstName', 'businessName'];
+  const stringFields = ['username', 'email', 'password'];
   const nonStringField = stringFields.find(
     field => field in req.body && typeof req.body[field] !== 'string'
   );
 
   if (nonStringField) {
-    return res.status(422).json({
-      code: 422,
-      reason: 'ValidationError',
-      message: 'Incorrect field type: expected string',
-      location: nonStringField
-    });
+    const err = new Error(`Field: '${nonStringField}' must be type String`);
+    err.status = 422;
+    return next(err);
   }
 
-  // If the merchant and password aren't trimmed we give an error.  merchants might
-  // expect that these will work without trimming (i.e. they want the password
-  // "foobar ", including the space at the end).  We need to reject such values
-  // explicitly so the merchants know what's happening, rather than silently
-  // trimming them and expecting the merchant to understand.
-  // We'll silently trim the other fields, because they aren't credentials used
-  // to log in, so it's less of a problem.
-  const explicityTrimmedFields = ['merchant', 'password'];
-  const nonTrimmedField = explicityTrimmedFields.find(
+  const explicitlyTrimmedFields = ['username', 'email', 'password'];
+  const nonTrimmedField = explicitlyTrimmedFields.find(
     field => req.body[field].trim() !== req.body[field]
   );
 
   if (nonTrimmedField) {
-    return res.status(422).json({
-      code: 422,
-      reason: 'ValidationError',
-      message: 'Cannot start or end with whitespace',
-      location: nonTrimmedField
-    });
+    const err = new Error(
+      `Field: '${nonTrimmedField}' cannot start or end with whitespace`
+    );
+    err.status = 422;
+    return next(err);
   }
 
   const sizedFields = {
-    merchant: {
-      min: 1
-    },
-    password: {
-      min: 10,
-      // bcrypt truncates after 72 characters, so let's not give the illusion
-      // of security by storing extra (unused) info
-      max: 72
-    }
+    username: { min: 1 },
+    password: { min: 8, max: 72 }
   };
+
   const tooSmallField = Object.keys(sizedFields).find(
     field =>
       'min' in sizedFields[field] &&
-            req.body[field].trim().length < sizedFields[field].min
+      req.body[field].trim().length < sizedFields[field].min
   );
+
   const tooLargeField = Object.keys(sizedFields).find(
     field =>
       'max' in sizedFields[field] &&
-            req.body[field].trim().length > sizedFields[field].max
+      req.body[field].trim().length > sizedFields[field].max
   );
 
-  if (tooSmallField || tooLargeField) {
-    return res.status(422).json({
-      code: 422,
-      reason: 'ValidationError',
-      message: tooSmallField
-        ? `Must be at least ${sizedFields[tooSmallField]
-          .min} characters long`
-        : `Must be at most ${sizedFields[tooLargeField]
-          .max} characters long`,
-      location: tooSmallField || tooLargeField
-    });
+  if (tooSmallField) {
+    const min = sizedFields[tooSmallField].min;
+    const err = new Error(
+      `Field: '${tooSmallField}' must be at least ${min} characters long`
+    );
+    err.status = 422;
+    return next(err);
+  }
+
+  if (tooLargeField) {
+    const max = sizedFields[tooLargeField].max;
+    const err = new Error(
+      `Field: '${tooLargeField}' must be at most ${max} characters long`
+    );
+    err.status = 422;
+    return next(err);
   }
 
   return User.hashPassword(password)
@@ -294,13 +281,11 @@ router.post('/', (req, res, next) => {
       };
       return User.create(newUser);
     })
-    .then(hash => {
-      return merchant.create({
-        merchant,
-        password: hash,
-        firstName,
-        businessName
-      });
+    .then(result => {
+      return res
+        .status(201)
+        .location(`/api/users/${result.id}`)
+        .json(result);
     })
     .catch(err => {
       if (err.code === 11000) {
@@ -327,23 +312,8 @@ router.delete('/:id', (req, res, next) => {
       res.sendStatus(204);
     })
     .catch(err => {
-      // Forward validation errors on to the client, otherwise give a 500
-      // error because something unexpected has happened
-      if (err.reason === 'ValidationError') {
-        return res.status(err.code).json(err);
-      }
-      res.status(500).json({code: 500, message: 'Internal server error'});
+      next(err);
     });
 });
 
-// // Never expose all your merchants like below in a prod application
-// // we're just doing this so we have a quick way to see
-// // if we're creating merchants. keep in mind, you can also
-// // verify this in the Mongo shell.
-// router.get('/', (req, res) => {
-//   return merchant.find()
-//     .then(merchants => res.json(merchants.map(merchant => merchant.serialize())))
-//     .catch(err => res.status(500).json({message: 'Internal server error'}));
-// });
-
-module.exports = {router};
+module.exports = router;
