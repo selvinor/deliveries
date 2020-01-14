@@ -22,7 +22,7 @@
     "dotenv": "^8.0.0",
     "express": "^4.16.3",
     "knex": "^0.19.5",
-    "mongoose": "^5.4.16",
+    "mongoose": "^5.8.7",
     "morgan": "^1.9.1",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
