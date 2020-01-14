@@ -1,36 +1,47 @@
 'use strict';
-
+const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 
+mongoose.Promise = global.Promise;
+
 const driverSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.Object, ref: 'User', required: true },
+  driverId: { type: String, required: true, unique: true },
+  driverPassword: { type: String, required: true },
   driverName: {type: String, default: ''},
+  driverEmail: {type: String, default: ''},
   driverPhone: {type: String, default: ''},
-  driverVehicleMake: {type: String, default: ''},
-  driverVehicleModel: {type: String, default: ''},
-  driverVehiclePlate: {type: String, default: '', unique: true},
-   pickups : [{
-     type: mongoose.Schema.Types.Object, ref: 'Pickup' 
-   }],  
-   deliveries :[{
-     type: mongoose.Schema.Types.Object, ref: 'Delivery' 
-   }]
-  });
+  driverVehicleType: {type: String, default: ''},
+  driverVehiclePlate: {type: String, default: ''},
+  driverDeliveries: [
+    {
+      order: { type: mongoose.Schema.Types.ObjectId, ref: 'order' }
+    }
+  ]
+});
 
 driverSchema.methods.serialize = function() {
   return {
-    userId: this.user || '',
+    driverId: this.driverId || '',
+    driverPassword: { type: String, required: true },
     driverName: this.driverName || '',
+    driverEmail: this.driverEmail|| '',
     driverPhone: this.driverPhone|| '',
-    driverVehicleMake: this.driverVehicleMake|| '',
-    driverVehicleModel: this.driverVehicleModel|| '',
+    driverVehicleType: this.driverVehicleType|| '',
+    driverPhone: this.driverPhone|| '',
     driverVehiclePlate: this.driverVehiclePlate|| '',
-    pickups: this.pickups|| '',
-    deliveries: this.deliveries|| ''
+    driverDeliveries: this.driverDeliveries|| ''
   };
 };
 
+driverSchema.methods.validatePassword = function(password) {
+  return bcrypt.compare(password, this.password);
+};
 
+driverSchema.statics.hashPassword = function(password) {
+  return bcrypt.hash(password, 10);
+};
+
+const Driver = mongoose.model('driver', driverSchema);
 // Add `createdAt` and `updatedAt` fields
 driverSchema.set('timestamps', true);
 
@@ -40,7 +51,9 @@ driverSchema.set('toObject', {
   versionKey: false,  // remove `__v` version key
   transform: (doc, ret) => {
     delete ret._id; // delete `_id`
+    delete ret.password; // delete `_id`
   }
 });
 
-module.exports = mongoose.model('Driver', driverSchema);
+
+module.exports = {Driver};
