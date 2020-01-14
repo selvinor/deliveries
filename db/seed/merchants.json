@@ -1,29 +1,29 @@
  [{
    "_id": "111111111111111111111100",
-   "userId": "shop1",
+   "merchantId": "shop1",
    "password": "$2a$10$Mk7Z.7hiexMSLbN6unTgCOEzbCcg3TgEf7H81dPIE6219EP78UJWK",
    "streetAddress": "900 SW 5th Ave. Portland Oregon 97204",
    "businessName": "Baf",
    "email": "bifbaf@fakeemail.com",
    "phone": "555-555-1111",
-   "orders": 
+   "deliveries": 
     [
       { " _id": "22222222222222222222001",
-        "userId": "shop1",
-        "orderNumber": "3", 
-        "orderOrderRef": "#870",  
-        "orderAddress": "1100 SW 6th Ave Portland, OR 97204", 
-        "orderInstructions": "Deliver to front desk, have guard call recipient", 
-        "orderRecipient" : "Jane Doe", 
-        "orderPhone" : "555-555-1212", 
-        "orderStatus": "ready_for_pickup",   
-        "orderZone" :  "zone1",   
-        "orderDriver" :  {
+        "merchantId": "shop1",
+        "deliveryNumber": "3", 
+        "deliveryOrderRef": "#870",  
+        "deliveryAddress": "1100 SW 6th Ave Portland, OR 97204", 
+        "deliveryInstructions": "Deliver to front desk, have guard call recipient", 
+        "deliveryRecipient" : "Jane Doe", 
+        "deliveryPhone" : "555-555-1212", 
+        "deliveryStatus": "ready_for_pickup",   
+        "deliveryZone" :  "zone1",   
+        "deliveryDriver" :  {
           " _id": "33333333333333333333001",
           "driverId": "driver1",  
           "driverName": "Bob Driver",  
           "driverStatus": "dispatched",
-          "orderZones": [1,4]
+          "deliveryZones": [1,4]
         }
       }
     ] 
