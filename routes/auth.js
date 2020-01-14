@@ -19,13 +19,13 @@ function createAuthToken(user) {
 	});
 }
 
-router.post('/login', localAuth, function (req, res) {
-	const authToken = createAuthToken(req.user);
-	return res.json({ authToken });
+router.post('/', localAuth, function (req, res) {
+	// const authToken = createAuthToken(req.user);
+  // res.json({ authToken });
+  return res.json(req.user);
 });
 
 router.post('/refresh', jwtAuth, (req, res) => {
-  // console.log('*** REFRESHING ***');
 	const authToken = createAuthToken(req.user);
 	res.json({ authToken });
 });
