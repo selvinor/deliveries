@@ -35,7 +35,7 @@ router.get('/:id', (req, res, next) => {
     select: 'vendorName vendorLocation vendorPhone', 
     populate: {
       path: 'orders',
-      select: 'orderNumber orderDetails orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+      select: 'orderNumber orderDescription orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
       populate: {
         path: 'pickup',
         select: 'pickupStatus updatedAt' 
@@ -57,14 +57,24 @@ router.get('/:id', (req, res, next) => {
     select: 'driverName driverPhone',
     populate: {
       path: 'pickups',
-      select: 'pickupDate pickupTimeSlot depot pickupStatus updatedAt',
+      select: 'pickupDate pickupTimeSlot pickupStatus updatedAt',
       populate: { 
         path: 'pickupVendor', 
         select: 'vendorName vendorLocation vendorPhone', 
         populate: {
           path: 'orders',
-          select: 'orderNumber orderDetails orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+          select: 'orderNumber orderDescription orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
         }
+      }
+    }
+  })
+  .populate({
+    path: 'driver', 
+    populate: {
+      path: 'pickups',
+      populate: { 
+        path: 'depot', 
+        select: 'depotName', 
       }
     }
   })
@@ -75,7 +85,7 @@ router.get('/:id', (req, res, next) => {
       select: 'deliveryDate depot deliveryStatus updatedAt',
       populate: {
         path: 'orders',
-        select: 'orderNumber orderDetails orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+        select: 'orderNumber orderDescription orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
       }
     }
   })
@@ -85,7 +95,7 @@ router.get('/:id', (req, res, next) => {
     select: 'depotName streetAddress city state zipcode geocode.coordinates phone', 
     populate: {
       path: 'zones',
-      select: 'orderNumber orderDetails orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+      select: 'orderNumber orderDescription orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
     }
   })
   .populate({
@@ -97,7 +107,7 @@ router.get('/:id', (req, res, next) => {
         select: 'deliveryDate depot deliveryStatus updatedAt',
         populate: {
           path: 'orders',
-          select: 'orderNumber orderDetails orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+          select: 'orderNumber orderDescription orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
         }
       }
     }
@@ -114,7 +124,7 @@ router.get('/:id', (req, res, next) => {
           select: 'vendorName vendorLocation vendorPhone', 
           populate: {
             path: 'orders',
-            select: 'orderNumber orderDetails orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+            select: 'orderNumber orderDescription orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
           }
         }
       }
@@ -124,10 +134,14 @@ router.get('/:id', (req, res, next) => {
     path: 'depot',  
     populate: {
       path: 'pickups', 
-      select: 'vendorName vendorLocation vendorPhone', 
+      select: 'pickupDate depot pickupTimeSlot pickupStatus pickupDriver updatedAt',
       populate: {
-        path: 'orders',
-        select: 'orderNumber orderDetails orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+        path: 'pickupVendor',
+        select: 'vendorName vendorLocation vendorPhone', 
+        populate: {
+          path: 'orders',
+          select: 'orderNumber orderDescription orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions'
+        }
       }
     }
   })
@@ -135,13 +149,38 @@ router.get('/:id', (req, res, next) => {
     path: 'depot',  
     populate: {
       path: 'deliveries',
-      select: 'deliveryDate depot deliveryStatus updatedAt',
+      select: 'deliveryDate depot zone deliveryStatus updatedAt',
       populate: {
-        path: 'orders',
-        select: 'orderNumber orderDetails orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+        path: 'order',
+        select: 'orderNumber orderDescription orderSize vendor destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+        populate: { 
+          path: 'vendor', 
+          select: 'vendorName vendorLocation vendorPhone'
+        }
       }
     }
   })
+  .populate({
+    path: 'depot',  
+    populate: {
+      path: 'deliveries',
+      populate: {
+        path: 'deliveryDriver',
+        select: 'driverName driverStatus updatedAt'
+      }
+    }
+  })
+  .populate({
+    path: 'depot',  
+    populate: {
+      path: 'deliveries',
+      populate: {
+        path: 'zone',
+        select: 'zoneName'
+      }
+    }
+  })
+
   .populate({
     path: 'depot',  
     populate: {
@@ -149,7 +188,7 @@ router.get('/:id', (req, res, next) => {
       select: 'vendorName vendorLocation.streetAddress vendorLocation.streetAddress vendorLocation.city vendorLocation.state vendorLocation.zipcode vendorPhone',
       populate: {
         path: 'orders',
-        select: 'orderNumber orderDetails orderStatus orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+        select: 'orderNumber orderDescription orderStatus orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
       }
     }
   })

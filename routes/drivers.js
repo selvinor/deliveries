@@ -49,7 +49,7 @@ router.get('/:id', (req, res, next) => {
       select: 'vendorName vendorLocation vendorPhone', 
       populate: {
         path: 'orders',
-        select: 'orderNumber orderDetails orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+        select: 'orderNumber orderDescription orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
       }
     }
   })

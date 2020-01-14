@@ -16,15 +16,38 @@ router.use('/', passport.authenticate('jwt', { session: false, failWithError: tr
 
 /* ========== GET/READ ALL ITEMS ========== */
 router.get('/', (req, res, next) => {
-  Delivery.find()
-  .populate('depot', 'depotName')
-  .populate('deliveryDriver', 'driverName driverPhone')
-  .populate('vendor')
-    .then(result => {
-      return res
-      .status(200)
-      .json(result);
-    })
+  Depot.find()
+  .populate('zones')
+  .populate('drivers', 'driverName driverPhone driverVehicleMake driverVehicleModel')
+  .populate({
+    path: 'pickups',
+    select: 'pickupDate pickupTimeSlot depot pickupStatus updatedAt',
+    populate: { 
+      path: 'pickupVendor', 
+      select: 'vendorName vendorLocation vendorPhone', 
+      populate: {
+        path: 'orders',
+        select: 'orderNumber orderDescription orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+      }
+    }
+  })
+  .populate({
+    path: 'deliveries', 
+    select: 'deliveryDate depot zone deliveryStatus updatedAt',
+    populate: {
+      path: 'order',
+      select: 'orderNumber orderDescription orderSize vendor destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+      populate: { 
+        path: 'vendor', 
+        select: 'vendorName vendorLocation vendorPhone'
+      }
+    }
+  })
+  .then(result => {
+    return res
+    .status(200)
+    .json(result);
+  })
     .catch(err => {
       next(err);
     });
@@ -41,15 +64,38 @@ router.get('/:id', (req, res, next) => {
     return next(err);
   }
 
-  Delivery.findOne({ _id: id })
-  .populate('depot', 'depotName')
-  .populate('deliveryDriver', 'driverName driverPhone')
-  .populate('vendor')
+  Depot.findOne({ _id: id })
+  .populate('zones')
+  .populate('drivers', 'driverName driverPhone driverVehicleMake driverVehicleModel')
+  .populate({
+    path: 'pickups',
+    select: 'pickupDate pickupTimeSlot depot pickupStatus updatedAt',
+    populate: { 
+      path: 'pickupVendor', 
+      select: 'vendorName vendorLocation vendorPhone', 
+      populate: {
+        path: 'orders',
+        select: 'orderNumber orderDescription orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+      }
+    }
+  })
+  .populate({
+    path: 'deliveries', 
+    select: 'deliveryDate depot zone deliveryStatus updatedAt',
+    populate: {
+      path: 'order',
+      select: 'orderNumber orderDescription orderSize vendor destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+      populate: { 
+        path: 'vendor', 
+        select: 'vendorName vendorLocation vendorPhone'
+      }
+    }
+  })
   .then(result => {
     return res
     .status(200)
     .json(result);
-})
+  })
     .catch(err => {
       next(err);
     });
@@ -62,7 +108,7 @@ router.post('/', (req, res, next) => {
     return next(err);
   }
 
-  Delivery.create(req.body).then(result => {
+  Depot.create(req.body).then(result => {
     res
       .location(`${req.originalUrl}/${result.id}`)
       .status(201)
@@ -76,12 +122,12 @@ router.post('/', (req, res, next) => {
 router.put('/:id', (req, res, next) => {
   // const { id } = req.params;
   const id = req.params.id;
-  const updateDelivery = {};
+  const updateDepot = {};
   const updateFields = ['depotName', 'streetAddress', 'city', 'state', 'zipcode', 'zones', 'deliveries, vendors']
 
   updateFields.forEach(field => {
     if (field in req.body) {
-      updateDelivery[field] = req.body[field];
+      updateDepot[field] = req.body[field];
     }
   });
 
@@ -90,7 +136,7 @@ router.put('/:id', (req, res, next) => {
     err.status = 400;
     return next(err);
   }
-  Delivery.findByIdAndUpdate( {_id: id}, updateDelivery,   { $push: { delivery: updateDelivery } })
+  Depot.findByIdAndUpdate( {_id: id}, updateDepot,   { $push: { delivery: updateDepot } })
   .then(result => {
     if (result) {
       res.json(result);

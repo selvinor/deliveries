@@ -112,7 +112,7 @@ describe('Orders API', function () {
               'userId',  
               'orderNumber',
               'orderDate', 
-              'orderDetails',
+              'orderDescription',
               'orderSize',
               'vendor', 
               'pickup', 
@@ -124,7 +124,7 @@ describe('Orders API', function () {
             item.DeliveryDate = new Date(item.deliveryDate);
             expect(item.orderNumber).to.equal(data[i].orderNumber);
             expect(item.OrderDate).to.eql(new Date(data[i].orderDate));
-            expect(item.orderDetails).to.equal(data[i].orderDetails);
+            expect(item.orderDescription).to.equal(data[i].orderDescription);
             expect(item.orderSize).to.equal(data[i].orderSize);
             expect(item.vendor._id).to.equal(data[i].vendor);
             expect(item.pickup._id).to.equal(data[i].pickup);
@@ -163,7 +163,7 @@ describe('Orders API', function () {
             'userId',  
             'orderNumber',
             'orderDate', 
-            'orderDetails',
+            'orderDescription',
             'orderSize',
             'vendor', 
             'pickup', 
@@ -175,7 +175,7 @@ describe('Orders API', function () {
       item.DeliveryDate = new Date(item.deliveryDate);
       expect(item.orderNumber).to.equal(data.orderNumber);
       expect(item.OrderDate).to.eql(new Date(data.orderDate));
-      expect(item.orderDetails).to.equal(data.orderDetails);
+      expect(item.orderDescription).to.equal(data.orderDescription);
       expect(item.orderSize).to.equal(data.orderSize);
       expect(item.vendor._id).to.equal(data.vendor);
       expect(item.pickup._id).to.equal(data.pickup);
@@ -212,7 +212,7 @@ describe('Orders API', function () {
           "vendor": "222222222222222222222001",
           "orderDate": "2019-11-21T00:00:00.000Z",
           "orderNumber": "CAT140",
-          "orderDetails": "12 Red Roses",
+          "orderDescription": "12 Red Roses",
           "orderStatus": "pending",
           "orderSize": "1",
           "deliveryDate": "2019-11-22T00:00:00.000Z",
@@ -253,7 +253,7 @@ describe('Orders API', function () {
             'vendor',
             'deliveryDate', 
             'orderNumber', 
-            'orderDetails',
+            'orderDescription',
             'orderStatus',
             'orderSize',
             'destination',
@@ -273,7 +273,7 @@ describe('Orders API', function () {
           expect(newItem.pickupVendor).to.equal(data.pickupVendor);
           expect(strDeliveryDate).to.eql(data.deliveryDate);
           expect(newItem.orderNumber).to.equal(data.orderNumber);
-          expect(newItem.orderDetails).to.equal(data.orderDetails);
+          expect(newItem.orderDescription).to.equal(data.orderDescription);
           expect(newItem.orderStatus).to.equal(data.orderStatus);
           expect(newItem.orderSize).to.equal(data.orderSize);
           expect(newItem.destination.geocode.coordinates).to.eql(data.destination.geocode.coordinates);
@@ -298,7 +298,7 @@ describe('Orders API', function () {
         'orderDate': '12-20-2019', 
         'orderSize': '2',
         'orderNumber': 'XXX100', 
-        'orderDetails': '12 Yellow Roses',
+        'orderDescription': '12 Yellow Roses',
         'orderStatus': 'ready',
         'destination.businessName': 'Bloomz' 
       };
@@ -323,7 +323,7 @@ describe('Orders API', function () {
             'orderDate', 
             'orderSize',
             'orderNumber', 
-            'orderDetails',
+            'orderDescription',
             'orderStatus',
             'destination',
             'vendor',

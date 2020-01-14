@@ -80,7 +80,7 @@ router.get('/:id', (req, res, next) => {
 /* ========== POST/CREATE AN ITEM ========== */
 
 router.post('/', (req, res, next) => {
-  const {  orderNumber, orderDate, orderDetails, orderStatus, orderSize, vendor, pickup, delivery, deliveryDate, destination } = req.body;
+  const {  orderNumber, orderDate, orderDescription, orderStatus, orderSize, vendor, pickup, delivery, deliveryDate, destination } = req.body;
   // console.log('req.body: ',req.body);
   const userId = req.user.id;
   
@@ -109,7 +109,7 @@ router.post('/', (req, res, next) => {
     return next(err);
   }
   
- const newOrder = { userId, orderNumber, orderDate, orderDetails, orderStatus, orderSize, vendor, pickup, delivery, deliveryDate, destination };
+ const newOrder = { userId, orderNumber, orderDate, orderDescription, orderStatus, orderSize, vendor, pickup, delivery, deliveryDate, destination };
 
   Order.create(newOrder).then(result => {
     res
@@ -131,7 +131,7 @@ router.put('/:id', (req, res, next) => {
     'orderDate', 
     'deliveryDate', 
     'orderNumber', 
-    'orderDetails',
+    'orderDescription',
     'orderStatus',
     'orderSize',
     'destination.geocode.coordinates', 

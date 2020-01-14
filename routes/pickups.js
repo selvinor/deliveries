@@ -16,15 +16,17 @@ router.use('/', passport.authenticate('jwt', { session: false, failWithError: tr
 /* ========== GET/READ ALL ITEMS ========== */
 router.get('/', (req, res, next) => {
   Pickup.find()
-  .populate('depot', 'depotName')
   .populate('pickupDriver', 'driverName driverPhone')
-  // .populate('pickupVendor', 'vendorName vendorLocation vendorPhone')
+  .populate({
+    path: 'depot', 
+    select: 'depotName'
+  })
   .populate({
     path: 'pickupVendor', 
     select: 'vendorName vendorLocation vendorPhone',
     populate: {
       path: 'orders',
-      select: 'orderNumber orderDetails orderSize deliveryDate destination'
+      select: 'orderNumber orderDescription orderSize deliveryDate destination'
     }
   })
   .then(result => {
@@ -50,14 +52,17 @@ router.get('/:id', (req, res, next) => {
   }
 
   Pickup.findOne({ _id: id })
-  .populate('depot', 'depotName')
   .populate('pickupDriver', 'driverName driverPhone')
+  .populate({
+    path: 'depot', 
+    select: 'depotName'
+  })
   .populate({
     path: 'pickupVendor', 
     select: 'vendorName vendorLocation vendorPhone',
     populate: {
       path: 'orders',
-      select: 'orderNumber orderDetails orderSize deliveryDate destination'
+      select: 'orderNumber orderDescription orderSize deliveryDate destination'
     }
   })
   .then(result => {

@@ -8,6 +8,7 @@ const Delivery = require('../models/deliveries');
 const Depot = require('../models/depots');
 const Driver = require('../models/drivers');
 const Vendor = require('../models/vendors');
+const Order = require('../models/orders');
 
 
 const router = express.Router();
@@ -20,7 +21,7 @@ router.get('/', (req, res, next) => {
   Delivery.find()
   .populate('depot', 'depotName')
   .populate('deliveryDriver', 'driverName driverPhone')
-  .populate('vendor')
+  .populate('order')
   .populate('zone')
     .then(result => {
       return res
@@ -46,7 +47,7 @@ router.get('/:id', (req, res, next) => {
   Delivery.findOne({ _id: id })
   .populate('depot', 'depotName')
   .populate('deliveryDriver', 'driverName driverPhone')
-  .populate('vendor')
+  .populate('order')
   .populate('zone')
   .then(result => {
     return res
