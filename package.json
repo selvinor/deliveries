@@ -17,11 +17,13 @@
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.4",
     "cross-env": "^6.0.3",
-    "dotenv": "^8.0.0",
+    "dotenv": "^8.2.0",
     "express": "^4.16.3",
+    "heroku": "^7.36.3",
     "knex": "^0.15.2",
     "mongoose": "^5.4.16",
     "morgan": "^1.9.1",
+    "passport": "^0.4.1",
     "pg": "^7.4.3"
   },
   "devDependencies": {
