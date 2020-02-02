@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const driverSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.Object, ref: 'User', required: true },
   driverName: {type: String, default: ''},
+  driverStatus : {type: String, default: ''},
   driverPhone: {type: String, default: ''},
   driverVehicleMake: {type: String, default: ''},
   driverVehicleModel: {type: String, default: ''},
@@ -21,6 +22,7 @@ driverSchema.methods.serialize = function() {
   return {
     userId: this.user || '',
     driverName: this.driverName || '',
+    driverStatus: this.driverStatus|| '',    
     driverPhone: this.driverPhone|| '',
     driverVehicleMake: this.driverVehicleMake|| '',
     driverVehicleModel: this.driverVehicleModel|| '',

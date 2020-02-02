@@ -15,7 +15,7 @@ const orderSchema = new mongoose.Schema({
   deliveryDate: { type: Date},
   destination : {
     recipient : {type: String, default: ''},
-    recipientPhone :  {type: String, default: ''},  
+    phone :  {type: String, default: ''},  
     businessName :  {type: String, default: ''},
     streetAddress :  {type: String, default: ''},
     city: {type: String, default: ''},

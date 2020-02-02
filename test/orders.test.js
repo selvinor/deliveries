@@ -138,7 +138,7 @@ describe('Orders API', function () {
             expect(item.destination.zipcode).to.equal(data[i].destination.zipcode);
             expect(item.destination.instructions).to.equal(data[i].destination.instructions);
             expect(item.destination.recipient).to.equal(data[i].destination.recipient);
-            expect(item.destination.recipientPhone).to.equal(data[i].destination.recipientPhone);      
+            expect(item.destination.phone).to.equal(data[i].destination.phone);      
           });
         });
 
@@ -189,7 +189,7 @@ describe('Orders API', function () {
       expect(item.destination.zipcode).to.equal(data.destination.zipcode);
       expect(item.destination.instructions).to.equal(data.destination.instructions);
       expect(item.destination.recipient).to.equal(data.destination.recipient);
-      expect(item.destination.recipientPhone).to.equal(data.destination.recipientPhone);      
+      expect(item.destination.phone).to.equal(data.destination.phone);      
 });
   });
 
@@ -231,7 +231,7 @@ describe('Orders API', function () {
               "zipcode": "97006",
               "instructions": "",
               "recipient": "Betty Sue",
-              "recipientPhone": "555-555-1212"
+              "phone": "555-555-1212"
           },
           "pickup": "",
           "delivery": ""
@@ -284,7 +284,7 @@ describe('Orders API', function () {
           expect(newItem.destination.zipcode).to.equal(data.destination.zipcode);
           expect(newItem.destination.instructions).to.equal(data.destination.instructions);
           expect(newItem.destination.recipient).to.equal(data.destination.recipient);
-          expect(newItem.destination.recipientPhone).to.equal(data.destination.recipientPhone);      
+          expect(newItem.destination.phone).to.equal(data.destination.phone);      
           expect(newItem.pickups_id).to.eql(data.pickups);
           expect(newItem.deliveries_id).to.eql(data.deliveries);
         });

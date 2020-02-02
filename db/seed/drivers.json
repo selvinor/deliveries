@@ -3,13 +3,17 @@
    "_id":"333333333333333333333101",
    "userId":   "111111111111111111111004",
    "driverName": "Bob Driver",
+   "driverStatus": "waiting",
    "driverPhone": "555-555-1111",
    "driverVehicleMake": "Subaru",
    "driverVehicleModel": "Outback",
    "driverVehiclePlate": "deliver1",
    "pickups": 
     [
-      "888888888888888888888051" 
+      "888888888888888888888051",
+      "888888888888888888888052",
+      "888888888888888888888053", 
+      "888888888888888888888059" 
     ],
     "deliveries" : 
     []
@@ -18,13 +22,17 @@
     "_id":"333333333333333333333102",
     "userId":   "111111111111111111111005",
     "driverName": "Jill Driver",
+    "driverStatus": "waiting",
     "driverPhone": "555-555-1111",
     "driverVehicleMake": "Subaru",
     "driverVehicleModel": "Outback",
     "driverVehiclePlate": "deliver2",
     "pickups": 
      [
-       "888888888888888888888052" 
+       "888888888888888888888052", 
+       "888888888888888888888054", 
+       "888888888888888888888055", 
+       "888888888888888888888057" 
      ],
      "deliveries" : 
      [] 
@@ -33,12 +41,16 @@
     "_id":"333333333333333333333103",
     "userId":   "111111111111111111111006",
     "driverName": "Debra Driver",
+    "driverStatus": "waiting",
     "driverPhone": "555-555-1111",
     "driverVehicleMake": "Subaru",
     "driverVehicleModel": "Outback",
      "driverVehiclePlate": "deliver3",
     "pickups": 
-     ["888888888888888888888053" ],
+     [
+       "888888888888888888888056", 
+       "888888888888888888888058" 
+      ],
      "deliveries" : 
      [
       "777777777777777777777501"
@@ -48,6 +60,7 @@
     "_id":"333333333333333333333104",
     "userId":   "111111111111111111111007",
     "driverName": "Zoe Driver",
+    "driverStatus": "waiting",
     "driverPhone": "555-555-1111",
     "driverVehicleMake": "Subaru",
     "driverVehicleModel": "Outback",
@@ -67,6 +80,7 @@
     "_id":"333333333333333333333105",
     "userId":   "111111111111111111111008",
     "driverName": "Fred Driver",
+    "driverStatus": "waiting",
     "driverPhone": "555-555-1111",
     "driverVehicleMake": "Subaru",
     "driverVehicleModel": "Outback",
@@ -83,6 +97,7 @@
     "_id":"333333333333333333333106",
     "userId":   "111111111111111111111010",
     "driverName": "Fiona Driver",
+    "driverStatus": "waiting",
     "driverPhone": "555-555-1111",
     "driverVehicleMake": "Subaru",
     "driverVehicleModel": "Outback",
@@ -98,6 +113,7 @@
    "_id":"333333333333333333333107",
    "userId":   "111111111111111111111011",
    "driverName": "Larry Driver",
+   "driverStatus": "waiting",
    "driverPhone": "555-555-1111",
    "driverVehicleMake": "Subaru",
    "driverVehicleModel": "Outback",

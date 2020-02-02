@@ -142,7 +142,7 @@ router.put('/:id', (req, res, next) => {
     'destination.zipcode', 
     'destination.instructions', 
     'destination.recipient', 
-    'destination.recipientPhone'
+    'destination.phone'
   ]
 //  console.log('req.body: ', req.body);
   updateFields.forEach(field => {

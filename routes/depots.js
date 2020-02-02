@@ -18,7 +18,34 @@ router.use('/', passport.authenticate('jwt', { session: false, failWithError: tr
 router.get('/', (req, res, next) => {
   Depot.find()
   .populate('zones')
-  .populate('drivers', 'driverName driverPhone driverVehicleMake driverVehicleModel')
+  .populate({
+    path: 'drivers', 
+    select: 'driverName driverStatus driverPhone driverVehicleMake driverVehicleModel',
+    populate:{
+      path: 'deliveries', 
+      select: 'deliveryDate depot zone deliveryStatus updatedAt',
+      populate: {
+        path: 'order',
+        select: 'orderNumber orderDescription orderSize vendor destination.recipient destination.phone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+        populate: { 
+          path: 'vendor', 
+          select: 'vendorName vendorLocation vendorPhone'
+        }
+      }
+    },
+    populate:{
+      path: 'pickups',
+      select: 'pickupDate pickupTimeSlot depot pickupStatus updatedAt',
+      populate: { 
+        path: 'pickupVendor', 
+        select: 'vendorName vendorLocation vendorPhone', 
+        populate: {
+          path: 'orders',
+          select: 'orderNumber orderDescription orderSize  destination.recipient destination.phone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+        }
+      }
+    }    
+  })    
   .populate({
     path: 'pickups',
     select: 'pickupDate pickupTimeSlot depot pickupStatus updatedAt',
@@ -27,7 +54,7 @@ router.get('/', (req, res, next) => {
       select: 'vendorName vendorLocation vendorPhone', 
       populate: {
         path: 'orders',
-        select: 'orderNumber orderDescription orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+        select: 'orderNumber orderDescription orderSize  destination.recipient destination.phone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
       }
     }
   })
@@ -36,7 +63,7 @@ router.get('/', (req, res, next) => {
     select: 'deliveryDate depot zone deliveryStatus updatedAt',
     populate: {
       path: 'order',
-      select: 'orderNumber orderDescription orderSize vendor destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+      select: 'orderNumber orderDescription orderSize vendor destination.recipient destination.phone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
       populate: { 
         path: 'vendor', 
         select: 'vendorName vendorLocation vendorPhone'
@@ -66,7 +93,7 @@ router.get('/:id', (req, res, next) => {
 
   Depot.findOne({ _id: id })
   .populate('zones')
-  .populate('drivers', 'driverName driverPhone driverVehicleMake driverVehicleModel')
+  .populate('drivers', 'driverName driverStatus driverPhone driverVehicleMake driverVehicleModel')
   .populate({
     path: 'pickups',
     select: 'pickupDate pickupTimeSlot depot pickupStatus updatedAt',
@@ -75,7 +102,7 @@ router.get('/:id', (req, res, next) => {
       select: 'vendorName vendorLocation vendorPhone', 
       populate: {
         path: 'orders',
-        select: 'orderNumber orderDescription orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+        select: 'orderNumber orderDescription orderSize  destination.recipient destination.phone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
       }
     }
   })
@@ -84,7 +111,7 @@ router.get('/:id', (req, res, next) => {
     select: 'deliveryDate depot zone deliveryStatus updatedAt',
     populate: {
       path: 'order',
-      select: 'orderNumber orderDescription orderSize vendor destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+      select: 'orderNumber orderDescription orderSize vendor destination.recipient destination.phone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
       populate: { 
         path: 'vendor', 
         select: 'vendorName vendorLocation vendorPhone'

@@ -49,11 +49,18 @@ router.get('/:id', (req, res, next) => {
       select: 'vendorName vendorLocation vendorPhone', 
       populate: {
         path: 'orders',
-        select: 'orderNumber orderDescription orderSize  destination.recipient destination.recipientPhone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+        select: 'orderNumber orderDescription orderSize  destination.recipient destination.phone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
       }
     }
   })
-  .populate('deliveries', 'deliveryDate depot zone deliveryStatus order updatedAt')
+  .populate({
+    path: 'deliveries',
+    select: 'deliveryDate zone depot deliveryStatus updatedAt',
+    populate: {
+      path: 'order',
+      select: 'orderNumber orderDescription orderSize  destination.recipient destination.phone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+    }
+  })
   .then(result => {
     return res
     .status(200)

@@ -111,7 +111,7 @@ router.put('/:id', (req, res, next) => {
     err.status = 400;
     return next(err);
   }
-  Pickup.findByIdAndUpdate( {_id: id}, updatePickup, { $push: { pickup: updatePickup } })
+  Pickup.findByIdAndUpdate( {_id: id}, updatePickup, { new: true })
   .then(result => {
     if (result) {
       res.json(result);
