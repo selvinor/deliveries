@@ -98,30 +98,54 @@ router.post('/', (req, res, next) => {
 router.put('/:id', (req, res, next) => {
   const id = req.params.id;
   const updatePickup = {};
-  const updateFields = ['depot', 'pickupDriver', 'zone', 'pickupStatus']
+  const updateFields = ['depot', 'pickupDriver', 'zone']
 
   updateFields.forEach(field => {
     if (field in req.body) {
       updatePickup[field] = req.body[field];
     }
   });
+  let updateStatus = null;
+  let updateParms = null;
+  console.log('pickups put req.body:', req.body);
+
+  if ('pickupStatus' in req.body) {
+    updateStatus = req.body['pickupStatus'];
+  }
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
-  Pickup.findByIdAndUpdate( {_id: id}, updatePickup, { new: true })
-  .then(result => {
-    if (result) {
-      res.json(result);
-    } else {
-      next();
-    }
-  })
-  .catch(err => {
-    next(err);
-  });
+console.log('pickups put updateStatus:', updateStatus);
+  if (updateStatus !== null) {
+    Pickup.findByIdAndUpdate( 
+      {_id: id}, { $push: { pickupStatus: updateStatus, new: true} })
+    .then(result => {
+      if (result) {
+        res.json(result);
+      } else {
+        next();
+      }
+    })
+    .catch(err => {
+      next(err);
+    });
+  } else {
+    Pickup.findByIdAndUpdate( 
+      {_id: id}, updatePickup, { new: true })
+    .then(result => {
+      if (result) {
+        res.json(result);
+      } else {
+        next();
+      }
+    })
+    .catch(err => {
+      next(err);
+    });
+  }
 });
 
 router.delete('/:id', (req, res, next) => {

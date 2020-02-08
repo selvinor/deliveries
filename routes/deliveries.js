@@ -81,30 +81,52 @@ router.put('/:id', (req, res, next) => {
   // const { id } = req.params;
   const id = req.params.id;
   const updateDelivery = {};
-  const updateFields = ['depot', 'deliveryDriver', 'zone', 'deliveryStatus']
+  const updateFields = ['depot', 'deliveryDriver', 'deliveryStatus', 'zone']
 
   updateFields.forEach(field => {
     if (field in req.body) {
       updateDelivery[field] = req.body[field];
     }
   });
+  let updateStatus = null;
+  let updateParms = null;
 
+  if ('deliveryStatus' in req.body) {
+    updateStatus = req.body['deliveryStatus'];
+  }
   if (!mongoose.Types.ObjectId.isValid(id)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
-  Delivery.findByIdAndUpdate( {_id: id}, updateDelivery,   { $push: { delivery: updateDelivery } })
-  .then(result => {
-    if (result) {
-      res.json(result);
-    } else {
-      next();
-    }
-  })
-  .catch(err => {
-    next(err);
-  });
+  console.log('deliveries put updateStatus:', updateStatus);
+  if (updateStatus !== null) {
+    Delivery.findByIdAndUpdate( 
+      {_id: id}, { $push: { deliveryStatus:updateStatus, new: true} })
+    .then(result => {
+      if (result) {
+        res.json(result);
+      } else {
+        next();
+      }
+    })
+    .catch(err => {
+      next(err);
+    });
+  } else {
+    Delivery.findByIdAndUpdate( 
+      {_id: id}, updateDelivery, { new: true })
+    .then(result => {
+      if (result) {
+        res.json(result);
+      } else {
+        next();
+      }
+    })
+    .catch(err => {
+      next(err);
+    });
+  }
 });
 
 

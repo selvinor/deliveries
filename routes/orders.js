@@ -37,10 +37,30 @@ router.get('/', (req, res, next) => {
   }
 // console.log('filter: ', filter);
   Order.find(filter)
-    .populate('pickupVendor', 'vendorName phone')
-    .populate('vendor' , 'vendorLocation vendorName vendorPhone')
-    .populate('pickup',  'pickupDate pickupTimeSlot pickupStatus  pickupDriver createdAt updatedAt')
-    .populate('delivery' ,'zone deliveryDate deliveryStatus deliveryDriver createdAt updatedAt')
+  .populate({
+    path: 'vendor', 
+    select: 'vendorName vendorLocation vendorPhone',
+    populate: {
+      path: 'orders',
+      select: 'orderNumber orderDescription orderSize deliveryDate destination'
+    }
+  })
+  .populate({
+    path: 'pickup',
+    select:'pickupStatus pickupDate',
+    populate: {
+      path: 'pickupDriver',
+      select: 'driverName driverPhone'
+    }
+  })
+  .populate({
+    path: 'delivery',
+    select:'deliveryStatus deliveryDate',
+    populate: {
+      path: 'deliveryDriver',
+      select: 'driverName driverPhone'
+    }
+  })
     .then(result => {
       return res
       .status(200)
@@ -63,10 +83,30 @@ router.get('/:id', (req, res, next) => {
   }
 
   Order.findOne({ _id: id })
-  .populate('pickupVendor', 'vendorName phone')
-  .populate('vendor' , 'vendorLocation vendorName vendorPhone')
-  .populate('pickup',  'pickupDate pickupTimeSlot pickupStatus  pickupDriver createdAt updatedAt')
-  .populate('delivery' ,'zone deliveryDate deliveryStatus deliveryDriver createdAt updatedAt')
+  .populate({
+    path: 'vendor', 
+    select: 'vendorName vendorLocation vendorPhone',
+    populate: {
+      path: 'orders',
+      select: 'orderNumber orderDescription orderSize deliveryDate destination'
+    }
+  })
+  .populate({
+    path: 'pickup',
+    select:'pickupStatus pickupDate',
+    populate: {
+      path: 'pickupDriver',
+      select: 'driverName driverPhone'
+    }
+  })
+  .populate({
+    path: 'delivery',
+    select:'deliveryStatus deliveryDate',
+    populate: {
+      path: 'deliveryDriver',
+      select: 'driverName driverPhone'
+    }
+  })
 .then(result => {
     return res
     .status(200)
@@ -80,7 +120,7 @@ router.get('/:id', (req, res, next) => {
 /* ========== POST/CREATE AN ITEM ========== */
 
 router.post('/', (req, res, next) => {
-  const {  orderNumber, orderDate, orderDescription, orderStatus, orderSize, vendor, pickup, delivery, deliveryDate, destination } = req.body;
+  const {  orderNumber, orderDate, orderDescription, orderStatus, orderSize, vendor, order, delivery, deliveryDate, destination } = req.body;
   // console.log('req.body: ',req.body);
   const userId = req.user.id;
   
@@ -109,7 +149,7 @@ router.post('/', (req, res, next) => {
     return next(err);
   }
   
- const newOrder = { userId, orderNumber, orderDate, orderDescription, orderStatus, orderSize, vendor, pickup, delivery, deliveryDate, destination };
+ const newOrder = { userId, orderNumber, orderDate, orderDescription, orderStatus, orderSize, vendor, order, delivery, deliveryDate, destination };
 
   Order.create(newOrder).then(result => {
     res
@@ -132,7 +172,6 @@ router.put('/:id', (req, res, next) => {
     'deliveryDate', 
     'orderNumber', 
     'orderDescription',
-    'orderStatus',
     'orderSize',
     'destination.geocode.coordinates', 
     'destination.businessName', 
@@ -150,14 +189,27 @@ router.put('/:id', (req, res, next) => {
       updateOrder[field] = req.body[field];
     }
   });
-  // console.log('updateOrder: ', updateOrder);
+
+  let updateStatus = null;
+  let updateParms = null;
+
+  if ('orderStatus' in req.body) {
+    let updateStatus = req.body['orderStatus'];
+  }
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
-  Order.findByIdAndUpdate( {_id: id}, updateOrder,   { $push: { order: updateOrder } })
+
+  if (updateStatus !== null) {
+    updateParms = '{_id: id}, updateOrder, { $push: { order: updateOrder , orderStatus: {status: updateStatus},  new: true  } }'
+  } else {
+    updateParms = '{_id: id}, updateOrder, { new: true }'
+  }
+
+  Order.findByIdAndUpdate( {updateParms})
   .then(result => {
     if (result) {
       res.json(result);

@@ -23,7 +23,7 @@ const seedOrders = require('../db/seed/orders');
 const seedPickups = require('../db/seed/pickups');
 const seedDeliveries = require('../db/seed/deliveries');
 
-mongoose.connect(DATABASE_URL,{'useNewUrlParser': true, 'useCreateIndex': true})
+mongoose.connect(DATABASE_URL,{'useNewUrlParser': true, 'useCreateIndex': true,  useFindAndModify: false })
   .then(() => {
     console.info('Dropping Database');
     return mongoose.connection.db.dropDatabase();

@@ -3,9 +3,12 @@ const mongoose = require('mongoose');
 
 
 const deliverySchema = new mongoose.Schema({
-  deliveryDate: { type: Date},
+  deliveryDate: { type: Date, default: Date.now},
   depot   : { type: mongoose.Schema.Types.Object, ref: 'Depot' },   
-  deliveryStatus    : {type: String, default: ''},
+  deliveryStatus    : [{
+    status:  { type: String, default: 'dispatching'}, 
+     timestamp: {type : Date, default: Date.now}
+  }],
   deliveryDriver  : { type: mongoose.Schema.Types.Object, ref: 'Driver' },  
   order: {type: mongoose.Schema.Types.Object, ref: 'Order'  },
   zone      : { type: mongoose.Schema.Types.Object, ref: 'Zone' },

@@ -197,7 +197,20 @@ router.get('/:id', (req, res, next) => {
         select: 'vendorName vendorLocation.streetAddress vendorLocation.streetAddress vendorLocation.city vendorLocation.state vendorLocation.zipcode vendorPhone',
         populate: {
           path: 'orders',
-          select: 'orderNumber orderStatus orderDescription orderStatus orderSize  destination.recipient destination.phone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+          select: 'orderNumber orderStatus orderDescription  orderSize destination.recipient destination.phone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+        }
+      }
+    })
+    .populate({
+      path: 'depot',
+      populate: {
+        path: 'vendors',
+        populate: {
+          path: 'orders',
+          populate: {
+            path: 'vendor',
+            select: 'vendorName  vendorPhone' 
+          }
         }
       }
     })

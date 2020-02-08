@@ -5,14 +5,17 @@ const mongoose = require('mongoose');
 const orderSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.Object, ref: 'User', required: false },  
   orderNumber: {type: String, unique: false },
-  orderDate: { type: Date},
+  orderDate: { type: Date, default: Date.now},
   orderDescription : {type: String, default: ''},
-  orderStatus : {type: String, default: 'pending'},
+  orderStatus : [{
+    status:  { type: String, default: 'pending'},
+     timestamp: {type : Date, default: Date.now}
+  }],
   orderSize : {type: String, default: ''},
   vendor: { type: mongoose.Schema.Types.Object, ref: 'Vendor' },
   pickup: { type: mongoose.Schema.Types.Object, ref: 'Pickup' },
   delivery: { type: mongoose.Schema.Types.Object, ref: 'Delivery' },
-  deliveryDate: { type: Date},
+  deliveryDate: { type: Date, default: Date.now},
   destination : {
     recipient : {type: String, default: ''},
     phone :  {type: String, default: ''},  

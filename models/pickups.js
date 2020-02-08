@@ -2,27 +2,30 @@
 const mongoose = require('mongoose');
 
 const pickupSchema = new mongoose.Schema({
-  pickupDate: { type: Date},
-  depot   : { type: mongoose.Schema.Types.Object, ref: 'Depot' },   
-  pickupTimeSlot: { type: String, default: 'pm'},
+  pickupDate: { type: Date, default: Date.now },
+  depot: { type: mongoose.Schema.Types.Object, ref: 'Depot' },
+  pickupTimeSlot: { type: String, default: 'pm' },
   pickupVendor: { type: mongoose.Schema.Types.Object, ref: 'Vendor' },
-  pickupStatus : {type: String, default: ''},
-  pickupDriver: { type: mongoose.Schema.Types.Object, ref: 'Driver', required: false },  
-  zone   : { type: mongoose.Schema.Types.Object, ref: 'Zone' }
+  pickupStatus: [{
+    status: { type: String, default: 'pending' },
+    timestamp: { type: Date, default: Date.now }
+  }],
+  pickupDriver: { type: mongoose.Schema.Types.Object, ref: 'Driver', required: false },
+  zone: { type: mongoose.Schema.Types.Object, ref: 'Zone' }
 });
 
 
-pickupSchema.methods.serialize = function() { 
+pickupSchema.methods.serialize = function () {
   return {
-    pickupDate:  this.pickupDate || '',
-    depot   :  this.depot || '', 
-    pickupTimeSlot    : this.pickupTimeSlot|| '',
-    pickupVendor    : this.pickupVendor|| '',
-    pickupStatus    :  this.pickupStatus || '',
-    pickupDriver  :  this.pickupDriver || '',
-    zone      : this.zone|| ''
+    pickupDate: this.pickupDate || '',
+    depot: this.depot || '',
+    pickupTimeSlot: this.pickupTimeSlot || '',
+    pickupVendor: this.pickupVendor || '',
+    pickupStatus: this.pickupStatus || '',
+    pickupDriver: this.pickupDriver || '',
+    zone: this.zone || ''
   };
-};  
+};
 
 // Add `createdAt` and `updatedAt` fields
 pickupSchema.set('timestamps', true);

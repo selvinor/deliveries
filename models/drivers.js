@@ -5,7 +5,10 @@ const mongoose = require('mongoose');
 const driverSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.Object, ref: 'User', required: true },
   driverName: {type: String, default: ''},
-  driverStatus : {type: String, default: ''},
+  driverStatus : [{
+    status:  { type: String, default: 'waiting'},
+    timestamp: {type : Date, default: Date.now}
+  }],
   driverPhone: {type: String, default: ''},
   driverVehicleMake: {type: String, default: ''},
   driverVehicleModel: {type: String, default: ''},

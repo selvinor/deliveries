@@ -29,7 +29,7 @@ const expect = chai.expect;
 describe('Orders API', function () {
 
   before(function () {
-    return mongoose.connect(TEST_DATABASE_URL,{'useNewUrlParser': true, 'useCreateIndex': true})
+    return mongoose.connect(TEST_DATABASE_URL,{'useNewUrlParser': true, 'useCreateIndex': true,  useFindAndModify: false })
       .then(() => mongoose.connection.db.dropDatabase());
   });
 
