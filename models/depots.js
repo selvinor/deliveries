@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 
 const depotSchema = new mongoose.Schema({ 
-  depotName:  { type: String },
+  name:  { type: String },
   streetAddress:  {type: String },
   city:  {type: String },
   state:  {type: String },
@@ -32,7 +32,7 @@ const depotSchema = new mongoose.Schema({
 
 depotSchema.methods.serialize = function() { 
   return {
-    depotName: this.depotName || '',
+    name: this.name || '',
     streetAddress: this.streetAddress || '',
     city: this.city || '',
     state: this.state || '',

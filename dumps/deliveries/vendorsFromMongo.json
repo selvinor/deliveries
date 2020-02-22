@@ -13,7 +13,7 @@
     "state": "Oregon",
     "zipcode": "97204"
   },
-  "vendorName": "Blooms",
+  "name": "Blooms",
   "vendorPhone": "555-555-1111",
   "orders": [
     "666666666666666666666001",
@@ -49,7 +49,7 @@
     "state": "Oregon",
     "zipcode": "97204"
   },
-  "vendorName": "Acme Flowers",
+  "name": "Acme Flowers",
   "vendorPhone": "555-555-1111",
   "orders": [
     "666666666666666666666005",

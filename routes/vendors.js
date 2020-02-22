@@ -57,17 +57,17 @@ router.get('/:id', (req, res, next) => {
 
 /* ========== POST/CREATE AN ITEM ========== */
 router.post('/', (req, res, next) => {
-  const { userId, vendorName, vendorLocation, vendorPhone, orders } = req.body;
+  const { userId, name, vendorLocation, vendorPhone, orders } = req.body;
   const user = req.user.id;
   
   /***** Never trust users - validate input *****/
-  if (!vendorName) {
-    const err = new Error('Missing `vendorName` in request body');
+  if (!name) {
+    const err = new Error('Missing `name` in request body');
     err.status = 400;
     return next(err);
   }
   
-  const newVendor = {  userId, vendorName, vendorLocation, vendorPhone, orders };
+  const newVendor = {  userId, name, vendorLocation, vendorPhone, orders };
 // console.log('newVendor: ', newVendor);
   Vendor.create(newVendor)
   .then(result => {
@@ -85,7 +85,7 @@ router.put('/:id', (req, res, next) => {
   // const { id } = req.params;
   const id = req.params.id;
   const updateVendor = {};
-  const updateFields = ['geocode', 'vendorName', 'vendorLocation.streetAddress', 'vendorLocation.city', 'vendorLocation.state', 'vendorLocation.zipcode', 'vendorPhone', 'pickup', 'delivery', 'order']
+  const updateFields = ['geocode', 'name', 'vendorLocation.streetAddress', 'vendorLocation.city', 'vendorLocation.state', 'vendorLocation.zipcode', 'vendorPhone', 'pickup', 'delivery', 'order']
 //  console.log('req.body: ', req.body);
   updateFields.forEach(field => {
     if (field in req.body) {

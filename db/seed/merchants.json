@@ -21,7 +21,7 @@
         "deliveryDriver" :  {
           " _id": "33333333333333333333001",
           "driverId": "driver1",  
-          "driverName": "Bob Driver",  
+          "name": "Bob Driver",  
           "driverStatus": "dispatched",
           "deliveryZones": [1,4]
         }

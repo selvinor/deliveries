@@ -32,7 +32,7 @@ router.get('/:id', (req, res, next) => {
   User.findOne({ _id: id })
     .populate({
       path: 'vendor',   //user is a Vendor so populate the vendor's orders data
-      select: 'vendorName vendorLocation vendorPhone',
+      select: 'name vendorLocation vendorPhone',
       populate: {
         path: 'orders',
         select: 'orderNumber orderStatus orderDescription orderSize  destination.recipient destination.phone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
@@ -54,13 +54,13 @@ router.get('/:id', (req, res, next) => {
     })
     .populate({
       path: 'driver', //user is a Driver so populate the Driver's Pickups and Deliveries 
-      select: 'driverName driverPhone',
+      select: 'name driverPhone',
       populate: {
         path: 'pickups',
         select: 'pickupDate pickupTimeSlot pickupStatus updatedAt',
         populate: {
           path: 'pickupVendor',
-          select: 'vendorName vendorLocation vendorPhone',
+          select: 'name vendorLocation vendorPhone',
           populate: {
             path: 'orders',
             select: 'orderNumber orderStatus orderDescription orderSize  destination.recipient destination.phone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
@@ -74,7 +74,7 @@ router.get('/:id', (req, res, next) => {
         path: 'pickups',
         populate: {
           path: 'depot',
-          select: 'depotName',
+          select: 'name',
         }
       }
     })
@@ -92,10 +92,10 @@ router.get('/:id', (req, res, next) => {
 
     .populate({
       path: 'depot', //user is a Depot so populate the Depot's Zones, Pickups, Deliveries and Drivers 
-      select: 'depotName streetAddress city state zipcode geocode.coordinates phone',
+      select: 'name streetAddress city state zipcode geocode.coordinates phone',
       populate: {
         path: 'zones',
-        select: 'orderNumber orderStatus orderDescription orderSize  destination.recipient destination.phone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
+        select: 'zoneNumber zoneName'
       }
     })
     .populate({
@@ -130,7 +130,7 @@ router.get('/:id', (req, res, next) => {
           select: 'pickupDate pickupTimeSlot depot pickupStatus updatedAt',
           populate: {
             path: 'pickupVendor',
-            select: 'vendorName vendorLocation vendorPhone',
+            select: 'name vendorLocation vendorPhone',
             populate: {
               path: 'orders',
               select: 'orderNumber orderStatus orderDescription orderSize  destination.recipient destination.phone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions'
@@ -146,7 +146,7 @@ router.get('/:id', (req, res, next) => {
         select: 'pickupDate depot pickupTimeSlot pickupStatus pickupDriver updatedAt',
         populate: {
           path: 'pickupVendor',
-          select: 'vendorName vendorLocation vendorPhone',
+          select: 'name vendorLocation vendorPhone',
           populate: {
             path: 'orders',
             select: 'orderNumber orderStatus orderDescription orderSize  destination.recipient destination.phone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions'
@@ -164,7 +164,7 @@ router.get('/:id', (req, res, next) => {
           select: 'orderNumber orderStatus orderDescription orderSize vendor destination.recipient destination.phone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
           populate: {
             path: 'vendor',
-            select: 'vendorName vendorLocation vendorPhone'
+            select: 'name vendorLocation vendorPhone'
           }
         }
       }
@@ -175,7 +175,7 @@ router.get('/:id', (req, res, next) => {
         path: 'deliveries',
         populate: {
           path: 'deliveryDriver',
-          select: 'driverName driverStatus updatedAt'
+          select: 'name driverStatus updatedAt'
         }
       }
     })
@@ -194,7 +194,7 @@ router.get('/:id', (req, res, next) => {
       path: 'depot',
       populate: {
         path: 'vendors',
-        select: 'vendorName vendorLocation.streetAddress vendorLocation.streetAddress vendorLocation.city vendorLocation.state vendorLocation.zipcode vendorPhone',
+        select: 'name vendorLocation.streetAddress vendorLocation.streetAddress vendorLocation.city vendorLocation.state vendorLocation.zipcode vendorPhone',
         populate: {
           path: 'orders',
           select: 'orderNumber orderStatus orderDescription  orderSize destination.recipient destination.phone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
@@ -209,7 +209,7 @@ router.get('/:id', (req, res, next) => {
           path: 'orders',
           populate: {
             path: 'vendor',
-            select: 'vendorName  vendorPhone' 
+            select: 'name  vendorPhone' 
           }
         }
       }

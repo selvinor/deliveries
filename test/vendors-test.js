@@ -107,7 +107,7 @@ describe('Vendors API', function () {
               expect(item).to.be.a('object');
               expect(item).to.include.all.keys(
               'userId',
-              'vendorName', 
+              'name', 
               'vendorLocation', 
               'vendorPhone', 
               'orders',
@@ -118,7 +118,7 @@ describe('Vendors API', function () {
             // console.log('item: ', item);
             // console.log('data[i]: ',data[i]);
             expect(item.userId).to.equal(data[i].userId);
-            expect(item.vendorName).to.equal(data[i].vendorName);
+            expect(item.name).to.equal(data[i].name);
             expect(item.vendorLocation.streetAddress).to.equal(data[i].vendorLocation.streetAddress);
             expect(item.vendorLocation.city).to.equal(data[i].vendorLocation.city);
             expect(item.vendorLocation.state).to.equal(data[i].vendorLocation.state);
@@ -152,7 +152,7 @@ describe('Vendors API', function () {
           expect(item).to.be.a('object');
           expect(item).to.include.all.keys(
             'userId',
-            'vendorName', 
+            'name', 
             'vendorLocation', 
             'vendorPhone', 
             'orders',
@@ -163,7 +163,7 @@ describe('Vendors API', function () {
           // console.log('item: ', item);
           // console.log('data: ',data);
           expect(item.userId).to.equal(data.userId);
-          expect(item.vendorName).to.equal(data.vendorName);
+          expect(item.name).to.equal(data.name);
           expect(item.vendorLocation.streetAddress).to.equal(data.vendorLocation.streetAddress);
           expect(item.vendorLocation.city).to.equal(data.vendorLocation.city);
           expect(item.vendorLocation.state).to.equal(data.vendorLocation.state);
@@ -190,7 +190,7 @@ describe('Vendors API', function () {
     it('should create and return a new vendor when provided valid data', function () {
       const newItem = {
         "userId": "111111111111111111111001",
-        "vendorName": "NewVendor",
+        "name": "NewVendor",
             "vendorLocation" :{
               "geocode": {
                   "coordinates": [
@@ -222,7 +222,7 @@ describe('Vendors API', function () {
           expect(res.body).to.be.a('object');
           expect(res.body).to.have.all.keys(
             'userId', 
-            'vendorName', 
+            'name', 
             'vendorLocation', 
             'vendorPhone', 
             'orders', 
@@ -238,7 +238,7 @@ describe('Vendors API', function () {
         })
         .then(data => {
           // console.log('newItem: ', newItem, ' data: ', data);
-          expect(newItem.vendorName).to.equal(data.vendorName);
+          expect(newItem.name).to.equal(data.name);
           expect(newItem.vendorLocation.geocode.coordinates).to.eql(data.vendorLocation.geocode.coordinates);
           expect(newItem.userId).to.equal(data.userId);
           expect(newItem.vendorLocation.streetAddress).to.equal(data.vendorLocation.streetAddress);

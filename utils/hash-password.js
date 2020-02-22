@@ -1,7 +1,7 @@
 'use strict';
 
 const bcrypt = require('bcryptjs');
-const password = 'thinkful';
+const password = 'testdepot';
 
 /* Hash a password with cost-factor 10, then run compare to verify */
 bcrypt.hash(password, 10)

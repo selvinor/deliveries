@@ -19,8 +19,8 @@ router.use('/', passport.authenticate('jwt', { session: false, failWithError: tr
 /* ========== GET/READ ALL ITEMS ========== */
 router.get('/', (req, res, next) => {
   Delivery.find()
-  .populate('depot', 'depotName')
-  .populate('deliveryDriver', 'driverName driverPhone')
+  .populate('depot', 'name')
+  .populate('deliveryDriver', 'name driverPhone')
   .populate('order')
   .populate('zone')
     .then(result => {
@@ -45,8 +45,8 @@ router.get('/:id', (req, res, next) => {
   }
 
   Delivery.findOne({ _id: id })
-  .populate('depot', 'depotName')
-  .populate('deliveryDriver', 'driverName driverPhone')
+  .populate('depot', 'name')
+  .populate('deliveryDriver', 'name driverPhone')
   .populate('order')
   .populate('zone')
   .then(result => {

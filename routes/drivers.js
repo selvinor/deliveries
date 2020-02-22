@@ -15,7 +15,7 @@ router.use('/', passport.authenticate('jwt', { session: false, failWithError: tr
 /* ========== GET/READ ALL ITEMS ========== */
 router.get('/', (req, res, next) => {
   Driver.find()
-  .populate('pickupVendor', 'vendorName vendorLocation vendorPhone orders')
+  .populate('pickupVendor', 'name vendorLocation vendorPhone orders')
   .populate('pickups', 'pickupDate pickupTimeSlot depot pickupStatus updatedAt')
   .populate('deliveries', 'deliveryDate depot zone deliveryStatus order updatedAt')
     .then(result => {
@@ -46,7 +46,7 @@ router.get('/:id', (req, res, next) => {
     select: 'pickupDate pickupTimeSlot depot pickupStatus updatedAt',
     populate: { 
       path: 'pickupVendor', 
-      select: 'vendorName vendorLocation vendorPhone', 
+      select: 'name vendorLocation vendorPhone', 
       populate: {
         path: 'orders',
         select: 'orderNumber orderDescription orderSize  destination.recipient destination.phone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
@@ -73,12 +73,12 @@ router.get('/:id', (req, res, next) => {
 
 /* ========== POST/CREATE AN ITEM ========== */
 router.post('/', (req, res, next) => {
-  const { driverName, driverPhone, driverVehicleMake, driverVehicleModel, driverVehiclePlate } = req.body;
+  const { name, driverPhone, driverVehicleMake, driverVehicleModel, driverVehiclePlate } = req.body;
   const userId = req.user.id;
   
   /***** Never trust users - validate input *****/
-  if (!driverName) {
-    const err = new Error('Missing `driverName` in request body');
+  if (!name) {
+    const err = new Error('Missing `name` in request body');
     err.status = 400;
     return next(err);
   }
@@ -107,7 +107,7 @@ router.post('/', (req, res, next) => {
     return next(err);
   }
   
-  const newDriver = {  userId, driverName, driverPhone, driverVehicleMake, driverVehicleModel, driverVehiclePlate };
+  const newDriver = {  userId, name, driverPhone, driverVehicleMake, driverVehicleModel, driverVehiclePlate };
 // console.log('newDriver: ', newDriver);
   Driver.create(newDriver).then(result => {
     res
@@ -125,7 +125,7 @@ router.put('/:id', (req, res, next) => {
   // const { id } = req.params;
   const id = req.params.id;
   const updateDriver = {};
-  const updateFields = ['driverName', 'driverPhone', 'driverVehicleMake', 'driverVehicleModel', 'driverVehiclePlate', 'deliveries', 'pickups']
+  const updateFields = ['name', 'driverPhone', 'driverVehicleMake', 'driverVehicleModel', 'driverVehiclePlate', 'deliveries', 'pickups']
   updateFields.forEach(field => {
     if (field in req.body) {
       updateDriver[field] = req.body[field];

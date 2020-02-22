@@ -107,7 +107,7 @@ describe('Drivers API', function () {
               expect(item).to.be.a('object');
               expect(item).to.include.all.keys(
                 'userId',
-                'driverName',  
+                'name',  
                 'driverVehicleMake', 
                 'driverVehicleModel',
                 'driverVehiclePlate', 
@@ -121,7 +121,7 @@ describe('Drivers API', function () {
             // console.log('item: ', item);
             // console.log('data[i]: ',data[i]);
             expect(item.userId).to.equal(data[i].userId);
-            expect(item.driverName).to.equal(data[i].driverName);
+            expect(item.name).to.equal(data[i].name);
             expect(item.driverVehicleMake).to.equal(data[i].driverVehicleMake);
             expect(item.driverVehicleModel).to.equal(data[i].driverVehicleModel);
             expect(item.driverVehiclePlate).to.equal(data[i].driverVehiclePlate);
@@ -155,7 +155,7 @@ describe('Drivers API', function () {
           expect(item).to.be.a('object');
           expect(item).to.include.all.keys(
             'userId',
-            'driverName',  
+            'name',  
             'driverVehicleMake', 
             'driverVehicleModel',
             'driverVehiclePlate', 
@@ -169,7 +169,7 @@ describe('Drivers API', function () {
           // console.log('item: ', item);
           // console.log('data: ',data);
           expect(item.userId).to.equal(data.userId);
-          expect(item.driverName).to.equal(data.driverName);
+          expect(item.name).to.equal(data.name);
           expect(item.driverVehicleMake).to.equal(data.driverVehicleMake);
           expect(item.driverVehicleModel).to.equal(data.driverVehicleModel);
           expect(item.driverVehiclePlate).to.equal(data.driverVehiclePlate);
@@ -200,7 +200,7 @@ describe('Drivers API', function () {
       const newItem = 
       {
             "userId": "111111111111111111111001",
-            "driverName": "NewDriver",
+            "name": "NewDriver",
             "driverPhone": "555-555-1212",
             "driverVehicleMake": "Toyota",
             "driverVehicleModel": "RAV4",
@@ -221,7 +221,7 @@ describe('Drivers API', function () {
           expect(res.body).to.be.a('object');
           expect(res.body).to.have.all.keys(
             'userId', 
-            'driverName', 
+            'name', 
             'driverVehicleMake', 
             'driverVehicleModel', 
             'driverVehiclePlate', 
@@ -238,7 +238,7 @@ describe('Drivers API', function () {
         .then(data => {
           // console.log('newItem: ', newItem, ' data: ', data);
           expect(newItem.userId).to.equal(data.userId);
-          expect(newItem.driverName).to.equal(data.driverName);
+          expect(newItem.name).to.equal(data.name);
           expect(newItem.driverPhone).to.equal(data.driverPhone);      
           expect(newItem.driverVehicleMake).to.equal(data.driverVehicleMake);
           expect(newItem.driverVehicleModel).to.equal(data.driverVehicleModel);
@@ -252,7 +252,7 @@ describe('Drivers API', function () {
       let driver;
       let res;
       const updateDriver = { 
-        'driverName': 'Updated DriverName', 
+        'name': 'Updated DriverName', 
         'driverVehicleMake': 'Mercury', 
         'driverVehicleModel': 'Cougar', 
         'driverVehiclePlate': 'Updated Plate', 
@@ -276,7 +276,7 @@ describe('Drivers API', function () {
           expect(res.body).to.be.a('object');
           expect(res.body).to.have.all.keys(
             'userId', 
-            'driverName', 
+            'name', 
             'driverVehicleMake', 
             'driverVehicleModel', 
             'driverVehiclePlate', 
@@ -291,7 +291,7 @@ describe('Drivers API', function () {
           // console.log('****res.body: ', res.body);
           expect(res.body._id).to.equal(driver.id);
           expect(res.body.userId).to.equal(driver.userId);
-          // expect(res.body.driverName).to.equal(updateDriver.driverName);
+          // expect(res.body.name).to.equal(updateDriver.name);
           // expect(res.body.driverPhone).to.equal(updateDriver.driverPhone);      
           // expect(res.body.driverVehicleMake).to.equal(updateDriver.driverVehicleMake);
           // expect(res.body.driverVehicleModel).to.equal(updateDriver.driverVehicleModel);
@@ -307,7 +307,7 @@ describe('Drivers API', function () {
     it('should respond with a 400 for an invalid id', function () {
       let res;
       const updateDriver = { 
-        'driverName': 'Updated DriverName', 
+        'name': 'Updated DriverName', 
         'driverVehicleMake': 'Mercury', 
         'driverVehicleModel': 'Cougar', 
         'driverVehiclePlate': 'Updated Plate', 
@@ -329,7 +329,7 @@ describe('Drivers API', function () {
     it('should respond with a 404 for an id that does not exist', function () {
       let res;
       const updateDriver = { 
-        'driverName': 'Updated DriverName', 
+        'name': 'Updated DriverName', 
         'driverVehicleMake': 'Mercury', 
         'driverVehicleModel': 'Cougar', 
         'driverVehiclePlate': 'Updated Plate', 

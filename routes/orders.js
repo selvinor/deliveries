@@ -39,7 +39,7 @@ router.get('/', (req, res, next) => {
   Order.find(filter)
   .populate({
     path: 'vendor', 
-    select: 'vendorName vendorLocation vendorPhone',
+    select: 'name vendorLocation vendorPhone',
     populate: {
       path: 'orders',
       select: 'orderNumber orderDescription orderSize deliveryDate destination'
@@ -50,7 +50,7 @@ router.get('/', (req, res, next) => {
     select:'pickupStatus pickupDate',
     populate: {
       path: 'pickupDriver',
-      select: 'driverName driverPhone'
+      select: 'name driverPhone'
     }
   })
   .populate({
@@ -58,7 +58,7 @@ router.get('/', (req, res, next) => {
     select:'deliveryStatus deliveryDate',
     populate: {
       path: 'deliveryDriver',
-      select: 'driverName driverPhone'
+      select: 'name driverPhone'
     }
   })
     .then(result => {
@@ -85,7 +85,7 @@ router.get('/:id', (req, res, next) => {
   Order.findOne({ _id: id })
   .populate({
     path: 'vendor', 
-    select: 'vendorName vendorLocation vendorPhone',
+    select: 'name vendorLocation vendorPhone',
     populate: {
       path: 'orders',
       select: 'orderNumber orderDescription orderSize deliveryDate destination'
@@ -96,7 +96,7 @@ router.get('/:id', (req, res, next) => {
     select:'pickupStatus pickupDate',
     populate: {
       path: 'pickupDriver',
-      select: 'driverName driverPhone'
+      select: 'name driverPhone'
     }
   })
   .populate({
@@ -104,7 +104,7 @@ router.get('/:id', (req, res, next) => {
     select:'deliveryStatus deliveryDate',
     populate: {
       path: 'deliveryDriver',
-      select: 'driverName driverPhone'
+      select: 'name driverPhone'
     }
   })
 .then(result => {
@@ -194,7 +194,7 @@ router.put('/:id', (req, res, next) => {
   let updateParms = null;
 
   if ('orderStatus' in req.body) {
-    let updateStatus = req.body['orderStatus'];
+    updateStatus = req.body['orderStatus'];
   }
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -202,17 +202,20 @@ router.put('/:id', (req, res, next) => {
     err.status = 400;
     return next(err);
   }
+  console.log('orders put req.body:', req.body);
 
   if (updateStatus !== null) {
-    updateParms = '{_id: id}, updateOrder, { $push: { order: updateOrder , orderStatus: {status: updateStatus},  new: true  } }'
-  } else {
-    updateParms = '{_id: id}, updateOrder, { new: true }'
-  }
-
-  Order.findByIdAndUpdate( {updateParms})
+  //   updateParms = '{_id: id}, updateOrder, { $push: { order: updateOrder , orderStatus: {status: updateStatus},  new: true  } }'
+  // } else {
+  //   updateParms = '{_id: id}, updateOrder, { new: true }'
+  // }
+  console.log('orders put updateStatus:', updateStatus);
+  Order.findByIdAndUpdate( 
+    {_id: id}, { $push: { orderStatus: updateStatus}}, {new: true}
+  )
   .then(result => {
     if (result) {
-      res.json(result);
+      return res.json(result);
     } else {
       next();
     }
@@ -220,8 +223,20 @@ router.put('/:id', (req, res, next) => {
   .catch(err => {
     next(err);
   });
-
-
+} else {
+  Order.findByIdAndUpdate( 
+    {_id: id}, updateOrder, { new: true })
+  .then(result => {
+    if (result) {
+      return res.json(result);
+    } else {
+      next();
+    }
+  })
+  .catch(err => {
+    next(err);
+  });
+}
 });
 
 /* ========== DELETE/REMOVE A SINGLE ITEM ========== */

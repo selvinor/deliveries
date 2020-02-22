@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 const vendorSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.Object, ref: 'User', required: true },
-  vendorName: {type: String, default: ''},
+  name: {type: String, default: ''},
   vendorLocation: {
     streetAddress: {type: String, default: ''},
     city: {type: String, default: ''},
@@ -30,7 +30,7 @@ const vendorSchema = new mongoose.Schema({
 vendorSchema.methods.serialize = function() {
   return {
     userId: this.user || '',
-    vendorName: this.vendorName || '',
+    name: this.name || '',
     vendorLocation: this.location|| '',
     vendorPhone: this.vendorPhone|| '',
     orders: this.orders || '',

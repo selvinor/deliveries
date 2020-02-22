@@ -20,7 +20,7 @@ router.get('/', (req, res, next) => {
   .populate('zones')
   .populate({
     path: 'drivers', 
-    select: 'driverName driverStatus driverPhone driverVehicleMake driverVehicleModel',
+    select: 'name driverStatus driverPhone driverVehicleMake driverVehicleModel',
     populate:{
       path: 'deliveries', 
       select: 'deliveryDate depot zone deliveryStatus updatedAt',
@@ -29,7 +29,7 @@ router.get('/', (req, res, next) => {
         select: 'orderNumber orderDescription orderSize vendor destination.recipient destination.phone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
         populate: { 
           path: 'vendor', 
-          select: 'vendorName vendorLocation vendorPhone'
+          select: 'name vendorLocation vendorPhone'
         }
       }
     },
@@ -38,7 +38,7 @@ router.get('/', (req, res, next) => {
       select: 'pickupDate pickupTimeSlot depot pickupStatus updatedAt',
       populate: { 
         path: 'pickupVendor', 
-        select: 'vendorName vendorLocation vendorPhone', 
+        select: 'name vendorLocation vendorPhone', 
         populate: {
           path: 'orders',
           select: 'orderNumber orderDescription orderSize  destination.recipient destination.phone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
@@ -51,7 +51,7 @@ router.get('/', (req, res, next) => {
     select: 'pickupDate pickupTimeSlot depot pickupStatus updatedAt',
     populate: { 
       path: 'pickupVendor', 
-      select: 'vendorName vendorLocation vendorPhone', 
+      select: 'name vendorLocation vendorPhone', 
       populate: {
         path: 'orders',
         select: 'orderNumber orderDescription orderSize  destination.recipient destination.phone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
@@ -66,7 +66,7 @@ router.get('/', (req, res, next) => {
       select: 'orderNumber orderDescription orderSize vendor destination.recipient destination.phone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
       populate: { 
         path: 'vendor', 
-        select: 'vendorName vendorLocation vendorPhone'
+        select: 'name vendorLocation vendorPhone'
       }
     }
   })
@@ -93,13 +93,13 @@ router.get('/:id', (req, res, next) => {
 
   Depot.findOne({ _id: id })
   .populate('zones')
-  .populate('drivers', 'driverName driverStatus driverPhone driverVehicleMake driverVehicleModel')
+  .populate('drivers', 'name driverStatus driverPhone driverVehicleMake driverVehicleModel')
   .populate({
     path: 'pickups',
     select: 'pickupDate pickupTimeSlot depot pickupStatus updatedAt',
     populate: { 
       path: 'pickupVendor', 
-      select: 'vendorName vendorLocation vendorPhone', 
+      select: 'name vendorLocation vendorPhone', 
       populate: {
         path: 'orders',
         select: 'orderNumber orderDescription orderSize  destination.recipient destination.phone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
@@ -114,7 +114,7 @@ router.get('/:id', (req, res, next) => {
       select: 'orderNumber orderDescription orderSize vendor destination.recipient destination.phone  destination.businessName  destination.streetAddress  destination.city  destination.state  destination.zipcode  destination.instructions',
       populate: { 
         path: 'vendor', 
-        select: 'vendorName vendorLocation vendorPhone'
+        select: 'name vendorLocation vendorPhone'
       }
     }
   })
@@ -150,7 +150,7 @@ router.put('/:id', (req, res, next) => {
   // const { id } = req.params;
   const id = req.params.id;
   const updateDepot = {};
-  const updateFields = ['depotName', 'streetAddress', 'city', 'state', 'zipcode', 'zones', 'deliveries, vendors']
+  const updateFields = ['name', 'streetAddress', 'city', 'state', 'zipcode', 'zones', 'deliveries, vendors']
 
   updateFields.forEach(field => {
     if (field in req.body) {

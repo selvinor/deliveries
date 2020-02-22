@@ -25,12 +25,12 @@ router.get('/', (req, res, next) => {
       populate: [{
         path: 'pickupDriver', 
         model: 'Driver', 
-        select: 'driverName driverPhone'
+        select: 'name driverPhone'
       },
       {
         path: 'pickupVendor',
         model: 'Vendor',
-        select: 'vendorName vendorLocation vendorPhone',
+        select: 'name vendorLocation vendorPhone',
         populate: {
           path: 'orders',
           model: 'Order',
@@ -47,12 +47,12 @@ router.get('/', (req, res, next) => {
       populate: [{
         path: 'deliveryDriver', 
         model: 'Driver', 
-        select: 'driverName driverPhone'
+        select: 'name driverPhone'
       },
       {
         path: 'order',
         model: 'Order',
-        select: 'vendorName vendorLocation vendorPhone',
+        select: 'name vendorLocation vendorPhone',
         populate: {
           path: 'orders',
           model: 'Order',
@@ -65,7 +65,7 @@ router.get('/', (req, res, next) => {
     {
       path: 'drivers', 
       model: 'Driver',
-      select: 'driverName driverPhone',
+      select: 'name driverPhone',
       populate: [{
         path: 'pickups', 
         model: 'Pickup', 
@@ -73,7 +73,7 @@ router.get('/', (req, res, next) => {
         populate: [{
           path: 'pickupVendor',
           model: 'Vendor',
-          select: 'vendorName vendorLocation vendorPhone',
+          select: 'name vendorLocation vendorPhone',
           populate: {
             path: 'orders',
             model: 'Order',
@@ -84,7 +84,7 @@ router.get('/', (req, res, next) => {
       {
         path: 'order',
         model: 'Order',
-        select: 'vendorName vendorLocation vendorPhone',
+        select: 'name vendorLocation vendorPhone',
         populate: {
           path: 'orders',
           model: 'Order',
@@ -123,12 +123,12 @@ router.get('/:id', (req, res, next) => {
       populate: [{
         path: 'pickupDriver', 
         model: 'Driver', 
-        select: 'driverName driverPhone'
+        select: 'name driverPhone'
       },
       {
         path: 'pickupVendor',
         model: 'Vendor',
-        select: 'vendorName vendorLocation vendorPhone',
+        select: 'name vendorLocation vendorPhone',
         populate: {
           path: 'orders',
           model: 'Order',
@@ -145,12 +145,12 @@ router.get('/:id', (req, res, next) => {
       populate: [{
         path: 'deliveryDriver', 
         model: 'Driver', 
-        select: 'driverName driverPhone'
+        select: 'name driverPhone'
       },
       {
         path: 'order',
         model: 'Order',
-        select: 'vendorName vendorLocation vendorPhone',
+        select: 'name vendorLocation vendorPhone',
         populate: {
           path: 'orders',
           model: 'Order',
@@ -163,7 +163,7 @@ router.get('/:id', (req, res, next) => {
     {
       path: 'drivers', 
       model: 'Driver',
-      select: 'driverName driverPhone',
+      select: 'name driverPhone',
       populate: [{
         path: 'pickups', 
         model: 'Pickup', 
@@ -171,7 +171,7 @@ router.get('/:id', (req, res, next) => {
         populate: [{
           path: 'pickupVendor',
           model: 'Vendor',
-          select: 'vendorName vendorLocation vendorPhone',
+          select: 'name vendorLocation vendorPhone',
           populate: {
             path: 'orders',
             model: 'Order',
@@ -182,7 +182,7 @@ router.get('/:id', (req, res, next) => {
       {
         path: 'order',
         model: 'Order',
-        select: 'vendorName vendorLocation vendorPhone',
+        select: 'name vendorLocation vendorPhone',
         populate: {
           path: 'orders',
           model: 'Order',
