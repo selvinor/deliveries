@@ -1,7 +1,7 @@
  [
   {
     "_id": "888888888888888888888001",
-    "name": "Central Depot",
+    "userName": "Central Depot",
     "streetAddress": "837 SW 1st Ave.",
     "city": "Portland",
     "state": "Oregon",
