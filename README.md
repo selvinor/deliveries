@@ -1,7 +1,12 @@
-# H1 Delivery Tracking Server
+# H1 Delivery Tracking System
 ## H2 User Stories
-## The Delivery Tracking Server provides an API that enables Users to register with a role of Vendor, Depot or Driver, and login. The exogeneous stimulus of the system is provided by a sequence of order requests originated by the Vendors 
+## The Delivery Tracking System provides simple and effective communication capabilities for a Delivery Service that provides Pickup and Delivery services for a group of Vendors who:
+1. Fulfill Orders from their customers that require delivery to a third party.
+2. Want the ability to have automated tracking and notification of the Orders as they are picked up by the Delivery service, sorted and delivered to their destinations.
+3. Want the ability to notify, or have their customers notified or able to view the delivery progress.
+## The Delivery Tracking System provides the Delivery Service with an easy to use interface to match Drivers with Orders, and in a future iteration, provide optimal delivery routing by leveraging Open Street Maps and computing routes based on the number of Drivers and the shortest time between delivery addresses.
 
+## The Delivery Tracking Server provides an API that serves data requests from the front end Users, who have the role of Vendor, Depot or Driver. 
 1. Users
   * Can have role of Depot, Vendor or Driver
   * Once logged in, Users are redirected to their role-based dashboard that shows a filtered list of current orders. 
